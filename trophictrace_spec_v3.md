@@ -552,119 +552,169 @@ Every dataset is federal, public, and free. No API keys required except Mapbox (
 
 ## The Visualization: What the Judges See
 
-The visualization is a full-screen interactive map of the United States. It tells a story in three clicks: (1) see the national risk landscape, (2) zoom into any watershed and see species-level contamination, (3) see the environmental justice disparity between recreational and subsistence fishers.
+The visualization opens with a cinematic hero screen, then transitions to an interactive map. The design language is **intellectual minimalism**: serif display type, warm dark palette, generous whitespace, no decorative elements. The feeling is a research paper meets a luxury editorial — every element earns its place.
+
+### Design System
+
+**Typography:**
+- Display/headings: Newsreader (serif), weight 400–500, line-height 1.1–1.15, letter-spacing -0.02em
+- Body: DM Sans (humanist sans-serif), weight 400–500, line-height 1.5
+- Data/numbers: JetBrains Mono, weight 400–500
+
+**Color palette (dark mode default):**
+```css
+--bg-primary: #191919;      /* warm near-black */
+--bg-secondary: #232323;
+--bg-surface: #2A2A2A;
+--text-primary: #E8E5E0;    /* warm off-white */
+--text-secondary: #A0A0A0;
+--text-tertiary: #6B6B6B;
+--accent: #D4916E;           /* warm terracotta, used sparingly */
+--border: #333333;
+```
+
+**Data colors (slightly muted):**
+- Safe: `#2EB872` (muted green)
+- Limited: `#E0A030` (muted amber)
+- Unsafe: `#DC4444` (muted red)
+
+**Rules:** No gradients on backgrounds. No glassmorphism. No emoji in UI. Accent color in max 2 places per screen. Shadows subtle and warm. Motion = settling into place, not performing.
 
 ---
 
-### Screen 1: National Overview Map (Full Screen)
+### Screen 1: Hero Landing (Full Screen)
 
-**Base map:** Mapbox dark theme (`mapbox://styles/mapbox/dark-v11`). The dark background makes data layers pop. Initial view: continental US (lat 39.8, lng -98.6, zoom 4).
+A full-viewport cinematic opening that establishes the project's tone before the data.
 
-**HUC-8 watershed choropleth:** ~2,600 HUC-8 polygons, each colored by the maximum predicted fish tissue PFAS concentration in that watershed:
+**Background image:** A real photograph of fish in water (Unsplash, landscape orientation). The image fills the entire viewport with `object-fit: cover`.
 
-- **Blue-green (#22d3ee, 15% opacity):** All species predicted safe (<5 ng/g). Most of the map is this color.
-- **Amber (#f59e0b, 30% opacity):** Some species limited (5–50 ng/g). Visible hotspots around industrial corridors.
-- **Red (#ef4444, 45% opacity):** Some species unsafe (>50 ng/g). Concentrated around known PFAS sources — Cape Fear NC, Great Lakes, Delaware River, etc.
+**Dark gradient overlay:** `linear-gradient(to bottom, rgba(25,25,25,0.3) 0%, rgba(25,25,25,0.6) 50%, rgba(25,25,25,0.9) 100%)` — ensures text readability without obscuring the image.
 
-**Facility markers:** Small pulsing dots at every known PFAS-handling facility from EPA ECHO. White dots with CSS pulse animation (concentric rings expanding and fading). On hover, show facility name and PFAS industry sector.
+**Content (centered):**
+- Title: "TrophicTrace" in Newsreader, `clamp(2.5rem, 5vw, 4.5rem)`, weight 400, `--text-primary`
+- Subtitle: "Predicting PFAS contamination across aquatic food webs using physics-informed neural networks." in DM Sans, `clamp(1rem, 1.8vw, 1.25rem)`, `--text-secondary`, max-width 580px
+- Scroll indicator: "Scroll to explore" + down-arrow SVG icon in `--text-tertiary`, 0.8125rem
 
-**EJ overlay toggle:** Toggle in the header bar. When activated, overlays census tracts with median income < $35,000 in purple tint (rgba(139, 92, 246, 0.15)). The visual correlation between red contamination zones and purple EJ zones IS the story.
+**Scroll transition (two phases):**
+1. **0–50% scroll:** Title and subtitle scroll upward and fade out. Background image stays fixed.
+2. **50–100% scroll:** Background image crossfades to the map view (image opacity → 0, map opacity → 1).
 
-**Click interaction:** Clicking any HUC-8 polygon zooms to that watershed and loads the segment-level detail view.
+The entire transition is driven by `window.scrollY / window.innerHeight` mapped to a 0–1 progress value. A 200vh scroll spacer provides the scroll distance. Both hero and map are in a fixed fullscreen layer, composited with opacity.
 
 ---
 
-### Screen 2: Watershed Detail View (Zoomed In)
+### Screen 2: Interactive Map View
 
-After clicking a HUC-8, the map zooms to show individual NHDPlus stream segments within that watershed.
+Once the hero fades, the map occupies the full viewport.
 
-**River network layer:** GeoJSON LineString features for each stream segment, styled by predicted contamination:
+**Base map:** Mapbox dark theme (`mapbox://styles/mapbox/dark-v11`). Centered on Cape Fear River watershed (lat 35.05, lng -78.88, zoom 9.5). US-wide navigation enabled (minZoom 4, maxZoom 14). Navigation controls bottom-right (no compass).
 
-- **Color:** Continuous gradient by predicted water PFAS concentration. Blue-green (#22d3ee) → amber (#f59e0b) → red (#ef4444). Mapbox `interpolate` expression on `water_pfas_ng_l` property.
-- **Width:** 2px (clean headwaters) → 6px (contaminated segments). Scaled by contamination level.
-- **Glow effect:** Each line drawn twice — once as the colored line, once as a wider (3×), more transparent version underneath with `line-blur: 4`, creating a neon glow on the dark map.
+**Title bar:** Top of viewport, semi-transparent gradient background fading to transparent. Contains:
+- "TrophicTrace" in Newsreader, 1.125rem, weight 500
+- "Cape Fear River, NC" in DM Sans, 0.8125rem, `--text-tertiary`
 
-**Hover tooltip (appears on river segment hover):**
+**River network layer:** GeoJSON LineString features from the backend, added as a Mapbox source. Each segment styled by predicted contamination:
+
+- **Color:** Continuous gradient by `water_pfas_ng_l`. Green (#2EB872) → amber (#E0A030) → red (#DC4444). Mapbox `interpolate` expression.
+- **Width:** 2px (low contamination) → 5px (high contamination). Mapbox `interpolate` expression.
+- **Glow effect:** Each line drawn twice — once as the colored line, once as a wider (3×) version underneath at 15% opacity with `line-blur: 8`. Creates a soft ambient glow, not neon.
+
+**Facility markers:** 10px terracotta (`--accent`) circles with 1.5px `--text-primary` border and subtle box-shadow (`0 0 12px rgba(212, 145, 110, 0.4)`). On hover, show a Mapbox popup with facility name and discharge concentration in the design system fonts.
+
+**Legend:** Bottom-left corner, `--bg-surface` background, 1px `--border`, 12px border-radius. Shows three color swatches with labels: "< 5 Safe", "5–20 Limited", "> 20 Unsafe". Section header in 0.6875rem uppercase, 500 weight, `--text-secondary`.
+
+**Hover interaction:** `mousemove` listener on the river line layer. On hover, cursor changes to pointer and the tooltip appears.
+
+---
+
+### Screen 3: Hover Tooltip
+
+Appears anchored near the cursor when hovering over a river segment.
 
 ```
 ┌─────────────────────────────────────────────┐
 │                                             │
-│  📍 Cape Fear River — Fayetteville Reach    │
-│  Predicted Water PFAS: 120 ng/L             │
+│  Cape Fear River — Fayetteville Reach       │
+│  Water PFAS: 120 ng/L                       │
 │                                             │
 │  ─────────────────────────────────────      │
 │                                             │
-│  🔴 Largemouth Bass    48.3 ng/g            │
-│     ⚠ Max 1 serving/month                  │
+│  ● Largemouth Bass          48.3 ng/g       │
+│    Max 1 serving/month              Details │
 │                                             │
-│  🔴 Striped Bass       38.9 ng/g            │
-│     ⚠ Max 1 serving/month                  │
+│  ● Striped Bass             38.9 ng/g       │
+│    Max 1 serving/month              Details │
 │                                             │
-│  🟡 Channel Catfish    14.7 ng/g            │
-│     ⚠ Max 3 servings/month                 │
+│  ● Channel Catfish          14.7 ng/g       │
+│    Max 3 servings/month             Details │
 │                                             │
-│  🟢 Bluegill            3.1 ng/g            │
-│     ✓ Safe for regular consumption          │
+│  ● Bluegill                  3.1 ng/g       │
+│    Safe for regular consumption     Details │
 │                                             │
-│  ─────────────────────────────────────      │
-│                                             │
-│  ┌──────────────────────────────────────┐   │
-│  │ ⚠ EJ ALERT: Subsistence fishers     │   │
-│  │ face 8.4× the exposure of           │   │
-│  │ recreational anglers at this site    │   │
-│  └──────────────────────────────────────┘   │
-│                                             │
-│                         [See Full Report →] │
 └─────────────────────────────────────────────┘
 ```
 
 **Tooltip design specs:**
-- Dark glassmorphism card: rgba(15, 15, 25, 0.92), backdrop-filter: blur(12px), 1px border rgba(255,255,255,0.08), border-radius: 12px
+- Background: `rgba(25, 25, 25, 0.94)` with `backdrop-filter: blur(12px)`, 1px solid `--border`, border-radius 12px
+- Location name: Newsreader (serif), 0.875rem, weight 500, `--text-primary`
+- Water PFAS value: JetBrains Mono, 0.6875rem, `--text-tertiary`
+- Species names: DM Sans, 0.8125rem, weight 500, `--text-primary`
+- Tissue concentrations: JetBrains Mono, 0.8125rem, `--text-primary`
+- Safety dots: 7px CSS circles next to each species — colored by safety status
 - Species sorted worst-first (highest tissue concentration at top)
-- Safety dots: 8px CSS circles — red (#ef4444) for >20 ng/g, amber (#eab308) for 5–20 ng/g, green (#22c55e) for <5 ng/g
-- EJ alert box: only appears when segment overlaps low-income census tract. Purple tint background (rgba(139, 92, 246, 0.15)) with left border accent (3px solid #8b5cf6)
-- Fixed width 360px, fade-in 150ms CSS transition
+- Advisory text: 0.6875rem, `--text-secondary`
+- "Details" link: 0.6875rem, `--accent` color, right-aligned. Clicking opens the detail panel.
+- Fixed width 340px, fade-in 150ms CSS animation
+- Positioning: 20px right / 10px below cursor, flips to opposite side if near viewport edge
 
 ---
 
-### Screen 3: Species Detail Panel (Click "See Full Report")
+### Screen 4: Species Detail Panel (Click "Details")
 
-Clicking opens a slide-in panel from the right (420px wide, full viewport height):
+Clicking "Details" on any species slides in a panel from the right edge. A dark scrim (`rgba(0,0,0,0.4)`) overlays the map to focus attention on the panel. Clicking the scrim closes the panel.
 
-**Section A — Verdict:**
-- Species name: 22px bold white
-- Big tissue concentration: 48px bold font, colored by safety status
-- EPA reference comparison: "2.4× over EPA threshold" in red badge
-- Safe servings recommendation
+**Panel specs:**
+- Width: 420px. Slides in with 300ms ease-out CSS transition.
+- Background: `--bg-primary`. Full viewport height, scrollable.
+- Close button: top-right, Lucide `X` icon, 18px, `--text-secondary`.
 
-**Section B — "Why Is This Fish Contaminated?" (Feature Attribution):**
-- Horizontal bar chart of XGBoost feature importance for this prediction
-- 5 bars sorted by contribution %, color-coded by category:
-  - Source factors (discharge facilities): orange (#f97316)
-  - Ecological factors (trophic level): blue (#3b82f6)
-  - Environmental factors (temperature, pH): teal (#14b8a6)
-  - Biological factors (lipid content): purple (#a855f7)
-  - Hydrologic factors (flow, dilution): gray (#6b7280)
+**Section A — Header & Verdict:**
+- Species common name: Newsreader, 1.375rem, weight 500, `--text-primary`
+- Scientific name: 0.8125rem, italic, `--text-tertiary`
+- Location: 0.8125rem, `--text-secondary`
+- Big number: JetBrains Mono, 3rem, weight 500, colored by safety status. This is the hero element.
+- Unit label: 1rem, `--text-secondary`
+- EPA reference: JetBrains Mono, 0.75rem, `--text-tertiary`
+- Multiplier badge: 0.75rem mono, 8px border-radius, colored background at 12% opacity (red for over, green for under)
+- 95% confidence interval: JetBrains Mono, 0.6875rem, `--text-tertiary`
+- Servings recommendation: 0.8125rem, `--text-secondary`
 
-**Section C — "Contamination Pathway" (Vertical Flow Diagram):**
-A simple SVG showing 4 connected nodes:
-1. **[Factory Name]** → discharge concentration (ppt)
-2. **[River Water]** → predicted water concentration (ng/L) — annotated with "÷X dilution"
-3. **[Fish Tissue]** → predicted tissue concentration (ng/g) — annotated with "×Y bioaccumulation"
-4. **[Human Dose]** → dose at given consumption rate (ng/kg/day)
+**Section B — "Why Is This Fish Contaminated?" (Contributing Factors):**
+- Section header: DM Sans, 0.6875rem, uppercase, weight 500, letter-spacing 0.05em, `--text-tertiary`. 1px `--border` divider above.
+- Horizontal bar chart: 5 bars sorted by contribution percentage. Each bar:
+  - Label (factor name) left-aligned, percentage right-aligned, both 0.75rem
+  - Bar: 4px height, 2px border-radius, `--bg-secondary` track
+  - Bar fill width proportional to percentage, color-coded by factor type:
+    - Source factors: `#E8845A` (warm orange)
+    - Ecological factors: `#5B8FD4` (muted blue)
+    - Environmental factors: `#3DA89A` (muted teal)
+    - Biological factors: `#9A6DD4` (muted purple)
+    - Hydrologic factors: `#7A7A7A` (gray)
 
-Lines get thicker at each step. Node colors grade from green → amber → red. This is a custom SVG with 4 `<rect>` and 3 `<path>` elements — not a charting library.
+**Section C — "Accumulation Over Time" (Timeline Chart):**
+- Small SVG line chart (356×140px) showing predicted tissue concentration over time (months on x-axis, ng/g on y-axis)
+- Line colored by safety status, 1.5px stroke, round caps
+- End point marked with a 3px filled circle
+- Dashed horizontal line at EPA reference dose, labeled "EPA {limit}" in JetBrains Mono 9px
+- X-axis labels at 0, 12, 24, 36 months in JetBrains Mono 9px
 
-**Section D — "Who Is At Risk?" (The Core Disparity):**
-Two horizontal bars showing hazard quotient:
-1. **Recreational angler** (17 g/day): bar extends to show HQ (e.g., 0.8 — green, within safe zone)
-2. **Subsistence fisher** (142.4 g/day): bar extends past the EPA limit line (e.g., 6.7 — red, far into danger)
-
-A vertical dashed line marks HQ = 1.0, labeled "EPA Safety Threshold."
-
-The subsistence bar visually overshooting the line is the **punchline** of the entire project. It makes the environmental justice disparity impossible to miss.
-
-Below the bars: "Subsistence fishers face **8.4× the exposure** of recreational anglers. In this community (median income $31,200), an estimated 18.5% of households rely on locally caught fish as a primary protein source."
+**Section D — "Contamination Pathway" (Vertical Flow):**
+- 3 rounded-rectangle nodes stacked vertically, connected by 1px `--border` lines:
+  1. Source facility → discharge concentration
+  2. River Water → water concentration, annotated with "÷X dilution"
+  3. Fish Tissue → tissue concentration, annotated with "×Y BCF"
+- Each node: `--bg-secondary` background, 8px border-radius, 3px left border colored by stage (gray → amber → red)
+- Values in JetBrains Mono, 0.875rem, weight 500, colored by stage
 
 ---
 
@@ -675,7 +725,7 @@ Below the bars: "Subsistence fishers face **8.4× the exposure** of recreational
 | XGBoost model | Python 3.10+, xgboost, scikit-learn, pandas, numpy | Industry standard for tabular ML, GPU support, built-in feature importance |
 | Bioaccumulation model | Python, numpy | Pure arithmetic — published equations, no libraries needed beyond numpy |
 | Data pipeline | Python, requests, geopandas, shapely | Download, join, and process federal datasets |
-| Visualization | React (Vite), Mapbox GL JS (react-map-gl), D3.js, Tailwind CSS | Best-in-class web mapping, smooth interactions, dark theme support |
+| Visualization | React (Vite), Mapbox GL JS, D3.js, Tailwind CSS, Lucide icons. Fonts: Newsreader, DM Sans, JetBrains Mono | Intellectual minimalism design system, dark mode default, cinematic hero-to-map scroll transition |
 | Backend API | FastAPI (Python) | Serves precomputed results + handles real-time segment queries during demo |
 | ASUS compute | CUDA, xgboost gpu_hist, batch inference | GPU-accelerated training and national-scale inference |
 
@@ -777,51 +827,50 @@ Build `inference.py`:
 
 ---
 
-### TRACK B: Interactive Map Visualization
+### TRACK B: Hero + Map + Tooltips
 
 **Owner:** Strongest React/frontend person
-**Tools:** React (Vite), Mapbox GL JS / react-map-gl, D3.js, Tailwind CSS
+**Tools:** React (Vite), Mapbox GL JS, Tailwind CSS, Lucide icons
 
-#### B1: Project Setup + Dark Map + National Choropleth (Hours 0–4)
+#### B1: Project Setup + Design System + Hero (Hours 0–4)
 
 1. `npm create vite@latest trophictrace-viz -- --template react`
-2. `npm install mapbox-gl react-map-gl d3 tailwindcss @tailwindcss/vite`
-3. Render dark Mapbox map centered on continental US
-4. Load pre-prepared HUC-8 boundary GeoJSON (available from USGS WBD download)
-5. Style HUC-8 polygons as choropleth by contamination level (from mock data initially)
-6. Add facility markers with pulse animation
-7. Add title bar: "TrophicTrace — PFAS Fish Contamination Risk Map" + EJ overlay toggle
+2. `npm install mapbox-gl d3 tailwindcss @tailwindcss/vite lucide-react`
+3. Set up design system CSS: custom properties (dark palette), Google Fonts (Newsreader, DM Sans, JetBrains Mono), scrollbar styling, Mapbox overrides
+4. Build `Hero.jsx`: full-viewport image background, dark gradient overlay, centered title + subtitle, scroll indicator
+5. Build scroll orchestration in `App.jsx`: 200vh scroll spacer, fixed compositing layer, scroll progress tracking (0–1)
+6. Implement two-phase scroll transition: phase 1 (text fades/scrolls up), phase 2 (image crossfades to map)
 
-**Deliverable:** React app with national choropleth map + facility markers
+**Deliverable:** React app with cinematic hero landing and scroll transition
 
-#### B2: Watershed Zoom + River Segments + Heatmap (Hours 4–8)
+#### B2: Map View + River Network + Glow (Hours 4–8)
 
-1. Implement click-to-zoom on HUC-8 polygons
-2. On zoom, load NHDPlus flowline GeoJSON for that watershed
-3. Style river segments: color by predicted PFAS, width by contamination, glow effect
-4. Add heatmap layer around segments (radial gradient by max tissue concentration)
-5. Smooth zoom transition animation
+1. Build `MapView.jsx`: dark Mapbox map centered on Cape Fear River (lat 35.05, lng -78.88, zoom 9.5)
+2. Use IntersectionObserver to defer Mapbox init until container is visible (avoids 0-dimension init bug)
+3. Add river GeoJSON source, style segments with `interpolate` expressions on `water_pfas_ng_l`
+4. Add glow layer: same source drawn at 3× width, 15% opacity, `line-blur: 8`
+5. Add facility markers: terracotta circles with border and box-shadow, Mapbox popups on hover
+6. Add legend component: bottom-left card with color swatches and labels
+7. Add title bar with project name and watershed name
 
-**Deliverable:** Zoomable map with river segment rendering
+**Deliverable:** Map with river network, glow effect, facility markers, legend
 
 #### B3: Hover Tooltips (Hours 8–12)
 
-1. Mapbox `mousemove` listener on river segments
-2. Render tooltip component with species list, safety dots, advisory text
-3. Conditional EJ alert box when hovering near low-income census tracts
-4. 150ms fade transition, viewport-aware positioning
-5. "See Full Report" click handler → sets React state for detail panel
+1. Build `Tooltip.jsx`: Mapbox `mousemove` listener on `river-line` layer
+2. Species list sorted worst-first, with 7px safety dots and tissue concentrations
+3. Advisory text per species, "Details" link → sets selectedSpecies React state
+4. 340px fixed width, viewport-aware positioning (flips near edges), 150ms fade-in
+5. Wire up to App.jsx: hoveredSegment state, cursor position tracking
 
-**Deliverable:** Fully working hover tooltips
+**Deliverable:** Fully working hover tooltips consuming mock data
 
 #### B4: Polish + Real Data Integration (Hours 13–16)
 
 1. Swap mock data for `national_results.json` from Track A
-2. Fix any rendering issues with real data ranges
-3. Implement EJ overlay toggle (census tract polygons)
-4. Add map legend (bottom-left)
-5. Final CSS polish, transitions, responsive behavior
-6. Test full interaction flow end-to-end
+2. Fix rendering with real data ranges (adjust interpolation breakpoints if needed)
+3. Final visual polish: transitions, scroll feel, legend clarity
+4. Test full flow: hero → scroll → map → hover → tooltip → click Details
 
 **Deliverable:** Polished, data-connected visualization
 
@@ -830,42 +879,50 @@ Build `inference.py`:
 ### TRACK C: Detail Panel + Interpretability Views
 
 **Owner:** Second frontend person
-**Tools:** React, D3.js (minimal), Tailwind CSS, custom SVG
+**Tools:** React, D3.js (minimal for accumulation chart), Tailwind CSS, Lucide icons, custom SVG
 
-#### C1: Panel Scaffold + Verdict Section (Hours 0–3)
+#### C1: Panel Scaffold + Header/Verdict Section (Hours 0–3)
 
-Build `<DetailPanel>` as standalone component:
-- 420px slide-in panel, dark background, close button
-- Big tissue concentration number (48px, color-coded)
-- EPA threshold comparison badge
-- Safe servings recommendation
+Build `<DetailPanel>` as standalone component in the same Vite project:
+- 420px slide-in from right, `--bg-primary` background, 300ms ease-out transition
+- Lucide `X` close button (18px, `--text-secondary`)
+- Scrim overlay (`rgba(0,0,0,0.4)`) — clicking scrim closes panel
+- Header: species name (Newsreader 1.375rem), scientific name (italic), location
+- Big number: JetBrains Mono 3rem, colored by safety status
+- EPA reference line, multiplier badge (colored pill), confidence interval
+- Servings recommendation
 
-#### C2: Feature Attribution Bar Chart (Hours 3–6)
+#### C2: Contributing Factors Bar Chart (Hours 3–6)
 
-- "Why Is This Fish Contaminated?" section
-- 5 horizontal bars sorted by importance, color-coded by factor type
-- Pure CSS implementation (flexbox width percentages)
+- Section: "Why Is This Fish Contaminated?"
+- Section header: DM Sans 0.6875rem uppercase, `--text-tertiary`, 1px border divider
+- 5 horizontal bars sorted by contribution %, 4px height, 2px border-radius
+- Color-coded by type: source (#E8845A), ecological (#5B8FD4), environmental (#3DA89A), biological (#9A6DD4), hydrologic (#7A7A7A)
+- Pure CSS implementation (flexbox width percentages on `--bg-secondary` track)
 
-#### C3: Contamination Pathway SVG (Hours 6–9)
+#### C3: Accumulation Timeline Chart (Hours 6–9)
 
-- Vertical flow diagram: Factory → River Water → Fish Tissue → Human Dose
-- Custom SVG: 4 `<rect>` nodes + 3 `<path>` connections
-- Annotations for dilution factor and bioaccumulation factor
-- Line width increases at each step
+- Section: "Accumulation Over Time"
+- Small SVG line chart (356×140px): months on x-axis, concentration on y-axis
+- Line colored by safety status, 1.5px stroke, round caps, end-point dot
+- Dashed horizontal line at EPA reference dose
+- Axis labels in JetBrains Mono 9px
 
-#### C4: Exposure Disparity Chart (Hours 9–12)
+#### C4: Contamination Pathway (Hours 9–12)
 
-- "Who Is At Risk?" section
-- Two horizontal bars: recreational vs. subsistence HQ
-- Vertical dashed line at HQ = 1.0 (EPA threshold)
-- Community-specific demographic callout text
+- Section: "Contamination Pathway"
+- 3 stacked rounded-rectangle nodes connected by 1px lines:
+  1. Source facility → discharge concentration
+  2. River Water → water concentration (annotated "÷X dilution")
+  3. Fish Tissue → tissue concentration (annotated "×Y BCF")
+- Each node: `--bg-secondary`, 8px border-radius, 3px colored left border (gray → amber → red)
+- Values in JetBrains Mono, colored by stage
 
 #### C5: Integration with Track B (Hours 12–15)
 
-- Merge into Track B's React app
-- Wire "See Full Report" click → panel state
-- Add dark scrim overlay when panel is open
-- Test full flow: hover → tooltip → click → panel → close
+- Wire "Details" click in Tooltip → `selectedSpecies` state in App.jsx → render DetailPanel
+- Scrim + panel slide-in animation
+- Test full flow: hover → tooltip → click Details → panel slides in → close → back to map
 
 ---
 
@@ -923,12 +980,12 @@ Build FastAPI server:
 
 ## Delivery Schedule
 
-| Hour | Track A (ML) | Track B (Map) | Track C (Panel) | Track D (Data/Integration) |
-|------|-------------|---------------|-----------------|---------------------------|
-| 0–3 | A1: Feature engineering | B1: Project setup + dark map | C1: Panel scaffold + verdict | D1: Download federal datasets |
-| 3–6 | A1/A2: Finish features + labels | B1/B2: National choropleth + zoom | C2: Feature attribution chart | D1/D2: Finish downloads + mock data → B |
-| 6–9 | A3: XGBoost training on ASUS | B2: River segments + heatmap | C3: Pathway SVG | D3: Backend API |
-| 9–12 | A4: National inference + bioaccum | B3: Hover tooltips | C4: Exposure disparity chart | D3: Finish API + start integration |
+| Hour | Track A (ML) | Track B (Hero + Map) | Track C (Detail Panel) | Track D (Data/Integration) |
+|------|-------------|----------------------|------------------------|---------------------------|
+| 0–3 | A1: Feature engineering | B1: Design system + hero + scroll transition | C1: Panel scaffold + header/verdict | D1: Download federal datasets |
+| 3–6 | A1/A2: Finish features + labels | B1/B2: Finish hero + map + river network | C2: Contributing factors bar chart | D1/D2: Finish downloads + mock data → B |
+| 6–9 | A3: XGBoost training on ASUS | B2: Glow layer + facilities + legend | C3: Accumulation timeline chart | D3: Backend API |
+| 9–12 | A4: National inference + bioaccum | B3: Hover tooltips | C4: Contamination pathway | D3: Finish API + start integration |
 | 12–14 | A4: Deliver `national_results.json` | B3/B4: Polish tooltips + data swap | C5: Integrate panel into Track B | D4: Validate + help integrate |
 | 14–16 | Help debug + iterate | B4: Final visual polish | C5: Fix integration issues | D4: Slides, backup video, rehearsal |
 
@@ -1006,6 +1063,11 @@ Track A produces this. Track B/C consume it. Track D validates it.
           "tissue_pfos_ng_g": 42.1,
           "tissue_pfoa_ng_g": 3.8,
           "tissue_total_pfas_ng_g": 48.3,
+          "confidence_interval": [38.5, 59.1],
+          "accumulation_curve": {
+            "months": [0, 3, 6, 9, 12, 18, 24, 36],
+            "concentration_ng_g": [0, 12.5, 24.8, 34.2, 40.1, 45.8, 47.6, 48.3]
+          },
           "hazard_quotient_recreational": 0.8,
           "hazard_quotient_subsistence": 6.7,
           "safe_servings_per_month_recreational": 4,
