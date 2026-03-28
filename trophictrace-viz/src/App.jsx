@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Hero from './components/Hero'
 import MapView from './components/MapView'
 import Tooltip from './components/Tooltip'
@@ -13,9 +13,7 @@ export default function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY
-      const windowH = window.innerHeight
-      const progress = Math.min(scrollY / windowH, 1)
+      const progress = Math.min(window.scrollY / window.innerHeight, 1)
       setScrollProgress(progress)
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -32,45 +30,57 @@ export default function App() {
     setHoveredSegment(null)
   }
 
-  const mapVisible = scrollProgress >= 0.95
+  // Phase 1 (0–0.5): text scrolls up and fades out, image stays
+  // Phase 2 (0.5–1.0): image fades out, map fades in
+  const imageOpacity = scrollProgress < 0.5 ? 1 : 1 - (scrollProgress - 0.5) / 0.5
+  const mapOpacity = scrollProgress < 0.5 ? 0 : (scrollProgress - 0.5) / 0.5
 
   return (
     <div>
-      {/* Hero image + text: fixed behind everything, fades out on scroll */}
-      <Hero scrollProgress={scrollProgress} />
+      {/* Scroll spacer */}
+      <div style={{ height: '200vh' }} />
 
-      {/* Scroll spacer — scroll through this to fade the hero */}
-      <div style={{ height: '100vh', position: 'relative', zIndex: 1 }} />
-
-      {/* Map section — sits right after the spacer, sticky full viewport */}
-      <div
-        style={{
-          position: 'sticky',
-          top: 0,
-          height: '100vh',
-          zIndex: 2,
-          background: 'var(--bg-primary)',
-        }}
-      >
-        <MapView
-          data={mockData}
-          onSegmentHover={handleSegmentHover}
-          onCursorMove={setCursorPos}
-        />
-
-        {hoveredSegment && !selectedSpecies && (
-          <Tooltip
-            segment={hoveredSegment}
-            position={cursorPos}
-            onSpeciesClick={handleSpeciesClick}
+      {/* Fixed fullscreen layer — everything composited here */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 1 }}>
+        {/* Map layer — always mounted, fades in */}
+        <div style={{ position: 'absolute', inset: 0, opacity: mapOpacity }}>
+          <MapView
+            data={mockData}
+            onSegmentHover={handleSegmentHover}
+            onCursorMove={setCursorPos}
           />
-        )}
+        </div>
 
-        {selectedSpecies && (
-          <DetailPanel
-            species={selectedSpecies}
-            onClose={() => setSelectedSpecies(null)}
-          />
+        {/* Hero image layer — fades out in phase 2 */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            opacity: imageOpacity,
+            pointerEvents: scrollProgress >= 0.95 ? 'none' : 'auto',
+          }}
+        >
+          <Hero scrollProgress={scrollProgress} />
+        </div>
+
+        {/* Tooltip + Detail panel — only interactive when map is visible */}
+        {scrollProgress > 0.8 && (
+          <>
+            {hoveredSegment && !selectedSpecies && (
+              <Tooltip
+                segment={hoveredSegment}
+                position={cursorPos}
+                onSpeciesClick={handleSpeciesClick}
+              />
+            )}
+
+            {selectedSpecies && (
+              <DetailPanel
+                species={selectedSpecies}
+                onClose={() => setSelectedSpecies(null)}
+              />
+            )}
+          </>
         )}
       </div>
     </div>

@@ -1,62 +1,41 @@
-import { useRef } from 'react'
-
 const HERO_IMAGE_URL =
-  'https://images.unsplash.com/photo-1524704654690-b56c05c78a00?w=1920&q=80&fit=crop'
+  'https://images.unsplash.com/photo-1497290756760-23ac55edf36f?w=1920&q=80&fit=crop'
 
 export default function Hero({ scrollProgress }) {
-  // Image stays fixed; text scrolls up and fades; then image fades to reveal map
-  const textOpacity = 1 - Math.min(scrollProgress / 0.4, 1)
-  const textTranslateY = scrollProgress * -120
-  const imageOpacity = scrollProgress < 0.5 ? 1 : 1 - (scrollProgress - 0.5) / 0.5
+  // Text fades and scrolls up during phase 1 (0–0.5)
+  const textProgress = Math.min(scrollProgress / 0.5, 1)
+  const textOpacity = 1 - textProgress
+  const textTranslateY = textProgress * -80
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100vh',
-        zIndex: 0,
-        pointerEvents: scrollProgress >= 0.95 ? 'none' : 'auto',
-      }}
-    >
-      {/* Background image */}
+    <div style={{ position: 'absolute', inset: 0 }}>
+      {/* Background image — always full opacity, parent handles fade */}
+      <img
+        src={HERO_IMAGE_URL}
+        alt=""
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          display: 'block',
+        }}
+      />
+
+      {/* Dark gradient overlay */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          opacity: imageOpacity,
-          transition: 'opacity 0.1s ease-out',
+          background:
+            'linear-gradient(to bottom, rgba(25,25,25,0.3) 0%, rgba(25,25,25,0.6) 50%, rgba(25,25,25,0.9) 100%)',
         }}
-      >
-        <img
-          src={HERO_IMAGE_URL}
-          alt=""
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            display: 'block',
-          }}
-        />
-        {/* Dark gradient overlay for text readability */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background:
-              'linear-gradient(to bottom, rgba(25,25,25,0.3) 0%, rgba(25,25,25,0.6) 50%, rgba(25,25,25,0.9) 100%)',
-          }}
-        />
-      </div>
+      />
 
-      {/* Title content */}
+      {/* Title + subtitle — scrolls up and fades */}
       <div
         style={{
-          position: 'relative',
-          zIndex: 2,
-          height: '100%',
+          position: 'absolute',
+          inset: 0,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -106,6 +85,7 @@ export default function Hero({ scrollProgress }) {
             fontSize: '0.8125rem',
             fontFamily: 'var(--font-body)',
             fontWeight: 400,
+            opacity: textOpacity,
           }}
         >
           <span>Scroll to explore</span>
