@@ -1,0 +1,125 @@
+{
+  "cv_rmse_mean": 74.12,
+  "cv_rmse_std": 2.85,
+  "cv_r2_mean": 0.7012,
+  "cv_r2_std": 0.0343,
+  "cv_within_factor_3_mean": 98.6,
+  "train_time_seconds": 0.05,
+  "n_samples": 5000,
+  "n_features": 28,
+  "n_estimators": 250,
+  "feature_importance": [
+    {
+      "feature": "upstream_npdes_pfas_count",
+      "importance": 0.1959
+    },
+    {
+      "feature": "nearest_pfas_facility_km",
+      "importance": 0.173
+    },
+    {
+      "feature": "afff_site_nearby",
+      "importance": 0.1581
+    },
+    {
+      "feature": "wwtp_upstream",
+      "importance": 0.0969
+    },
+    {
+      "feature": "pfas_industry_density",
+      "importance": 0.0725
+    },
+    {
+      "feature": "longitude",
+      "importance": 0.0389
+    },
+    {
+      "feature": "latitude",
+      "importance": 0.0379
+    },
+    {
+      "feature": "mean_annual_flow_m3s",
+      "importance": 0.0319
+    },
+    {
+      "feature": "pct_urban",
+      "importance": 0.0276
+    },
+    {
+      "feature": "low_flow_7q10_m3s",
+      "importance": 0.0212
+    },
+    {
+      "feature": "landfill_upstream",
+      "importance": 0.0203
+    },
+    {
+      "feature": "pct_impervious",
+      "importance": 0.0188
+    },
+    {
+      "feature": "population_density",
+      "importance": 0.0186
+    },
+    {
+      "feature": "temperature_c",
+      "importance": 0.0131
+    },
+    {
+      "feature": "watershed_area_km2",
+      "importance": 0.0119
+    },
+    {
+      "feature": "ph",
+      "importance": 0.0082
+    },
+    {
+      "feature": "upstream_npdes_count",
+      "importance": 0.0068
+    },
+    {
+      "feature": "fire_training_site",
+      "importance": 0.0055
+    },
+    {
+      "feature": "pct_forest",
+      "importance": 0.0054
+    },
+    {
+      "feature": "pct_agriculture",
+      "importance": 0.0053
+    },
+    {
+      "feature": "stream_order",
+      "importance": 0.0052
+    },
+    {
+      "feature": "mean_velocity_ms",
+      "importance": 0.0049
+    },
+    {
+      "feature": "conductivity_us_cm",
+      "importance": 0.0048
+    },
+    {
+      "feature": "upstream_discharge_volume_m3",
+      "importance": 0.0047
+    },
+    {
+      "feature": "total_organic_carbon_mgl",
+      "importance": 0.0045
+    },
+    {
+      "feature": "dissolved_organic_carbon_mgl",
+      "importance": 0.0042
+    },
+    {
+      "feature": "baseflow_index",
+      "importance": 0.0039
+    },
+    {
+      "feature": "airport_within_10km",
+      "importance": 0.0
+    }
+  ]
+}

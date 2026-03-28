@@ -1,0 +1,54 @@
+{
+  "architecture": {
+    "hidden_dim": 128,
+    "n_layers": 4,
+    "n_parameters": 50829,
+    "activation": "Tanh",
+    "output_activation": "Softplus"
+  },
+  "training": {
+    "n_epochs": 500,
+    "learning_rate": 0.001,
+    "batch_size": 2048,
+    "lambda_physics": 0.1,
+    "train_time_seconds": 82.14,
+    "device": "cpu"
+  },
+  "validation": {
+    "r2": 0.7559,
+    "within_factor_2_pct": 96.88,
+    "within_factor_3_pct": 98.98
+  },
+  "normalization": {
+    "input_mins": [
+      0.1,
+      2.0,
+      1.0,
+      50.0,
+      5.0,
+      0.5,
+      0.0,
+      0.0
+    ],
+    "input_maxs": [
+      10000.0,
+      4.5,
+      10.0,
+      10000.0,
+      30.0,
+      20.0,
+      5.0,
+      365.0
+    ]
+  },
+  "physics_constraints": [
+    "Trophic monotonicity: \u2202C/\u2202trophic_level \u2265 0",
+    "Lipid monotonicity: \u2202C/\u2202lipid_content \u2265 0",
+    "Temporal monotonicity: \u2202C/\u2202time \u2265 0 (accumulation)"
+  ],
+  "training_history": {
+    "final_data_loss": 0.104938,
+    "final_physics_loss": 0.007843,
+    "final_val_loss": 0.108626
+  }
+}
