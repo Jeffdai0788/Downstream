@@ -14,6 +14,7 @@ import os
 
 from pinn_bioaccumulation import (
     PINNBioaccumulation, load_pinn, predict_tissue, predict_tissue_batch,
+    predict_with_ci, accumulation_curve_with_ci,
     CONGENER_LIST, BCF_BASE, TMF, K_DOC, REFERENCE_LIPID, REFERENCE_TROPHIC
 )
 
@@ -84,10 +85,23 @@ def run_full_pipeline(
         doc = seg['dissolved_organic_carbon_mgl']
         temp = seg['temperature_c']
 
+        # Identify primary source facility (nearest hotspot) — once per segment
+        best_source = None
+        best_dist = float('inf')
+        for hs in PFAS_HOTSPOTS:
+            dist = np.sqrt((seg['latitude'] - hs['lat'])**2 + (seg['longitude'] - hs['lng'])**2)
+            if dist < best_dist:
+                best_dist = dist
+                best_source = hs
+        dilution = max(1.0, best_dist * 50 + 1) if best_source else 10.0
+
         species_results = []
         for sp in SPECIES:
             tissue_by_congener = {}
+            ci_by_congener = {}
             total_tissue = 0
+            total_lower = 0
+            total_upper = 0
 
             # Assume congener profile: PFOS 40%, PFOA 20%, rest 10% each
             congener_fractions = {
@@ -98,7 +112,7 @@ def run_full_pipeline(
             for congener in CONGENER_LIST:
                 water_congener = water_pfas * congener_fractions[congener]
 
-                tissue_val = predict_tissue(
+                mean_val, lo_val, hi_val = predict_with_ci(
                     pinn_model, pinn_info,
                     water_pfas_ng_l=water_congener,
                     trophic_level=sp['trophic_level'],
@@ -107,29 +121,34 @@ def run_full_pipeline(
                     temperature_c=temp,
                     doc_mg_l=doc,
                     congener=congener,
-                    time_days=365  # Steady state
+                    time_days=365,  # Steady state
+                    n_passes=50,
                 )
 
-                tissue_by_congener[congener] = round(float(tissue_val), 2)
-                total_tissue += tissue_val
+                tissue_by_congener[congener] = round(float(mean_val), 2)
+                ci_by_congener[congener] = [round(float(lo_val), 2), round(float(hi_val), 2)]
+                total_tissue += mean_val
+                total_lower += lo_val
+                total_upper += hi_val
+
+            # Accumulation curve with CI bands (for dominant congener PFOS)
+            acc_curve = accumulation_curve_with_ci(
+                pinn_model, pinn_info,
+                water_pfas_ng_l=water_pfas * congener_fractions['PFOS'],
+                trophic_level=sp['trophic_level'],
+                lipid_pct=sp['lipid_pct'],
+                body_mass_g=sp['body_mass_g'],
+                temperature_c=temp,
+                doc_mg_l=doc,
+                congener='PFOS',
+                n_passes=50,
+            )
 
             # Stage 3: Hazard quotient
             hq_rec, serv_rec, status_rec = compute_hazard_quotient(
                 tissue_by_congener, CONSUMPTION_RATES['recreational'])
             hq_sub, serv_sub, status_sub = compute_hazard_quotient(
                 tissue_by_congener, CONSUMPTION_RATES['subsistence'])
-
-            # Identify primary source facility (nearest hotspot)
-            best_source = None
-            best_dist = float('inf')
-            for hs in PFAS_HOTSPOTS:
-                dist = np.sqrt((seg['latitude'] - hs['lat'])**2 + (seg['longitude'] - hs['lng'])**2)
-                if dist < best_dist:
-                    best_dist = dist
-                    best_source = hs
-
-            # Compute dilution factor from nearest source
-            dilution = max(1.0, best_dist * 50 + 1) if best_source else 10.0
 
             species_results.append({
                 "common_name": sp['common_name'],
@@ -139,16 +158,19 @@ def run_full_pipeline(
                 "tissue_pfos_ng_g": tissue_by_congener.get('PFOS', 0),
                 "tissue_pfoa_ng_g": tissue_by_congener.get('PFOA', 0),
                 "tissue_total_pfas_ng_g": round(total_tissue, 2),
+                "confidence_interval": [round(total_lower, 2), round(total_upper, 2)],
+                "tissue_by_congener": tissue_by_congener,
+                "ci_by_congener": ci_by_congener,
+                "accumulation_curve": acc_curve,
                 "hazard_quotient_recreational": hq_rec,
                 "hazard_quotient_subsistence": hq_sub,
                 "safe_servings_per_month_recreational": serv_rec,
                 "safe_servings_per_month_subsistence": serv_sub,
                 "safety_status_recreational": status_rec,
                 "safety_status_subsistence": status_sub,
-                "tissue_by_congener": tissue_by_congener,
                 "pathway": {
                     "source_facility": best_source['name'] if best_source else "Unknown",
-                    "source_distance_km": round(best_dist * 111, 1),  # degrees to km approx
+                    "source_distance_km": round(best_dist * 111, 1),
                     "dilution_factor": round(dilution, 1),
                     "water_concentration_ng_l": round(water_pfas, 2),
                     "bcf_applied": round(BCF_BASE.get('PFOS', 3100) * sp['lipid_pct'] / REFERENCE_LIPID, 0),
