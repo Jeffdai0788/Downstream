@@ -1,0 +1,35 @@
+{
+  "total_rows": 2881,
+  "by_source": {
+    "UCMR5": 1976,
+    "WQP": 905
+  },
+  "water_pfas_ng_l": {
+    "count": 2881,
+    "min": 0.165,
+    "p25": 4.7,
+    "median": 9.6,
+    "p75": 19.2,
+    "max": 8090.59,
+    "mean": 29.411,
+    "std": 242.084
+  },
+  "water_pfas_ng_l_WQP": {
+    "count": 905,
+    "min": 0.165,
+    "p25": 2.3,
+    "median": 5.3,
+    "p75": 11.52,
+    "max": 8090.59,
+    "mean": 51.955
+  },
+  "water_pfas_ng_l_UCMR5": {
+    "count": 1976,
+    "min": 3.0,
+    "p25": 5.9,
+    "median": 12.2,
+    "p75": 22.025,
+    "max": 531.6,
+    "mean": 19.086
+  }
+}

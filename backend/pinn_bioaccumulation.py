@@ -297,13 +297,13 @@ def train_pinn(n_epochs: int = 500, lr: float = 1e-3, batch_size: int = 2048,
     print("TrophicTrace — PINN Bioaccumulation Model Training")
     print("=" * 60)
 
-    # Device selection: try Ascend NPU first, then CUDA, then CPU
-    if hasattr(torch, 'npu') and torch.npu.is_available():
-        device = torch.device('npu')
-        print(f"Device: Ascend NPU")
-    elif torch.cuda.is_available():
+    # Device selection: try CUDA (NVIDIA), then MPS (Apple Silicon), then CPU
+    if torch.cuda.is_available():
         device = torch.device('cuda')
-        print(f"Device: CUDA GPU")
+        print(f"Device: CUDA GPU ({torch.cuda.get_device_name(0)})")
+    elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+        device = torch.device('mps')
+        print(f"Device: Apple Silicon GPU (MPS)")
     else:
         device = torch.device('cpu')
         print(f"Device: CPU")

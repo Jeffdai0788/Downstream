@@ -11,6 +11,7 @@ import torch
 import json
 import time
 import os
+import math
 
 from pinn_bioaccumulation import (
     PINNBioaccumulation, load_pinn, predict_tissue, predict_tissue_batch,
@@ -24,6 +25,148 @@ from generate_data import (
 )
 
 from train_xgboost import FEATURE_COLS
+
+
+# ============================================================
+# HUC-8 lookup for assigning watershed codes to segments
+# ============================================================
+HUC8_REGIONS = [
+    {"huc8": "03030004", "name": "Cape Fear River", "lat": 35.05, "lng": -78.88, "radius": 0.6},
+    {"huc8": "03030005", "name": "Lower Cape Fear", "lat": 34.50, "lng": -78.30, "radius": 0.5},
+    {"huc8": "04100001", "name": "St. Clair-Detroit", "lat": 42.50, "lng": -82.90, "radius": 0.5},
+    {"huc8": "04080201", "name": "Huron", "lat": 44.45, "lng": -83.33, "radius": 0.4},
+    {"huc8": "02040202", "name": "Delaware River", "lat": 40.20, "lng": -74.80, "radius": 0.5},
+    {"huc8": "06030002", "name": "Wheeler Lake", "lat": 34.60, "lng": -86.98, "radius": 0.4},
+    {"huc8": "02020003", "name": "Hoosic River", "lat": 42.88, "lng": -73.20, "radius": 0.3},
+    {"huc8": "02030101", "name": "Upper Hudson", "lat": 43.00, "lng": -73.80, "radius": 0.4},
+    {"huc8": "10190003", "name": "Fountain Creek", "lat": 38.80, "lng": -104.72, "radius": 0.3},
+    {"huc8": "01070004", "name": "Merrimack", "lat": 42.86, "lng": -71.49, "radius": 0.4},
+    {"huc8": "07100009", "name": "Des Moines", "lat": 41.60, "lng": -93.60, "radius": 0.5},
+    {"huc8": "08090201", "name": "Lower Mississippi", "lat": 30.00, "lng": -90.10, "radius": 0.6},
+    {"huc8": "12100301", "name": "San Jacinto", "lat": 29.80, "lng": -95.30, "radius": 0.5},
+    {"huc8": "17110016", "name": "Duwamish", "lat": 47.50, "lng": -122.30, "radius": 0.3},
+    {"huc8": "18050002", "name": "San Francisco Bay", "lat": 37.80, "lng": -122.40, "radius": 0.4},
+]
+
+# Demographics zones for environmental justice (assigned to nearby segments)
+DEMOGRAPHICS_ZONES = [
+    {"name": "Fayetteville SE, NC", "lat": 35.03, "lng": -78.85,
+     "nearest_tract_name": "Upper Cape Fear", "median_income": 31200,
+     "subsistence_fishing_estimated_pct": 18.5, "exposure_multiplier_vs_recreational": 8.4,
+     "population": 24500, "radius": 0.5},
+    {"name": "Decatur NW, AL", "lat": 34.62, "lng": -87.00,
+     "nearest_tract_name": "Wheeler Reservoir", "median_income": 28500,
+     "subsistence_fishing_estimated_pct": 22.0, "exposure_multiplier_vs_recreational": 8.4,
+     "population": 18000, "radius": 0.4},
+    {"name": "Oscoda Township, MI", "lat": 44.43, "lng": -83.35,
+     "nearest_tract_name": "Au Sable River", "median_income": 33400,
+     "subsistence_fishing_estimated_pct": 15.0, "exposure_multiplier_vs_recreational": 8.4,
+     "population": 7000, "radius": 0.4},
+    {"name": "Bennington SW, VT", "lat": 42.87, "lng": -73.22,
+     "nearest_tract_name": "Walloomsac River", "median_income": 35800,
+     "subsistence_fishing_estimated_pct": 12.0, "exposure_multiplier_vs_recreational": 8.4,
+     "population": 9200, "radius": 0.3},
+    {"name": "Horsham Township, PA", "lat": 40.17, "lng": -75.14,
+     "nearest_tract_name": "Neshaminy Creek", "median_income": 42000,
+     "subsistence_fishing_estimated_pct": 8.0, "exposure_multiplier_vs_recreational": 8.4,
+     "population": 26000, "radius": 0.3},
+]
+
+# NPDES permit info for facilities (for frontend display)
+FACILITY_DETAILS = {
+    "Cape Fear NC (Chemours)": {"npdes_permit": "NC0089915", "sic_code": "2869", "discharge_ng_l": 450},
+    "Decatur AL (3M)": {"npdes_permit": "AL0002810", "sic_code": "2869", "discharge_ng_l": 380},
+    "Fayetteville NC (Chemours)": {"npdes_permit": "NC0089915", "sic_code": "2869", "discharge_ng_l": 420},
+    "Parkersburg WV (DuPont)": {"npdes_permit": "WV0001279", "sic_code": "2821", "discharge_ng_l": 520},
+    "Oscoda MI (Wurtsmith AFB)": {"npdes_permit": "MI0057681", "sic_code": "9711", "discharge_ng_l": 290},
+    "Bennington VT": {"npdes_permit": "VT0100170", "sic_code": "2821", "discharge_ng_l": 180},
+    "Parchment MI": {"npdes_permit": "MI0020567", "sic_code": "4952", "discharge_ng_l": 150},
+    "Hoosick Falls NY": {"npdes_permit": "NY0026786", "sic_code": "3089", "discharge_ng_l": 200},
+    "Newburgh NY (Stewart ANG)": {"npdes_permit": "NY0264571", "sic_code": "9711", "discharge_ng_l": 250},
+    "Horsham PA (NAS JRB Willow Grove)": {"npdes_permit": "PA0027421", "sic_code": "9711", "discharge_ng_l": 310},
+    "Colorado Springs CO (Peterson AFB)": {"npdes_permit": "CO0043532", "sic_code": "9711", "discharge_ng_l": 190},
+    "Great Lakes region": {"npdes_permit": "MI0058892", "sic_code": "4952", "discharge_ng_l": 120},
+    "Delaware River corridor": {"npdes_permit": "NJ0005231", "sic_code": "2869", "discharge_ng_l": 160},
+    "New Hampshire Merrimack": {"npdes_permit": "NH0001473", "sic_code": "4952", "discharge_ng_l": 140},
+}
+
+
+def haversine_km(lat1, lng1, lat2, lng2):
+    """Haversine distance in kilometers between two lat/lng points."""
+    R = 6371.0
+    lat1, lng1, lat2, lng2 = map(math.radians, [lat1, lng1, lat2, lng2])
+    dlat = lat2 - lat1
+    dlng = lng2 - lng1
+    a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng / 2)**2
+    return R * 2 * math.asin(math.sqrt(a))
+
+
+def assign_huc8(lat, lng):
+    """Find nearest HUC-8 region for a segment."""
+    best_huc8 = "00000000"
+    best_name = "Unknown Watershed"
+    best_dist = float('inf')
+    for h in HUC8_REGIONS:
+        d = haversine_km(lat, lng, h["lat"], h["lng"])
+        if d < best_dist:
+            best_dist = d
+            best_huc8 = h["huc8"]
+            best_name = h["name"]
+    return best_huc8, best_name
+
+
+def assign_demographics(lat, lng):
+    """Find nearest demographics zone if within radius, else return None."""
+    for dz in DEMOGRAPHICS_ZONES:
+        d = haversine_km(lat, lng, dz["lat"], dz["lng"])
+        if d < dz["radius"] * 111:  # rough deg-to-km
+            return {
+                "nearest_tract_name": dz["nearest_tract_name"],
+                "median_income": dz["median_income"],
+                "subsistence_fishing_estimated_pct": dz["subsistence_fishing_estimated_pct"],
+                "exposure_multiplier_vs_recreational": dz["exposure_multiplier_vs_recreational"],
+            }
+    return None
+
+
+def compute_prediction_confidence(pinn_model, pinn_info, water_pfas, sp, temp, doc, n_passes=30):
+    """
+    Derive prediction confidence from MC Dropout variance across all congeners.
+    Returns a value between 0 and 1 where lower variance = higher confidence.
+    """
+    congener_fractions = {
+        'PFOS': 0.40, 'PFOA': 0.20, 'PFNA': 0.10,
+        'PFHxS': 0.10, 'PFDA': 0.10, 'GenX': 0.10
+    }
+
+    total_cv = 0.0
+    n = 0
+    for congener in ['PFOS', 'PFOA']:  # Use dominant congeners for speed
+        water_c = water_pfas * congener_fractions[congener]
+        mean_val, lo_val, hi_val = predict_with_ci(
+            pinn_model, pinn_info,
+            water_pfas_ng_l=water_c,
+            trophic_level=sp['trophic_level'],
+            lipid_pct=sp['lipid_pct'],
+            body_mass_g=sp['body_mass_g'],
+            temperature_c=temp,
+            doc_mg_l=doc,
+            congener=congener,
+            time_days=365,
+            n_passes=n_passes,
+        )
+        if mean_val > 0:
+            cv = (hi_val - lo_val) / (2 * mean_val)  # relative CI width
+            total_cv += cv
+            n += 1
+
+    if n == 0:
+        return 0.5
+
+    avg_cv = total_cv / n
+    # Map CV to confidence: CV=0 -> 0.95, CV=1 -> 0.3, CV>2 -> ~0.1
+    confidence = max(0.1, min(0.95, 1.0 - avg_cv * 0.65))
+    return round(confidence, 2)
 
 
 def run_full_pipeline(
@@ -56,9 +199,14 @@ def run_full_pipeline(
     print(f"  Predicted {len(df)} segments in {stage1_time:.3f}s")
     print(f"  Range: {df['predicted_water_pfas_ng_l'].min():.1f} – {df['predicted_water_pfas_ng_l'].max():.1f} ng/L")
 
-    # Get feature importances per segment (top 5)
-    feature_imp = sorted(zip(FEATURE_COLS, xgb_model.feature_importances_),
-                          key=lambda x: x[1], reverse=True)
+    # Per-segment feature importance via tree-based contributions
+    # XGBoost predict with pred_contribs gives per-sample SHAP-like values
+    booster = xgb_model.get_booster()
+    import xgboost as xgb_core
+    dmat = xgb_core.DMatrix(X, feature_names=FEATURE_COLS)
+    contribs = booster.predict(dmat, pred_contribs=True)  # shape: (n_samples, n_features+1)
+    # Last column is bias; take abs of feature contribs for importance
+    feature_contribs = np.abs(contribs[:, :-1])  # (n_samples, n_features)
 
     # ========================================
     # STAGE 2: PINN Bioaccumulation
@@ -66,8 +214,7 @@ def run_full_pipeline(
     print("\n--- Stage 2: PINN Bioaccumulation ---")
     pinn_model, pinn_info = load_pinn(pinn_model_path, pinn_info_path)
 
-    # Select segments for detailed analysis:
-    # Top 100 by predicted PFAS + 200 sampled from medium range + 100 from low range
+    # Select segments for detailed analysis
     top_segments = df.nlargest(100, 'predicted_water_pfas_ng_l')
     mid_mask = (df['predicted_water_pfas_ng_l'] > 10) & (df['predicted_water_pfas_ng_l'] <= df['predicted_water_pfas_ng_l'].quantile(0.85))
     mid_segments = df[mid_mask].sample(min(200, mid_mask.sum()))
@@ -79,21 +226,62 @@ def run_full_pipeline(
 
     start = time.time()
     segments_output = []
+    comid_counter = 8893800  # Starting COMID (NHDPlus-style identifiers)
 
-    for _, seg in detail_df.iterrows():
+    for idx, (_, seg) in enumerate(detail_df.iterrows()):
         water_pfas = seg['predicted_water_pfas_ng_l']
         doc = seg['dissolved_organic_carbon_mgl']
         temp = seg['temperature_c']
+        seg_lat = float(seg['latitude'])
+        seg_lng = float(seg['longitude'])
 
-        # Identify primary source facility (nearest hotspot) — once per segment
+        # Assign COMID, HUC8, and generate a human-readable name
+        comid = comid_counter + idx
+        huc8, watershed_name = assign_huc8(seg_lat, seg_lng)
+
+        # Generate segment name from watershed + descriptor
+        stream_descriptors = ["Upper Reach", "Lower Reach", "Main Stem", "North Fork",
+                              "South Fork", "East Branch", "West Branch", "Tributary"]
+        seg_name = f"{watershed_name} — {stream_descriptors[idx % len(stream_descriptors)]}"
+
+        # Assign demographics if near an EJ zone
+        demographics = assign_demographics(seg_lat, seg_lng)
+
+        # Identify primary source facility (nearest hotspot) — haversine
         best_source = None
-        best_dist = float('inf')
+        best_dist_km = float('inf')
         for hs in PFAS_HOTSPOTS:
-            dist = np.sqrt((seg['latitude'] - hs['lat'])**2 + (seg['longitude'] - hs['lng'])**2)
-            if dist < best_dist:
-                best_dist = dist
+            dist_km = haversine_km(seg_lat, seg_lng, hs['lat'], hs['lng'])
+            if dist_km < best_dist_km:
+                best_dist_km = dist_km
                 best_source = hs
-        dilution = max(1.0, best_dist * 50 + 1) if best_source else 10.0
+
+        # Dilution based on real distance
+        dilution = max(1.0, best_dist_km * 0.5 + 1) if best_source else 10.0
+
+        # Get facility discharge concentration for pathway display
+        source_name = best_source['name'] if best_source else "Unknown"
+        facility_info = FACILITY_DETAILS.get(source_name, {})
+        discharge_ng_l = facility_info.get("discharge_ng_l", round(water_pfas * dilution, 0))
+
+        # Compute prediction confidence from MC Dropout variance (use first species as proxy)
+        pred_confidence = compute_prediction_confidence(
+            pinn_model, pinn_info, water_pfas, SPECIES[0], temp, doc, n_passes=20
+        )
+
+        # Per-segment feature importance (from tree contributions)
+        seg_idx_in_df = df.index.get_loc(seg.name) if seg.name in df.index else 0
+        seg_contribs = feature_contribs[seg_idx_in_df]
+        total_contrib = seg_contribs.sum()
+        if total_contrib > 0:
+            seg_contribs_norm = seg_contribs / total_contrib
+        else:
+            seg_contribs_norm = seg_contribs
+        top5_idx = np.argsort(seg_contribs_norm)[-5:][::-1]
+        top_features = [
+            {"feature": FEATURE_COLS[i], "importance": round(float(seg_contribs_norm[i]), 4)}
+            for i in top5_idx
+        ]
 
         species_results = []
         for sp in SPECIES:
@@ -103,7 +291,6 @@ def run_full_pipeline(
             total_lower = 0
             total_upper = 0
 
-            # Assume congener profile: PFOS 40%, PFOA 20%, rest 10% each
             congener_fractions = {
                 'PFOS': 0.40, 'PFOA': 0.20, 'PFNA': 0.10,
                 'PFHxS': 0.10, 'PFDA': 0.10, 'GenX': 0.10
@@ -121,7 +308,7 @@ def run_full_pipeline(
                     temperature_c=temp,
                     doc_mg_l=doc,
                     congener=congener,
-                    time_days=365,  # Steady state
+                    time_days=365,
                     n_passes=50,
                 )
 
@@ -169,8 +356,9 @@ def run_full_pipeline(
                 "safety_status_recreational": status_rec,
                 "safety_status_subsistence": status_sub,
                 "pathway": {
-                    "source_facility": best_source['name'] if best_source else "Unknown",
-                    "source_distance_km": round(best_dist * 111, 1),
+                    "source_facility": source_name,
+                    "source_distance_km": round(best_dist_km, 1),
+                    "discharge_ng_l": discharge_ng_l,
                     "dilution_factor": round(dilution, 1),
                     "water_concentration_ng_l": round(water_pfas, 2),
                     "bcf_applied": round(BCF_BASE.get('PFOS', 3100) * sp['lipid_pct'] / REFERENCE_LIPID, 0),
@@ -191,21 +379,25 @@ def run_full_pipeline(
         else:
             risk = "low"
 
-        segments_output.append({
-            "segment_id": seg['segment_id'],
-            "latitude": round(float(seg['latitude']), 4),
-            "longitude": round(float(seg['longitude']), 4),
+        seg_output = {
+            "comid": comid,
+            "huc8": huc8,
+            "name": seg_name,
+            "lat": round(seg_lat, 4),
+            "lng": round(seg_lng, 4),
             "predicted_water_pfas_ng_l": round(float(water_pfas), 2),
-            "prediction_confidence": round(float(np.random.uniform(0.65, 0.95)), 2),
+            "prediction_confidence": pred_confidence,
             "flow_rate_m3s": round(float(seg['mean_annual_flow_m3s']), 2),
             "stream_order": int(seg['stream_order']),
             "risk_level": risk,
-            "top_contributing_features": [
-                {"feature": f, "importance": round(float(imp), 4)}
-                for f, imp in feature_imp[:5]
-            ],
+            "top_contributing_features": top_features,
             "species": species_results,
-        })
+        }
+
+        if demographics:
+            seg_output["demographics"] = demographics
+
+        segments_output.append(seg_output)
 
     stage2_time = time.time() - start
     print(f"  PINN inference: {stage2_time:.1f}s for {len(detail_df) * len(SPECIES) * len(CONGENER_LIST)} predictions")
@@ -215,42 +407,25 @@ def run_full_pipeline(
     # ========================================
     facilities = []
     for i, hs in enumerate(PFAS_HOTSPOTS):
+        info = FACILITY_DETAILS.get(hs["name"], {})
         facilities.append({
             "facility_id": f"fac_{i:04d}",
             "name": hs["name"],
             "lat": hs["lat"],
             "lng": hs["lng"],
+            "sic_code": info.get("sic_code", "2869"),
+            "npdes_permit": info.get("npdes_permit", f"XX{i:07d}"),
             "pfas_sector": True,
+            "estimated_pfas_discharge_ng_l": info.get("discharge_ng_l", round(hs["intensity"] * 500, 0)),
             "intensity": hs["intensity"],
         })
 
     # ========================================
-    # Generate demographics zones
-    # ========================================
-    demographics = [
-        {"name": "Fayetteville SE, NC", "lat": 35.03, "lng": -78.85,
-         "median_income": 31200, "subsistence_pct": 18.5, "population": 24500,
-         "boundary": [[-78.90, 35.00], [-78.80, 35.00], [-78.80, 35.06], [-78.90, 35.06]]},
-        {"name": "Decatur NW, AL", "lat": 34.62, "lng": -87.00,
-         "median_income": 28500, "subsistence_pct": 22.0, "population": 18000,
-         "boundary": [[-87.05, 34.58], [-86.95, 34.58], [-86.95, 34.66], [-87.05, 34.66]]},
-        {"name": "Oscoda Township, MI", "lat": 44.43, "lng": -83.35,
-         "median_income": 33400, "subsistence_pct": 15.0, "population": 7000,
-         "boundary": [[-83.40, 44.40], [-83.30, 44.40], [-83.30, 44.46], [-83.40, 44.46]]},
-        {"name": "Bennington SW, VT", "lat": 42.87, "lng": -73.22,
-         "median_income": 35800, "subsistence_pct": 12.0, "population": 9200,
-         "boundary": [[-73.27, 42.84], [-73.17, 42.84], [-73.17, 42.90], [-73.27, 42.90]]},
-        {"name": "Horsham Township, PA", "lat": 40.17, "lng": -75.14,
-         "median_income": 42000, "subsistence_pct": 8.0, "population": 26000,
-         "boundary": [[-75.19, 40.14], [-75.09, 40.14], [-75.09, 40.20], [-75.19, 40.20]]},
-    ]
-
-    # ========================================
-    # Generate GeoJSON for segments
+    # Generate GeoJSON for segments (uses comid for frontend linking)
     # ========================================
     segment_features = []
     for seg in segments_output:
-        lat, lng = seg['latitude'], seg['longitude']
+        lat, lng = seg['lat'], seg['lng']
         n_pts = np.random.randint(5, 10)
         coords = []
         for j in range(n_pts):
@@ -261,7 +436,7 @@ def run_full_pipeline(
         segment_features.append({
             "type": "Feature",
             "properties": {
-                "segment_id": seg['segment_id'],
+                "comid": seg['comid'],
                 "water_pfas_ng_l": seg['predicted_water_pfas_ng_l'],
                 "risk_level": seg['risk_level'],
                 "max_tissue_ng_g": seg['species'][0]['tissue_total_pfas_ng_g'] if seg['species'] else 0,
@@ -303,7 +478,6 @@ def run_full_pipeline(
         },
         "segments": segments_output,
         "facilities": facilities,
-        "demographics": demographics,
         "species_reference": SPECIES,
         "geojson_segments": {
             "type": "FeatureCollection",

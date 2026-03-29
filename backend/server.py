@@ -7,7 +7,7 @@ import json
 import os
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title="TrophicTrace API", version="1.0")
@@ -52,24 +52,24 @@ def get_segments(
     segments = NATIONAL_DATA["segments"]
 
     if min_lat is not None:
-        segments = [s for s in segments if s["latitude"] >= min_lat]
+        segments = [s for s in segments if s["lat"] >= min_lat]
     if max_lat is not None:
-        segments = [s for s in segments if s["latitude"] <= max_lat]
+        segments = [s for s in segments if s["lat"] <= max_lat]
     if min_lng is not None:
-        segments = [s for s in segments if s["longitude"] >= min_lng]
+        segments = [s for s in segments if s["lng"] >= min_lng]
     if max_lng is not None:
-        segments = [s for s in segments if s["longitude"] <= max_lng]
+        segments = [s for s in segments if s["lng"] <= max_lng]
     if risk_level:
         segments = [s for s in segments if s["risk_level"] == risk_level]
 
     return {"count": len(segments), "segments": segments}
 
 
-@app.get("/api/segment/{segment_id}")
-def get_segment(segment_id: str):
-    """Return detailed data for a single segment."""
+@app.get("/api/segment/{comid}")
+def get_segment(comid: int):
+    """Return detailed data for a single segment by COMID."""
     for seg in NATIONAL_DATA["segments"]:
-        if seg["segment_id"] == segment_id:
+        if seg["comid"] == comid:
             return seg
     return JSONResponse(status_code=404, content={"error": "Segment not found"})
 
@@ -78,12 +78,6 @@ def get_segment(segment_id: str):
 def get_facilities():
     """Return all known PFAS facilities."""
     return {"facilities": NATIONAL_DATA["facilities"]}
-
-
-@app.get("/api/demographics")
-def get_demographics():
-    """Return environmental justice demographic zones."""
-    return {"demographics": NATIONAL_DATA["demographics"]}
 
 
 @app.get("/api/geojson/segments")
@@ -134,7 +128,6 @@ def get_summary():
         "total_unsafe_species_instances": total_unsafe_species,
         "max_hazard_quotient_subsistence": round(max_hq, 2),
         "n_facilities": len(NATIONAL_DATA["facilities"]),
-        "n_ej_zones": len(NATIONAL_DATA["demographics"]),
     }
 
 
