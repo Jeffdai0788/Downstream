@@ -177,6 +177,8 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
     ]
 
     // ── Heatmap wash from water-only points ──────────────────────────────
+    // Weight driven heavily by PFAS value so color reflects contamination
+    // level, not just point density. Color ramp matches polygon ZONE_COLOR.
     m.addLayer({
       id: 'water-heatmap',
       type: 'heatmap',
@@ -184,12 +186,11 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
       paint: {
         'heatmap-weight': [
           'interpolate', ['linear'], ['get', 'pfas_ng_l'],
-          0,    0.05,
-          5,    0.15,
-          20,   0.3,
-          50,   0.5,
-          100,  0.7,
-          500,  1.0,
+          0,    0.01,
+          8,    0.12,
+          20,   0.35,
+          50,   0.65,
+          100,  1.0,
         ],
         'heatmap-radius': [
           'interpolate', ['linear'], ['zoom'],
@@ -201,20 +202,20 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
         ],
         'heatmap-intensity': [
           'interpolate', ['linear'], ['zoom'],
-          3,  0.3,
-          6,  0.5,
-          9,  0.8,
+          3,  0.4,
+          6,  0.6,
+          9,  0.9,
         ],
         'heatmap-color': [
           'interpolate', ['linear'], ['heatmap-density'],
           0,    'rgba(0,0,0,0)',
-          0.08, 'rgba(0,0,0,0)',
-          0.15, 'rgba(46,184,114,0.25)',
-          0.35, 'rgba(46,184,114,0.40)',
-          0.55, 'rgba(224,160,48,0.50)',
-          0.75, 'rgba(232,132,90,0.60)',
-          0.90, 'rgba(220,68,68,0.70)',
-          1.0,  'rgba(200,40,40,0.80)',
+          0.05, 'rgba(0,0,0,0)',
+          0.10, 'rgba(46,184,114,0.20)',   // SAFE_COLOR
+          0.25, 'rgba(46,184,114,0.35)',   // SAFE_COLOR
+          0.40, 'rgba(224,160,48,0.45)',   // LIMITED_COLOR
+          0.55, 'rgba(232,132,90,0.55)',   // MODERATE_COLOR
+          0.75, 'rgba(220,68,68,0.65)',    // UNSAFE_COLOR
+          1.0,  'rgba(200,40,40,0.75)',    // UNSAFE_COLOR deep
         ],
         'heatmap-opacity': 0.7,
       },
