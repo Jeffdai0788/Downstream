@@ -1,2 +1,10 @@
+node_modules/
+dist/
+dist2/
+dist3/
+.vercel
+.DS_Store
+*.pyc
+__pycache__/
 backend/venv/
 backend/api_cache/

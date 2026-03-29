@@ -1,0 +1,5 @@
+{
+  "installCommand": "cd trophictrace-viz && npm install",
+  "buildCommand": "cd trophictrace-viz && npm run build",
+  "outputDirectory": "trophictrace-viz/dist"
+}
