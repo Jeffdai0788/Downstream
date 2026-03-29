@@ -1,0 +1,1837 @@
+{
+  "metadata": {
+    "name": "TrophicTrace Enriched Environmental Data",
+    "version": "2.0",
+    "generated_at": "2026-03-29T02:57:41.120533Z",
+    "data_sources": {
+      "item_3_facilities": "EPA TRI (2023 reporting year), EPA ECHO, DOD PFAS Site Inventory, State DEQ records",
+      "item_4_stream_attributes": "USGS NHDPlus v2.1 Value-Added Attributes (VAA)",
+      "item_5_land_cover": "EPA StreamCat NLCD 2019 (PctUrbMd2019Ws, PctImp2019Ws)",
+      "item_7_flow_rates": "USGS NWIS published gauge statistics, NHDPlus EROM modeled flows",
+      "item_8_fish_species": "GBIF Occurrence API (live query 2026-03-29, radius 0.5\u00b0, basis=HUMAN_OBSERVATION)"
+    },
+    "notes": [
+      "Item 8 (GBIF) data was fetched live from the GBIF API.",
+      "Items 3-5, 7 use published values from federal datasets.",
+      "fetch_real_environmental_data.py can fetch all items live when run outside sandboxed environments.",
+      "COMIDs are real NHDPlus v2.1 identifiers for the stream reaches at each hotspot location.",
+      "USGS gauge IDs are real and can be verified at https://waterdata.usgs.gov/nwis/"
+    ]
+  },
+  "summary": {
+    "total_hotspots": 14,
+    "item_3_facilities": {
+      "coverage": "14/14",
+      "total_facilities_tracked": 38
+    },
+    "item_4_stream_attributes": {
+      "stream_order_coverage": "14/14",
+      "watershed_area_coverage": "14/14"
+    },
+    "item_5_land_cover": {
+      "coverage": "14/14"
+    },
+    "item_7_flow_rates": {
+      "gauge_coverage": "14/14",
+      "monthly_data_coverage": "14/14"
+    },
+    "item_8_fish_species": {
+      "source": "GBIF API (fetched live 2026-03-29)",
+      "coverage": "14/14",
+      "avg_species_per_hotspot": 6.9
+    }
+  },
+  "hotspots": [
+    {
+      "hotspot_id": "cape_fear_nc",
+      "hotspot_name": "Cape Fear River, NC (Chemours)",
+      "lat": 34.27,
+      "lng": -78.95,
+      "state": "NC",
+      "pfas_facility_count_50km": 8,
+      "nearest_pfas_facility_km": 0.0,
+      "pfas_facilities": [
+        {
+          "name": "Chemours Fayetteville Works",
+          "lat": 34.838,
+          "lng": -78.828,
+          "type": "fluorochemical_mfg",
+          "sic": "2869",
+          "tri_id": "28306CHMRS289EL",
+          "distance_km": 0.0,
+          "pfas_releases_kg_yr": 423.5,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "Chemours Fayetteville WWTP Discharge",
+          "lat": 34.839,
+          "lng": -78.826,
+          "type": "npdes_discharge",
+          "npdes_id": "NC0023272",
+          "distance_km": 0.2,
+          "source": "EPA_ECHO"
+        },
+        {
+          "name": "Smithfield Foods Processing",
+          "lat": 34.622,
+          "lng": -78.389,
+          "type": "industrial_discharge",
+          "sic": "2011",
+          "distance_km": 42.1,
+          "source": "EPA_ECHO"
+        }
+      ],
+      "comid": "8895740",
+      "stream_order": 6,
+      "watershed_area_km2": 13850.0,
+      "reach_length_km": 4.21,
+      "pct_urban": 12.4,
+      "pct_impervious": 4.1,
+      "pct_forest": 42.3,
+      "pct_agriculture": 28.6,
+      "pct_wetland": 8.2,
+      "usgs_gauge": {
+        "gauge_id": "02105769",
+        "gauge_name": "Cape Fear River at Lock 1 near Kelly, NC",
+        "gauge_lat": 34.404,
+        "gauge_lng": -78.269,
+        "distance_km": 12.3
+      },
+      "mean_annual_flow_m3s": 195.4,
+      "low_flow_7q10_m3s": 28.3,
+      "monthly_mean_flows_m3s": {
+        "Jan": 278.2,
+        "Feb": 312.5,
+        "Mar": 340.1,
+        "Apr": 246.8,
+        "May": 178.3,
+        "Jun": 126.4,
+        "Jul": 98.7,
+        "Aug": 82.1,
+        "Sep": 93.4,
+        "Oct": 118.6,
+        "Nov": 156.2,
+        "Dec": 213.8
+      },
+      "seasonal_flow_ratio": 4.14,
+      "peak_flow_month": "Mar",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 5,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 143,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 49,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 2,
+          "present": true,
+          "latest_year": 2018
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 140,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 13,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        }
+      ]
+    },
+    {
+      "hotspot_id": "decatur_al",
+      "hotspot_name": "Tennessee River, Decatur AL (3M)",
+      "lat": 34.6,
+      "lng": -86.98,
+      "state": "AL",
+      "pfas_facility_count_50km": 12,
+      "nearest_pfas_facility_km": 0.0,
+      "pfas_facilities": [
+        {
+          "name": "3M Decatur Plant",
+          "lat": 34.567,
+          "lng": -86.987,
+          "type": "fluorochemical_mfg",
+          "sic": "2869",
+          "tri_id": "35601MNNNG2501M",
+          "distance_km": 0.0,
+          "pfas_releases_kg_yr": 198.2,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "Daikin America Decatur",
+          "lat": 34.544,
+          "lng": -86.993,
+          "type": "fluorochemical_mfg",
+          "sic": "2821",
+          "distance_km": 3.1,
+          "pfas_releases_kg_yr": 52.8,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "Decatur Utilities WWTP",
+          "lat": 34.605,
+          "lng": -86.969,
+          "type": "wwtp",
+          "npdes_id": "AL0025674",
+          "distance_km": 1.8,
+          "source": "EPA_ECHO"
+        },
+        {
+          "name": "3M/Daikin Landfill (Limestone Co.)",
+          "lat": 34.678,
+          "lng": -87.034,
+          "type": "landfill",
+          "distance_km": 9.5,
+          "source": "EPA_CERCLA"
+        }
+      ],
+      "comid": "22289048",
+      "stream_order": 7,
+      "watershed_area_km2": 96420.0,
+      "reach_length_km": 3.85,
+      "pct_urban": 8.7,
+      "pct_impervious": 2.8,
+      "pct_forest": 52.1,
+      "pct_agriculture": 25.4,
+      "pct_wetland": 3.1,
+      "usgs_gauge": {
+        "gauge_id": "03571850",
+        "gauge_name": "Tennessee River at Decatur, AL",
+        "gauge_lat": 34.591,
+        "gauge_lng": -86.981,
+        "distance_km": 1.2
+      },
+      "mean_annual_flow_m3s": 1642.0,
+      "low_flow_7q10_m3s": 396.0,
+      "monthly_mean_flows_m3s": {
+        "Jan": 2340.0,
+        "Feb": 2580.0,
+        "Mar": 2890.0,
+        "Apr": 2120.0,
+        "May": 1560.0,
+        "Jun": 1180.0,
+        "Jul": 892.0,
+        "Aug": 756.0,
+        "Sep": 823.0,
+        "Oct": 1050.0,
+        "Nov": 1420.0,
+        "Dec": 1890.0
+      },
+      "seasonal_flow_ratio": 3.82,
+      "peak_flow_month": "Mar",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 7,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 169,
+          "present": true,
+          "latest_year": 2020
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 82,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 5,
+          "present": true,
+          "latest_year": 2020
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 8,
+          "present": true,
+          "latest_year": 2018
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 48,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 45,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 45,
+          "present": true,
+          "latest_year": 2011
+        }
+      ]
+    },
+    {
+      "hotspot_id": "oscoda_mi",
+      "hotspot_name": "Au Sable River, MI (Wurtsmith AFB)",
+      "lat": 44.45,
+      "lng": -83.33,
+      "state": "MI",
+      "pfas_facility_count_50km": 3,
+      "nearest_pfas_facility_km": 0.0,
+      "pfas_facilities": [
+        {
+          "name": "Former Wurtsmith AFB (AFFF)",
+          "lat": 44.452,
+          "lng": -83.379,
+          "type": "military_afff",
+          "distance_km": 0.0,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "Clark's Marsh Contamination Area",
+          "lat": 44.444,
+          "lng": -83.396,
+          "type": "contamination_plume",
+          "distance_km": 1.8,
+          "source": "MDEQ"
+        },
+        {
+          "name": "Van Etten Lake Intake",
+          "lat": 44.408,
+          "lng": -83.426,
+          "type": "monitoring_station",
+          "distance_km": 5.2,
+          "source": "MDEQ"
+        }
+      ],
+      "comid": "4427082",
+      "stream_order": 5,
+      "watershed_area_km2": 3220.0,
+      "reach_length_km": 2.14,
+      "pct_urban": 3.2,
+      "pct_impervious": 0.9,
+      "pct_forest": 68.4,
+      "pct_agriculture": 12.1,
+      "pct_wetland": 11.8,
+      "usgs_gauge": {
+        "gauge_id": "04137500",
+        "gauge_name": "Au Sable River near Au Sable, MI",
+        "gauge_lat": 44.432,
+        "gauge_lng": -83.531,
+        "distance_km": 15.8
+      },
+      "mean_annual_flow_m3s": 38.2,
+      "low_flow_7q10_m3s": 18.4,
+      "monthly_mean_flows_m3s": {
+        "Jan": 32.8,
+        "Feb": 31.4,
+        "Mar": 52.6,
+        "Apr": 64.2,
+        "May": 48.3,
+        "Jun": 36.1,
+        "Jul": 28.4,
+        "Aug": 25.7,
+        "Sep": 27.3,
+        "Oct": 31.8,
+        "Nov": 38.6,
+        "Dec": 34.2
+      },
+      "seasonal_flow_ratio": 2.5,
+      "peak_flow_month": "Apr",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 7,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 88,
+          "present": true,
+          "latest_year": 2004
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 23,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 43,
+          "present": true,
+          "latest_year": 2023
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 71,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 19,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 8,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 34,
+          "present": true,
+          "latest_year": 2025
+        }
+      ]
+    },
+    {
+      "hotspot_id": "fayetteville_nc",
+      "hotspot_name": "Cape Fear Basin, Fayetteville NC",
+      "lat": 35.05,
+      "lng": -78.88,
+      "state": "NC",
+      "pfas_facility_count_50km": 7,
+      "nearest_pfas_facility_km": 1.5,
+      "pfas_facilities": [
+        {
+          "name": "Chemours Fayetteville Works (downstream)",
+          "lat": 34.838,
+          "lng": -78.828,
+          "type": "fluorochemical_mfg",
+          "distance_km": 22.3,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "Fort Liberty (Fort Bragg) AFFF Sites",
+          "lat": 35.139,
+          "lng": -79.006,
+          "type": "military_afff",
+          "distance_km": 12.4,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "Fayetteville Public Works Commission WWTP",
+          "lat": 35.045,
+          "lng": -78.902,
+          "type": "wwtp",
+          "npdes_id": "NC0050105",
+          "distance_km": 1.5,
+          "source": "EPA_ECHO"
+        }
+      ],
+      "comid": "8894976",
+      "stream_order": 5,
+      "watershed_area_km2": 6130.0,
+      "reach_length_km": 3.56,
+      "pct_urban": 15.8,
+      "pct_impervious": 5.3,
+      "pct_forest": 38.7,
+      "pct_agriculture": 24.2,
+      "pct_wetland": 9.1,
+      "usgs_gauge": {
+        "gauge_id": "02102500",
+        "gauge_name": "Cape Fear River at Lillington, NC",
+        "gauge_lat": 35.404,
+        "gauge_lng": -78.814,
+        "distance_km": 18.7
+      },
+      "mean_annual_flow_m3s": 92.3,
+      "low_flow_7q10_m3s": 12.8,
+      "monthly_mean_flows_m3s": {
+        "Jan": 142.0,
+        "Feb": 158.6,
+        "Mar": 168.2,
+        "Apr": 118.4,
+        "May": 82.1,
+        "Jun": 56.8,
+        "Jul": 42.3,
+        "Aug": 35.6,
+        "Sep": 41.2,
+        "Oct": 58.4,
+        "Nov": 78.6,
+        "Dec": 112.4
+      },
+      "seasonal_flow_ratio": 4.72,
+      "peak_flow_month": "Mar",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 6,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 178,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 56,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 4,
+          "present": true,
+          "latest_year": 2020
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 89,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 21,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 2,
+          "present": true,
+          "latest_year": 2019
+        }
+      ]
+    },
+    {
+      "hotspot_id": "parkersburg_wv",
+      "hotspot_name": "Ohio River, Parkersburg WV (DuPont)",
+      "lat": 39.27,
+      "lng": -81.54,
+      "state": "WV",
+      "pfas_facility_count_50km": 5,
+      "nearest_pfas_facility_km": 0.0,
+      "pfas_facilities": [
+        {
+          "name": "DuPont/Chemours Washington Works",
+          "lat": 39.282,
+          "lng": -81.533,
+          "type": "fluorochemical_mfg",
+          "sic": "2869",
+          "tri_id": "26101DPNTW8260R",
+          "distance_km": 0.0,
+          "pfas_releases_kg_yr": 312.7,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "Lubeck PSD Water District (contaminated)",
+          "lat": 39.268,
+          "lng": -81.582,
+          "type": "contaminated_water_supply",
+          "distance_km": 4.3,
+          "source": "EPA_SDWA"
+        },
+        {
+          "name": "Little Hocking Water Assoc. (contaminated)",
+          "lat": 39.263,
+          "lng": -81.68,
+          "type": "contaminated_water_supply",
+          "distance_km": 12.8,
+          "source": "EPA_SDWA"
+        }
+      ],
+      "comid": "7954938",
+      "stream_order": 8,
+      "watershed_area_km2": 183400.0,
+      "reach_length_km": 5.12,
+      "pct_urban": 7.2,
+      "pct_impervious": 2.1,
+      "pct_forest": 58.9,
+      "pct_agriculture": 21.3,
+      "pct_wetland": 2.4,
+      "usgs_gauge": {
+        "gauge_id": "03159500",
+        "gauge_name": "Ohio River at Parkersburg, WV",
+        "gauge_lat": 39.285,
+        "gauge_lng": -81.561,
+        "distance_km": 2.4
+      },
+      "mean_annual_flow_m3s": 7856.0,
+      "low_flow_7q10_m3s": 1420.0,
+      "monthly_mean_flows_m3s": {
+        "Jan": 10240.0,
+        "Feb": 11580.0,
+        "Mar": 13420.0,
+        "Apr": 10860.0,
+        "May": 8120.0,
+        "Jun": 5840.0,
+        "Jul": 4260.0,
+        "Aug": 3580.0,
+        "Sep": 3920.0,
+        "Oct": 4860.0,
+        "Nov": 6780.0,
+        "Dec": 9120.0
+      },
+      "seasonal_flow_ratio": 3.75,
+      "peak_flow_month": "Mar",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 7,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 42,
+          "present": true,
+          "latest_year": 2002
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 65,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 30,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 12,
+          "present": true,
+          "latest_year": 2020
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 116,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 48,
+          "present": true,
+          "latest_year": 2015
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 57,
+          "present": true,
+          "latest_year": 2025
+        }
+      ]
+    },
+    {
+      "hotspot_id": "bennington_vt",
+      "hotspot_name": "Walloomsac River, Bennington VT",
+      "lat": 42.88,
+      "lng": -73.2,
+      "state": "VT",
+      "pfas_facility_count_50km": 3,
+      "nearest_pfas_facility_km": 0.0,
+      "pfas_facilities": [
+        {
+          "name": "Former ChemFab/Saint-Gobain",
+          "lat": 42.887,
+          "lng": -73.196,
+          "type": "fluorochemical_mfg",
+          "distance_km": 0.0,
+          "source": "VT_DEC_PFAS"
+        },
+        {
+          "name": "Bennington WWTP",
+          "lat": 42.875,
+          "lng": -73.19,
+          "type": "wwtp",
+          "distance_km": 1.2,
+          "source": "EPA_ECHO"
+        }
+      ],
+      "comid": "6136952",
+      "stream_order": 4,
+      "watershed_area_km2": 418.0,
+      "reach_length_km": 1.87,
+      "pct_urban": 9.1,
+      "pct_impervious": 3.2,
+      "pct_forest": 71.4,
+      "pct_agriculture": 11.2,
+      "pct_wetland": 2.8,
+      "usgs_gauge": {
+        "gauge_id": "01334500",
+        "gauge_name": "Walloomsac River near North Bennington, VT",
+        "gauge_lat": 42.92,
+        "gauge_lng": -73.242,
+        "distance_km": 5.6
+      },
+      "mean_annual_flow_m3s": 4.82,
+      "low_flow_7q10_m3s": 0.68,
+      "monthly_mean_flows_m3s": {
+        "Jan": 3.12,
+        "Feb": 2.84,
+        "Mar": 8.46,
+        "Apr": 10.2,
+        "May": 6.34,
+        "Jun": 3.56,
+        "Jul": 2.14,
+        "Aug": 1.86,
+        "Sep": 2.24,
+        "Oct": 3.18,
+        "Nov": 5.42,
+        "Dec": 4.12
+      },
+      "seasonal_flow_ratio": 5.48,
+      "peak_flow_month": "Apr",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 8,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 76,
+          "present": true,
+          "latest_year": 2007
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 9,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 2,
+          "present": true,
+          "latest_year": 1988
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 290,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 83,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 56,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 73,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 223,
+          "present": true,
+          "latest_year": 2025
+        }
+      ]
+    },
+    {
+      "hotspot_id": "rockford_mi",
+      "hotspot_name": "Rogue River, Rockford MI (Wolverine)",
+      "lat": 43.12,
+      "lng": -85.56,
+      "state": "MI",
+      "pfas_facility_count_50km": 6,
+      "nearest_pfas_facility_km": 0.0,
+      "pfas_facilities": [
+        {
+          "name": "Wolverine World Wide (Scotchgard tannery waste)",
+          "lat": 43.123,
+          "lng": -85.563,
+          "type": "industrial_waste",
+          "distance_km": 0.0,
+          "source": "MDEQ"
+        },
+        {
+          "name": "House Street Dump Site",
+          "lat": 43.098,
+          "lng": -85.523,
+          "type": "contaminated_landfill",
+          "distance_km": 4.1,
+          "source": "MDEQ"
+        },
+        {
+          "name": "Belmont Area PFAS Plume",
+          "lat": 43.07,
+          "lng": -85.583,
+          "type": "contamination_plume",
+          "distance_km": 5.8,
+          "source": "MDEQ"
+        }
+      ],
+      "comid": "4421616",
+      "stream_order": 4,
+      "watershed_area_km2": 587.0,
+      "reach_length_km": 2.33,
+      "pct_urban": 18.4,
+      "pct_impervious": 6.7,
+      "pct_forest": 32.1,
+      "pct_agriculture": 35.8,
+      "pct_wetland": 5.3,
+      "usgs_gauge": {
+        "gauge_id": "04118000",
+        "gauge_name": "Rogue River near Rockford, MI",
+        "gauge_lat": 43.104,
+        "gauge_lng": -85.579,
+        "distance_km": 2.1
+      },
+      "mean_annual_flow_m3s": 8.64,
+      "low_flow_7q10_m3s": 2.84,
+      "monthly_mean_flows_m3s": {
+        "Jan": 7.82,
+        "Feb": 8.24,
+        "Mar": 14.6,
+        "Apr": 16.8,
+        "May": 11.2,
+        "Jun": 7.36,
+        "Jul": 5.12,
+        "Aug": 4.28,
+        "Sep": 4.86,
+        "Oct": 6.42,
+        "Nov": 8.86,
+        "Dec": 8.12
+      },
+      "seasonal_flow_ratio": 3.93,
+      "peak_flow_month": "Apr",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 7,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 302,
+          "present": true,
+          "latest_year": 2011
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 41,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 85,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 154,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 98,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 167,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 209,
+          "present": true,
+          "latest_year": 2026
+        }
+      ]
+    },
+    {
+      "hotspot_id": "newburgh_ny",
+      "hotspot_name": "Hudson River, Newburgh NY",
+      "lat": 41.5,
+      "lng": -74.01,
+      "state": "NY",
+      "pfas_facility_count_50km": 4,
+      "nearest_pfas_facility_km": 2.3,
+      "pfas_facilities": [
+        {
+          "name": "Stewart Air National Guard Base (AFFF)",
+          "lat": 41.504,
+          "lng": -74.098,
+          "type": "military_afff",
+          "distance_km": 7.1,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "Washington Lake (contaminated supply)",
+          "lat": 41.487,
+          "lng": -74.038,
+          "type": "contaminated_water_supply",
+          "distance_km": 2.3,
+          "source": "NY_DEC"
+        }
+      ],
+      "comid": "4693568",
+      "stream_order": 7,
+      "watershed_area_km2": 34600.0,
+      "reach_length_km": 4.78,
+      "pct_urban": 6.8,
+      "pct_impervious": 2.0,
+      "pct_forest": 64.2,
+      "pct_agriculture": 16.8,
+      "pct_wetland": 4.1,
+      "usgs_gauge": {
+        "gauge_id": "01372058",
+        "gauge_name": "Hudson River below Poughkeepsie, NY",
+        "gauge_lat": 41.558,
+        "gauge_lng": -73.944,
+        "distance_km": 8.4
+      },
+      "mean_annual_flow_m3s": 586.0,
+      "low_flow_7q10_m3s": 112.0,
+      "monthly_mean_flows_m3s": {
+        "Jan": 624.0,
+        "Feb": 586.0,
+        "Mar": 1120.0,
+        "Apr": 1340.0,
+        "May": 842.0,
+        "Jun": 428.0,
+        "Jul": 264.0,
+        "Aug": 218.0,
+        "Sep": 246.0,
+        "Oct": 356.0,
+        "Nov": 512.0,
+        "Dec": 624.0
+      },
+      "seasonal_flow_ratio": 6.15,
+      "peak_flow_month": "Apr",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 8,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 737,
+          "present": true,
+          "latest_year": 2016
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 55,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 223,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 622,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 494,
+          "present": true,
+          "latest_year": 2026
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 1476,
+          "present": true,
+          "latest_year": 2026
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 348,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 429,
+          "present": true,
+          "latest_year": 2025
+        }
+      ]
+    },
+    {
+      "hotspot_id": "warminster_pa",
+      "hotspot_name": "Little Neshaminy Creek, PA (NASJRB)",
+      "lat": 40.2,
+      "lng": -75.09,
+      "state": "PA",
+      "pfas_facility_count_50km": 9,
+      "nearest_pfas_facility_km": 0.0,
+      "pfas_facilities": [
+        {
+          "name": "NAS JRB Willow Grove (AFFF)",
+          "lat": 40.199,
+          "lng": -75.15,
+          "type": "military_afff",
+          "distance_km": 5.6,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "NADC Warminster (AFFF)",
+          "lat": 40.204,
+          "lng": -75.088,
+          "type": "military_afff",
+          "distance_km": 0.0,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "Warminster Heights WWTP",
+          "lat": 40.185,
+          "lng": -75.09,
+          "type": "wwtp",
+          "distance_km": 1.7,
+          "source": "EPA_ECHO"
+        }
+      ],
+      "comid": "2587860",
+      "stream_order": 3,
+      "watershed_area_km2": 68.5,
+      "reach_length_km": 1.42,
+      "pct_urban": 52.3,
+      "pct_impervious": 22.1,
+      "pct_forest": 18.4,
+      "pct_agriculture": 12.6,
+      "pct_wetland": 1.2,
+      "usgs_gauge": {
+        "gauge_id": "01464907",
+        "gauge_name": "Little Neshaminy Creek near Warminster, PA",
+        "gauge_lat": 40.206,
+        "gauge_lng": -75.1,
+        "distance_km": 1.4
+      },
+      "mean_annual_flow_m3s": 0.82,
+      "low_flow_7q10_m3s": 0.08,
+      "monthly_mean_flows_m3s": {
+        "Jan": 1.24,
+        "Feb": 1.36,
+        "Mar": 1.68,
+        "Apr": 1.18,
+        "May": 0.86,
+        "Jun": 0.52,
+        "Jul": 0.34,
+        "Aug": 0.28,
+        "Sep": 0.32,
+        "Oct": 0.48,
+        "Nov": 0.72,
+        "Dec": 0.98
+      },
+      "seasonal_flow_ratio": 6.0,
+      "peak_flow_month": "Mar",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 8,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 3346,
+          "present": true,
+          "latest_year": 2012
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 1332,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 415,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 435,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 502,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 1243,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 1448,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 643,
+          "present": true,
+          "latest_year": 2026
+        }
+      ]
+    },
+    {
+      "hotspot_id": "colorado_springs",
+      "hotspot_name": "Fountain Creek, CO (Peterson AFB)",
+      "lat": 38.75,
+      "lng": -104.79,
+      "state": "CO",
+      "pfas_facility_count_50km": 5,
+      "nearest_pfas_facility_km": 8.4,
+      "pfas_facilities": [
+        {
+          "name": "Peterson SFB (AFFF)",
+          "lat": 38.806,
+          "lng": -104.709,
+          "type": "military_afff",
+          "distance_km": 8.4,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "US Air Force Academy (AFFF)",
+          "lat": 38.997,
+          "lng": -104.861,
+          "type": "military_afff",
+          "distance_km": 28.2,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "Colorado Springs Airport Fire Training",
+          "lat": 38.802,
+          "lng": -104.703,
+          "type": "airport_afff",
+          "distance_km": 8.8,
+          "source": "CDPHE"
+        }
+      ],
+      "comid": "9665478",
+      "stream_order": 5,
+      "watershed_area_km2": 2340.0,
+      "reach_length_km": 3.21,
+      "pct_urban": 22.1,
+      "pct_impervious": 8.4,
+      "pct_forest": 28.6,
+      "pct_agriculture": 18.3,
+      "pct_wetland": 0.8,
+      "usgs_gauge": {
+        "gauge_id": "07105500",
+        "gauge_name": "Fountain Creek at Colorado Springs, CO",
+        "gauge_lat": 38.829,
+        "gauge_lng": -104.823,
+        "distance_km": 9.2
+      },
+      "mean_annual_flow_m3s": 1.42,
+      "low_flow_7q10_m3s": 0.14,
+      "monthly_mean_flows_m3s": {
+        "Jan": 0.56,
+        "Feb": 0.62,
+        "Mar": 0.84,
+        "Apr": 1.28,
+        "May": 2.46,
+        "Jun": 3.12,
+        "Jul": 2.84,
+        "Aug": 2.16,
+        "Sep": 1.42,
+        "Oct": 0.86,
+        "Nov": 0.64,
+        "Dec": 0.52
+      },
+      "seasonal_flow_ratio": 6.0,
+      "peak_flow_month": "Jun",
+      "low_flow_month": "Dec",
+      "fish_species_present_count": 7,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 7,
+          "present": true,
+          "latest_year": 2007
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 13,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 42,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 8,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 45,
+          "present": true,
+          "latest_year": 2026
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 8,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 54,
+          "present": true,
+          "latest_year": 2025
+        }
+      ]
+    },
+    {
+      "hotspot_id": "great_lakes_mi",
+      "hotspot_name": "Lake Huron Shoreline, MI",
+      "lat": 43.8,
+      "lng": -83.0,
+      "state": "MI",
+      "pfas_facility_count_50km": 4,
+      "nearest_pfas_facility_km": 25.3,
+      "pfas_facilities": [
+        {
+          "name": "Dow Chemical Midland",
+          "lat": 43.617,
+          "lng": -84.247,
+          "type": "chemical_mfg",
+          "sic": "2869",
+          "distance_km": 25.3,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "Selfridge Air National Guard Base (AFFF)",
+          "lat": 42.613,
+          "lng": -82.826,
+          "type": "military_afff",
+          "distance_km": 45.2,
+          "source": "DOD_PFAS_Inventory"
+        }
+      ],
+      "comid": "4429112",
+      "stream_order": 3,
+      "watershed_area_km2": 124.0,
+      "reach_length_km": 1.56,
+      "pct_urban": 5.6,
+      "pct_impervious": 1.4,
+      "pct_forest": 55.8,
+      "pct_agriculture": 24.7,
+      "pct_wetland": 8.9,
+      "usgs_gauge": {
+        "gauge_id": "04159492",
+        "gauge_name": "Kawkawlin River near Bay City, MI",
+        "gauge_lat": 43.612,
+        "gauge_lng": -83.862,
+        "distance_km": 22.4
+      },
+      "mean_annual_flow_m3s": 2.86,
+      "low_flow_7q10_m3s": 0.42,
+      "monthly_mean_flows_m3s": {
+        "Jan": 2.42,
+        "Feb": 2.68,
+        "Mar": 5.84,
+        "Apr": 6.12,
+        "May": 3.86,
+        "Jun": 2.14,
+        "Jul": 1.42,
+        "Aug": 1.18,
+        "Sep": 1.36,
+        "Oct": 1.86,
+        "Nov": 2.84,
+        "Dec": 2.56
+      },
+      "seasonal_flow_ratio": 5.19,
+      "peak_flow_month": "Apr",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 6,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 19,
+          "present": true,
+          "latest_year": 1999
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 15,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 195,
+          "present": true,
+          "latest_year": 2016
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 72,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 28,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 64,
+          "present": true,
+          "latest_year": 2004
+        }
+      ]
+    },
+    {
+      "hotspot_id": "wilmington_nc",
+      "hotspot_name": "Cape Fear Estuary, Wilmington NC",
+      "lat": 34.05,
+      "lng": -77.95,
+      "state": "NC",
+      "pfas_facility_count_50km": 2,
+      "nearest_pfas_facility_km": 0.0,
+      "pfas_facilities": [
+        {
+          "name": "Chemours Fayetteville Works (far upstream)",
+          "lat": 34.838,
+          "lng": -78.828,
+          "type": "fluorochemical_mfg",
+          "distance_km": 95.4,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "CFPUA Sweeney WTP (contaminated intake)",
+          "lat": 34.271,
+          "lng": -77.856,
+          "type": "contaminated_water_supply",
+          "distance_km": 0.0,
+          "source": "NC_DEQ"
+        }
+      ],
+      "comid": "8896512",
+      "stream_order": 7,
+      "watershed_area_km2": 23730.0,
+      "reach_length_km": 5.43,
+      "pct_urban": 11.2,
+      "pct_impervious": 3.7,
+      "pct_forest": 40.8,
+      "pct_agriculture": 26.3,
+      "pct_wetland": 12.4,
+      "usgs_gauge": {
+        "gauge_id": "02105769",
+        "gauge_name": "Cape Fear River at Lock 1 near Kelly, NC",
+        "gauge_lat": 34.404,
+        "gauge_lng": -78.269,
+        "distance_km": 32.1
+      },
+      "mean_annual_flow_m3s": 195.4,
+      "low_flow_7q10_m3s": 28.3,
+      "monthly_mean_flows_m3s": {
+        "Jan": 278.2,
+        "Feb": 312.5,
+        "Mar": 340.1,
+        "Apr": 246.8,
+        "May": 178.3,
+        "Jun": 126.4,
+        "Jul": 98.7,
+        "Aug": 82.1,
+        "Sep": 93.4,
+        "Oct": 118.6,
+        "Nov": 156.2,
+        "Dec": 213.8
+      },
+      "seasonal_flow_ratio": 4.14,
+      "peak_flow_month": "Mar",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 4,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 28,
+          "present": true,
+          "latest_year": 2022
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 12,
+          "present": true,
+          "latest_year": 2017
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 4,
+          "present": true,
+          "latest_year": 2021
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 7,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        }
+      ]
+    },
+    {
+      "hotspot_id": "pease_nh",
+      "hotspot_name": "Pease AFB, Portsmouth NH",
+      "lat": 43.08,
+      "lng": -70.82,
+      "state": "NH",
+      "pfas_facility_count_50km": 3,
+      "nearest_pfas_facility_km": 0.0,
+      "pfas_facilities": [
+        {
+          "name": "Pease AFB (Former) AFFF sites",
+          "lat": 43.078,
+          "lng": -70.823,
+          "type": "military_afff",
+          "distance_km": 0.0,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "Haven Well (contaminated)",
+          "lat": 43.068,
+          "lng": -70.812,
+          "type": "contaminated_water_supply",
+          "distance_km": 1.4,
+          "source": "NH_DES"
+        }
+      ],
+      "comid": "6181242",
+      "stream_order": 3,
+      "watershed_area_km2": 52.3,
+      "reach_length_km": 1.12,
+      "pct_urban": 34.8,
+      "pct_impervious": 14.2,
+      "pct_forest": 38.2,
+      "pct_agriculture": 5.4,
+      "pct_wetland": 8.6,
+      "usgs_gauge": {
+        "gauge_id": "01073587",
+        "gauge_name": "Hodgson Brook near Portsmouth, NH",
+        "gauge_lat": 43.072,
+        "gauge_lng": -70.786,
+        "distance_km": 3.2
+      },
+      "mean_annual_flow_m3s": 0.38,
+      "low_flow_7q10_m3s": 0.02,
+      "monthly_mean_flows_m3s": {
+        "Jan": 0.42,
+        "Feb": 0.38,
+        "Mar": 0.72,
+        "Apr": 0.84,
+        "May": 0.52,
+        "Jun": 0.28,
+        "Jul": 0.16,
+        "Aug": 0.12,
+        "Sep": 0.14,
+        "Oct": 0.24,
+        "Nov": 0.38,
+        "Dec": 0.42
+      },
+      "seasonal_flow_ratio": 7.0,
+      "peak_flow_month": "Apr",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 8,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 92,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 11,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 187,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 312,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 145,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 38,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 56,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 178,
+          "present": true,
+          "latest_year": 2025
+        }
+      ]
+    },
+    {
+      "hotspot_id": "paulsboro_nj",
+      "hotspot_name": "Delaware River, Paulsboro NJ",
+      "lat": 39.83,
+      "lng": -75.24,
+      "state": "NJ",
+      "pfas_facility_count_50km": 11,
+      "nearest_pfas_facility_km": 2.3,
+      "pfas_facilities": [
+        {
+          "name": "Solvay Specialty Polymers",
+          "lat": 39.826,
+          "lng": -75.182,
+          "type": "fluorochemical_mfg",
+          "sic": "2821",
+          "distance_km": 4.8,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "PBF Energy Paulsboro Refinery",
+          "lat": 39.838,
+          "lng": -75.212,
+          "type": "refinery",
+          "distance_km": 2.3,
+          "source": "EPA_ECHO"
+        },
+        {
+          "name": "NJ Turnpike Authority PFAS Discharge",
+          "lat": 39.815,
+          "lng": -75.256,
+          "type": "npdes_discharge",
+          "distance_km": 3.1,
+          "source": "NJ_DEP"
+        }
+      ],
+      "comid": "2579382",
+      "stream_order": 8,
+      "watershed_area_km2": 29800.0,
+      "reach_length_km": 4.67,
+      "pct_urban": 28.4,
+      "pct_impervious": 10.8,
+      "pct_forest": 34.6,
+      "pct_agriculture": 19.2,
+      "pct_wetland": 5.7,
+      "usgs_gauge": {
+        "gauge_id": "01467200",
+        "gauge_name": "Delaware River at Bridesburg, PA",
+        "gauge_lat": 39.98,
+        "gauge_lng": -75.075,
+        "distance_km": 18.6
+      },
+      "mean_annual_flow_m3s": 342.0,
+      "low_flow_7q10_m3s": 62.4,
+      "monthly_mean_flows_m3s": {
+        "Jan": 468.0,
+        "Feb": 512.0,
+        "Mar": 624.0,
+        "Apr": 486.0,
+        "May": 348.0,
+        "Jun": 218.0,
+        "Jul": 156.0,
+        "Aug": 128.0,
+        "Sep": 142.0,
+        "Oct": 198.0,
+        "Nov": 286.0,
+        "Dec": 412.0
+      },
+      "seasonal_flow_ratio": 4.88,
+      "peak_flow_month": "Mar",
+      "low_flow_month": "Aug",
+      "fish_species_present_count": 8,
+      "fish_species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 1245,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 567,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 312,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 89,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 234,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 892,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 423,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 356,
+          "present": true,
+          "latest_year": 2025
+        }
+      ]
+    }
+  ]
+}

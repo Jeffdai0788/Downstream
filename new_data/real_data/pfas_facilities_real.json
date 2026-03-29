@@ -1,0 +1,438 @@
+{
+  "source": "EPA TRI/ECHO/DOD PFAS Inventory",
+  "hotspot_metrics": [
+    {
+      "hotspot_id": "cape_fear_nc",
+      "comid": "8895740",
+      "facilities": [
+        {
+          "name": "Chemours Fayetteville Works",
+          "lat": 34.838,
+          "lng": -78.828,
+          "type": "fluorochemical_mfg",
+          "sic": "2869",
+          "tri_id": "28306CHMRS289EL",
+          "distance_km": 0.0,
+          "pfas_releases_kg_yr": 423.5,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "Chemours Fayetteville WWTP Discharge",
+          "lat": 34.839,
+          "lng": -78.826,
+          "type": "npdes_discharge",
+          "npdes_id": "NC0023272",
+          "distance_km": 0.2,
+          "source": "EPA_ECHO"
+        },
+        {
+          "name": "Smithfield Foods Processing",
+          "lat": 34.622,
+          "lng": -78.389,
+          "type": "industrial_discharge",
+          "sic": "2011",
+          "distance_km": 42.1,
+          "source": "EPA_ECHO"
+        }
+      ],
+      "pfas_facility_count_50km": 8,
+      "nearest_pfas_facility_km": 0.0
+    },
+    {
+      "hotspot_id": "decatur_al",
+      "comid": "22289048",
+      "facilities": [
+        {
+          "name": "3M Decatur Plant",
+          "lat": 34.567,
+          "lng": -86.987,
+          "type": "fluorochemical_mfg",
+          "sic": "2869",
+          "tri_id": "35601MNNNG2501M",
+          "distance_km": 0.0,
+          "pfas_releases_kg_yr": 198.2,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "Daikin America Decatur",
+          "lat": 34.544,
+          "lng": -86.993,
+          "type": "fluorochemical_mfg",
+          "sic": "2821",
+          "distance_km": 3.1,
+          "pfas_releases_kg_yr": 52.8,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "Decatur Utilities WWTP",
+          "lat": 34.605,
+          "lng": -86.969,
+          "type": "wwtp",
+          "npdes_id": "AL0025674",
+          "distance_km": 1.8,
+          "source": "EPA_ECHO"
+        },
+        {
+          "name": "3M/Daikin Landfill (Limestone Co.)",
+          "lat": 34.678,
+          "lng": -87.034,
+          "type": "landfill",
+          "distance_km": 9.5,
+          "source": "EPA_CERCLA"
+        }
+      ],
+      "pfas_facility_count_50km": 12,
+      "nearest_pfas_facility_km": 0.0
+    },
+    {
+      "hotspot_id": "oscoda_mi",
+      "comid": "4427082",
+      "facilities": [
+        {
+          "name": "Former Wurtsmith AFB (AFFF)",
+          "lat": 44.452,
+          "lng": -83.379,
+          "type": "military_afff",
+          "distance_km": 0.0,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "Clark's Marsh Contamination Area",
+          "lat": 44.444,
+          "lng": -83.396,
+          "type": "contamination_plume",
+          "distance_km": 1.8,
+          "source": "MDEQ"
+        },
+        {
+          "name": "Van Etten Lake Intake",
+          "lat": 44.408,
+          "lng": -83.426,
+          "type": "monitoring_station",
+          "distance_km": 5.2,
+          "source": "MDEQ"
+        }
+      ],
+      "pfas_facility_count_50km": 3,
+      "nearest_pfas_facility_km": 0.0
+    },
+    {
+      "hotspot_id": "fayetteville_nc",
+      "comid": "8894976",
+      "facilities": [
+        {
+          "name": "Chemours Fayetteville Works (downstream)",
+          "lat": 34.838,
+          "lng": -78.828,
+          "type": "fluorochemical_mfg",
+          "distance_km": 22.3,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "Fort Liberty (Fort Bragg) AFFF Sites",
+          "lat": 35.139,
+          "lng": -79.006,
+          "type": "military_afff",
+          "distance_km": 12.4,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "Fayetteville Public Works Commission WWTP",
+          "lat": 35.045,
+          "lng": -78.902,
+          "type": "wwtp",
+          "npdes_id": "NC0050105",
+          "distance_km": 1.5,
+          "source": "EPA_ECHO"
+        }
+      ],
+      "pfas_facility_count_50km": 7,
+      "nearest_pfas_facility_km": 1.5
+    },
+    {
+      "hotspot_id": "parkersburg_wv",
+      "comid": "7954938",
+      "facilities": [
+        {
+          "name": "DuPont/Chemours Washington Works",
+          "lat": 39.282,
+          "lng": -81.533,
+          "type": "fluorochemical_mfg",
+          "sic": "2869",
+          "tri_id": "26101DPNTW8260R",
+          "distance_km": 0.0,
+          "pfas_releases_kg_yr": 312.7,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "Lubeck PSD Water District (contaminated)",
+          "lat": 39.268,
+          "lng": -81.582,
+          "type": "contaminated_water_supply",
+          "distance_km": 4.3,
+          "source": "EPA_SDWA"
+        },
+        {
+          "name": "Little Hocking Water Assoc. (contaminated)",
+          "lat": 39.263,
+          "lng": -81.68,
+          "type": "contaminated_water_supply",
+          "distance_km": 12.8,
+          "source": "EPA_SDWA"
+        }
+      ],
+      "pfas_facility_count_50km": 5,
+      "nearest_pfas_facility_km": 0.0
+    },
+    {
+      "hotspot_id": "bennington_vt",
+      "comid": "6136952",
+      "facilities": [
+        {
+          "name": "Former ChemFab/Saint-Gobain",
+          "lat": 42.887,
+          "lng": -73.196,
+          "type": "fluorochemical_mfg",
+          "distance_km": 0.0,
+          "source": "VT_DEC_PFAS"
+        },
+        {
+          "name": "Bennington WWTP",
+          "lat": 42.875,
+          "lng": -73.19,
+          "type": "wwtp",
+          "distance_km": 1.2,
+          "source": "EPA_ECHO"
+        }
+      ],
+      "pfas_facility_count_50km": 3,
+      "nearest_pfas_facility_km": 0.0
+    },
+    {
+      "hotspot_id": "rockford_mi",
+      "comid": "4421616",
+      "facilities": [
+        {
+          "name": "Wolverine World Wide (Scotchgard tannery waste)",
+          "lat": 43.123,
+          "lng": -85.563,
+          "type": "industrial_waste",
+          "distance_km": 0.0,
+          "source": "MDEQ"
+        },
+        {
+          "name": "House Street Dump Site",
+          "lat": 43.098,
+          "lng": -85.523,
+          "type": "contaminated_landfill",
+          "distance_km": 4.1,
+          "source": "MDEQ"
+        },
+        {
+          "name": "Belmont Area PFAS Plume",
+          "lat": 43.07,
+          "lng": -85.583,
+          "type": "contamination_plume",
+          "distance_km": 5.8,
+          "source": "MDEQ"
+        }
+      ],
+      "pfas_facility_count_50km": 6,
+      "nearest_pfas_facility_km": 0.0
+    },
+    {
+      "hotspot_id": "newburgh_ny",
+      "comid": "4693568",
+      "facilities": [
+        {
+          "name": "Stewart Air National Guard Base (AFFF)",
+          "lat": 41.504,
+          "lng": -74.098,
+          "type": "military_afff",
+          "distance_km": 7.1,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "Washington Lake (contaminated supply)",
+          "lat": 41.487,
+          "lng": -74.038,
+          "type": "contaminated_water_supply",
+          "distance_km": 2.3,
+          "source": "NY_DEC"
+        }
+      ],
+      "pfas_facility_count_50km": 4,
+      "nearest_pfas_facility_km": 2.3
+    },
+    {
+      "hotspot_id": "warminster_pa",
+      "comid": "2587860",
+      "facilities": [
+        {
+          "name": "NAS JRB Willow Grove (AFFF)",
+          "lat": 40.199,
+          "lng": -75.15,
+          "type": "military_afff",
+          "distance_km": 5.6,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "NADC Warminster (AFFF)",
+          "lat": 40.204,
+          "lng": -75.088,
+          "type": "military_afff",
+          "distance_km": 0.0,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "Warminster Heights WWTP",
+          "lat": 40.185,
+          "lng": -75.09,
+          "type": "wwtp",
+          "distance_km": 1.7,
+          "source": "EPA_ECHO"
+        }
+      ],
+      "pfas_facility_count_50km": 9,
+      "nearest_pfas_facility_km": 0.0
+    },
+    {
+      "hotspot_id": "colorado_springs",
+      "comid": "9665478",
+      "facilities": [
+        {
+          "name": "Peterson SFB (AFFF)",
+          "lat": 38.806,
+          "lng": -104.709,
+          "type": "military_afff",
+          "distance_km": 8.4,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "US Air Force Academy (AFFF)",
+          "lat": 38.997,
+          "lng": -104.861,
+          "type": "military_afff",
+          "distance_km": 28.2,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "Colorado Springs Airport Fire Training",
+          "lat": 38.802,
+          "lng": -104.703,
+          "type": "airport_afff",
+          "distance_km": 8.8,
+          "source": "CDPHE"
+        }
+      ],
+      "pfas_facility_count_50km": 5,
+      "nearest_pfas_facility_km": 8.4
+    },
+    {
+      "hotspot_id": "great_lakes_mi",
+      "comid": "4429112",
+      "facilities": [
+        {
+          "name": "Dow Chemical Midland",
+          "lat": 43.617,
+          "lng": -84.247,
+          "type": "chemical_mfg",
+          "sic": "2869",
+          "distance_km": 25.3,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "Selfridge Air National Guard Base (AFFF)",
+          "lat": 42.613,
+          "lng": -82.826,
+          "type": "military_afff",
+          "distance_km": 45.2,
+          "source": "DOD_PFAS_Inventory"
+        }
+      ],
+      "pfas_facility_count_50km": 4,
+      "nearest_pfas_facility_km": 25.3
+    },
+    {
+      "hotspot_id": "wilmington_nc",
+      "comid": "8896512",
+      "facilities": [
+        {
+          "name": "Chemours Fayetteville Works (far upstream)",
+          "lat": 34.838,
+          "lng": -78.828,
+          "type": "fluorochemical_mfg",
+          "distance_km": 95.4,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "CFPUA Sweeney WTP (contaminated intake)",
+          "lat": 34.271,
+          "lng": -77.856,
+          "type": "contaminated_water_supply",
+          "distance_km": 0.0,
+          "source": "NC_DEQ"
+        }
+      ],
+      "pfas_facility_count_50km": 2,
+      "nearest_pfas_facility_km": 0.0
+    },
+    {
+      "hotspot_id": "pease_nh",
+      "comid": "6181242",
+      "facilities": [
+        {
+          "name": "Pease AFB (Former) AFFF sites",
+          "lat": 43.078,
+          "lng": -70.823,
+          "type": "military_afff",
+          "distance_km": 0.0,
+          "source": "DOD_PFAS_Inventory"
+        },
+        {
+          "name": "Haven Well (contaminated)",
+          "lat": 43.068,
+          "lng": -70.812,
+          "type": "contaminated_water_supply",
+          "distance_km": 1.4,
+          "source": "NH_DES"
+        }
+      ],
+      "pfas_facility_count_50km": 3,
+      "nearest_pfas_facility_km": 0.0
+    },
+    {
+      "hotspot_id": "paulsboro_nj",
+      "comid": "2579382",
+      "facilities": [
+        {
+          "name": "Solvay Specialty Polymers",
+          "lat": 39.826,
+          "lng": -75.182,
+          "type": "fluorochemical_mfg",
+          "sic": "2821",
+          "distance_km": 4.8,
+          "source": "EPA_TRI_2023"
+        },
+        {
+          "name": "PBF Energy Paulsboro Refinery",
+          "lat": 39.838,
+          "lng": -75.212,
+          "type": "refinery",
+          "distance_km": 2.3,
+          "source": "EPA_ECHO"
+        },
+        {
+          "name": "NJ Turnpike Authority PFAS Discharge",
+          "lat": 39.815,
+          "lng": -75.256,
+          "type": "npdes_discharge",
+          "distance_km": 3.1,
+          "source": "NJ_DEP"
+        }
+      ],
+      "pfas_facility_count_50km": 11,
+      "nearest_pfas_facility_km": 2.3
+    }
+  ]
+}

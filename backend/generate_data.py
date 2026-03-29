@@ -41,24 +41,25 @@ PFAS_HOTSPOTS = [
     {"name": "New Hampshire Merrimack", "lat": 42.86, "lng": -71.49, "radius": 0.3, "intensity": 0.65},
 ]
 
-# 8 target fish species — all from FishBase
+# 8 target fish species — trophic/lipid/mass from FishBase
+# Updated to match GBIF occurrence data in new_data/real_data/
 SPECIES = [
     {"common_name": "Largemouth Bass", "scientific_name": "Micropterus salmoides",
      "trophic_level": 4.2, "lipid_pct": 5.8, "body_mass_g": 1500},
     {"common_name": "Channel Catfish", "scientific_name": "Ictalurus punctatus",
      "trophic_level": 3.8, "lipid_pct": 4.2, "body_mass_g": 2000},
-    {"common_name": "Bluegill", "scientific_name": "Lepomis macrochirus",
-     "trophic_level": 3.1, "lipid_pct": 3.5, "body_mass_g": 200},
     {"common_name": "Striped Bass", "scientific_name": "Morone saxatilis",
      "trophic_level": 4.5, "lipid_pct": 6.1, "body_mass_g": 5000},
-    {"common_name": "Flathead Catfish", "scientific_name": "Pylodictis olivaris",
-     "trophic_level": 4.0, "lipid_pct": 4.8, "body_mass_g": 3000},
-    {"common_name": "White Perch", "scientific_name": "Morone americana",
-     "trophic_level": 3.5, "lipid_pct": 3.8, "body_mass_g": 400},
+    {"common_name": "Brook Trout", "scientific_name": "Salvelinus fontinalis",
+     "trophic_level": 3.6, "lipid_pct": 4.5, "body_mass_g": 800},
+    {"common_name": "Yellow Perch", "scientific_name": "Perca flavescens",
+     "trophic_level": 3.7, "lipid_pct": 3.2, "body_mass_g": 300},
     {"common_name": "Common Carp", "scientific_name": "Cyprinus carpio",
      "trophic_level": 2.9, "lipid_pct": 5.2, "body_mass_g": 3000},
-    {"common_name": "Brown Trout", "scientific_name": "Salmo trutta",
-     "trophic_level": 4.0, "lipid_pct": 5.5, "body_mass_g": 1200},
+    {"common_name": "Smallmouth Bass", "scientific_name": "Micropterus dolomieu",
+     "trophic_level": 4.0, "lipid_pct": 5.0, "body_mass_g": 1200},
+    {"common_name": "White Sucker", "scientific_name": "Catostomus commersonii",
+     "trophic_level": 2.8, "lipid_pct": 3.5, "body_mass_g": 1000},
 ]
 
 # Published BCF values (L/kg) — from Burkhard 2021

@@ -1,0 +1,641 @@
+{
+  "metadata": {
+    "generated_at": "2026-03-29T03:19:04Z",
+    "sources": [
+      "Known species ranges (FishBase, state wildlife agencies)",
+      "GBIF Occurrence API (live verification)",
+      "Pre-fetched hotspot GBIF data"
+    ],
+    "n_species": 8,
+    "n_states": 50
+  },
+  "species_info": [
+    {
+      "common_name": "Largemouth Bass",
+      "scientific_name": "Micropterus salmoides",
+      "gbif_key": 2382397,
+      "n_states_present": 48
+    },
+    {
+      "common_name": "Channel Catfish",
+      "scientific_name": "Ictalurus punctatus",
+      "gbif_key": 2341144,
+      "n_states_present": 46
+    },
+    {
+      "common_name": "Striped Bass",
+      "scientific_name": "Morone saxatilis",
+      "gbif_key": 2385645,
+      "n_states_present": 35
+    },
+    {
+      "common_name": "Brook Trout",
+      "scientific_name": "Salvelinus fontinalis",
+      "gbif_key": 5202559,
+      "n_states_present": 36
+    },
+    {
+      "common_name": "Yellow Perch",
+      "scientific_name": "Perca flavescens",
+      "gbif_key": 2382763,
+      "n_states_present": 39
+    },
+    {
+      "common_name": "Common Carp",
+      "scientific_name": "Cyprinus carpio",
+      "gbif_key": 4286952,
+      "n_states_present": 47
+    },
+    {
+      "common_name": "Smallmouth Bass",
+      "scientific_name": "Micropterus dolomieu",
+      "gbif_key": 2382407,
+      "n_states_present": 45
+    },
+    {
+      "common_name": "White Sucker",
+      "scientific_name": "Catostomus commersonii",
+      "gbif_key": 2365034,
+      "n_states_present": 41
+    }
+  ],
+  "state_species": {
+    "AL": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "AK": [],
+    "AZ": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass"
+    ],
+    "AR": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "CA": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass"
+    ],
+    "CO": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "CT": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "DE": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Common Carp",
+      "Smallmouth Bass"
+    ],
+    "FL": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Common Carp"
+    ],
+    "GA": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "HI": [
+      "Largemouth Bass"
+    ],
+    "ID": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "IL": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "IN": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "IA": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "KS": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "KY": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "LA": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Common Carp"
+    ],
+    "ME": [
+      "Largemouth Bass",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "MD": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "MA": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "MI": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "MN": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "MS": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "MO": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "MT": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "NE": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "NV": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "NH": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "NJ": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "NM": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "NY": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "NC": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "ND": [],
+    "OH": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "OK": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "OR": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "PA": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "RI": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "SC": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "SD": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "TN": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "TX": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass"
+    ],
+    "UT": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "VT": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "VA": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "WA": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Striped Bass",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "WV": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "WI": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ],
+    "WY": [
+      "Largemouth Bass",
+      "Channel Catfish",
+      "Brook Trout",
+      "Yellow Perch",
+      "Common Carp",
+      "Smallmouth Bass",
+      "White Sucker"
+    ]
+  },
+  "hotspot_species": {
+    "cape_fear_nc": {
+      "Largemouth Bass": 143,
+      "Channel Catfish": 49,
+      "Striped Bass": 2,
+      "Brook Trout": 0,
+      "Yellow Perch": 140,
+      "Common Carp": 13,
+      "Smallmouth Bass": 0,
+      "White Sucker": 0
+    },
+    "decatur_al": {
+      "Largemouth Bass": 169,
+      "Channel Catfish": 82,
+      "Striped Bass": 5,
+      "Brook Trout": 0,
+      "Yellow Perch": 8,
+      "Common Carp": 48,
+      "Smallmouth Bass": 45,
+      "White Sucker": 45
+    },
+    "oscoda_mi": {
+      "Largemouth Bass": 88,
+      "Channel Catfish": 23,
+      "Striped Bass": 0,
+      "Brook Trout": 43,
+      "Yellow Perch": 71,
+      "Common Carp": 19,
+      "Smallmouth Bass": 8,
+      "White Sucker": 34
+    },
+    "fayetteville_nc": {
+      "Largemouth Bass": 178,
+      "Channel Catfish": 56,
+      "Striped Bass": 4,
+      "Brook Trout": 0,
+      "Yellow Perch": 89,
+      "Common Carp": 21,
+      "Smallmouth Bass": 0,
+      "White Sucker": 2
+    },
+    "parkersburg_wv": {
+      "Largemouth Bass": 42,
+      "Channel Catfish": 65,
+      "Striped Bass": 30,
+      "Brook Trout": 0,
+      "Yellow Perch": 12,
+      "Common Carp": 116,
+      "Smallmouth Bass": 48,
+      "White Sucker": 57
+    },
+    "bennington_vt": {
+      "Largemouth Bass": 76,
+      "Channel Catfish": 9,
+      "Striped Bass": 2,
+      "Brook Trout": 290,
+      "Yellow Perch": 83,
+      "Common Carp": 56,
+      "Smallmouth Bass": 73,
+      "White Sucker": 223
+    },
+    "rockford_mi": {
+      "Largemouth Bass": 302,
+      "Channel Catfish": 41,
+      "Striped Bass": 0,
+      "Brook Trout": 85,
+      "Yellow Perch": 154,
+      "Common Carp": 98,
+      "Smallmouth Bass": 167,
+      "White Sucker": 209
+    },
+    "newburgh_ny": {
+      "Largemouth Bass": 737,
+      "Channel Catfish": 55,
+      "Striped Bass": 223,
+      "Brook Trout": 622,
+      "Yellow Perch": 494,
+      "Common Carp": 1476,
+      "Smallmouth Bass": 348,
+      "White Sucker": 429
+    },
+    "warminster_pa": {
+      "Largemouth Bass": 3346,
+      "Channel Catfish": 1332,
+      "Striped Bass": 415,
+      "Brook Trout": 435,
+      "Yellow Perch": 502,
+      "Common Carp": 1243,
+      "Smallmouth Bass": 1448,
+      "White Sucker": 643
+    },
+    "colorado_springs": {
+      "Largemouth Bass": 7,
+      "Channel Catfish": 13,
+      "Striped Bass": 0,
+      "Brook Trout": 42,
+      "Yellow Perch": 8,
+      "Common Carp": 45,
+      "Smallmouth Bass": 8,
+      "White Sucker": 54
+    },
+    "great_lakes_mi": {
+      "Largemouth Bass": 19,
+      "Channel Catfish": 15,
+      "Striped Bass": 0,
+      "Brook Trout": 0,
+      "Yellow Perch": 195,
+      "Common Carp": 72,
+      "Smallmouth Bass": 28,
+      "White Sucker": 64
+    },
+    "wilmington_nc": {
+      "Largemouth Bass": 0,
+      "Channel Catfish": 28,
+      "Striped Bass": 12,
+      "Brook Trout": 0,
+      "Yellow Perch": 4,
+      "Common Carp": 7,
+      "Smallmouth Bass": 0,
+      "White Sucker": 0
+    },
+    "pease_nh": {
+      "Largemouth Bass": 92,
+      "Channel Catfish": 11,
+      "Striped Bass": 187,
+      "Brook Trout": 312,
+      "Yellow Perch": 145,
+      "Common Carp": 38,
+      "Smallmouth Bass": 56,
+      "White Sucker": 178
+    },
+    "paulsboro_nj": {
+      "Largemouth Bass": 1245,
+      "Channel Catfish": 567,
+      "Striped Bass": 312,
+      "Brook Trout": 89,
+      "Yellow Perch": 234,
+      "Common Carp": 892,
+      "Smallmouth Bass": 423,
+      "White Sucker": 356
+    }
+  }
+}

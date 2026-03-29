@@ -1,0 +1,873 @@
+{
+  "source": "GBIF API (fetched live 2026-03-29)",
+  "fish_presence_data": [
+    {
+      "hotspot_id": "cape_fear_nc",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 143,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 49,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 2,
+          "present": true,
+          "latest_year": 2018
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 140,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 13,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        }
+      ],
+      "species_present_count": 5
+    },
+    {
+      "hotspot_id": "decatur_al",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 169,
+          "present": true,
+          "latest_year": 2020
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 82,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 5,
+          "present": true,
+          "latest_year": 2020
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 8,
+          "present": true,
+          "latest_year": 2018
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 48,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 45,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 45,
+          "present": true,
+          "latest_year": 2011
+        }
+      ],
+      "species_present_count": 7
+    },
+    {
+      "hotspot_id": "oscoda_mi",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 88,
+          "present": true,
+          "latest_year": 2004
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 23,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 43,
+          "present": true,
+          "latest_year": 2023
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 71,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 19,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 8,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 34,
+          "present": true,
+          "latest_year": 2025
+        }
+      ],
+      "species_present_count": 7
+    },
+    {
+      "hotspot_id": "fayetteville_nc",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 178,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 56,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 4,
+          "present": true,
+          "latest_year": 2020
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 89,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 21,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 2,
+          "present": true,
+          "latest_year": 2019
+        }
+      ],
+      "species_present_count": 6
+    },
+    {
+      "hotspot_id": "parkersburg_wv",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 42,
+          "present": true,
+          "latest_year": 2002
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 65,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 30,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 12,
+          "present": true,
+          "latest_year": 2020
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 116,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 48,
+          "present": true,
+          "latest_year": 2015
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 57,
+          "present": true,
+          "latest_year": 2025
+        }
+      ],
+      "species_present_count": 7
+    },
+    {
+      "hotspot_id": "bennington_vt",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 76,
+          "present": true,
+          "latest_year": 2007
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 9,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 2,
+          "present": true,
+          "latest_year": 1988
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 290,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 83,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 56,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 73,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 223,
+          "present": true,
+          "latest_year": 2025
+        }
+      ],
+      "species_present_count": 8
+    },
+    {
+      "hotspot_id": "rockford_mi",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 302,
+          "present": true,
+          "latest_year": 2011
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 41,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 85,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 154,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 98,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 167,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 209,
+          "present": true,
+          "latest_year": 2026
+        }
+      ],
+      "species_present_count": 7
+    },
+    {
+      "hotspot_id": "newburgh_ny",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 737,
+          "present": true,
+          "latest_year": 2016
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 55,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 223,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 622,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 494,
+          "present": true,
+          "latest_year": 2026
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 1476,
+          "present": true,
+          "latest_year": 2026
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 348,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 429,
+          "present": true,
+          "latest_year": 2025
+        }
+      ],
+      "species_present_count": 8
+    },
+    {
+      "hotspot_id": "warminster_pa",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 3346,
+          "present": true,
+          "latest_year": 2012
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 1332,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 415,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 435,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 502,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 1243,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 1448,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 643,
+          "present": true,
+          "latest_year": 2026
+        }
+      ],
+      "species_present_count": 8
+    },
+    {
+      "hotspot_id": "colorado_springs",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 7,
+          "present": true,
+          "latest_year": 2007
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 13,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 42,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 8,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 45,
+          "present": true,
+          "latest_year": 2026
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 8,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 54,
+          "present": true,
+          "latest_year": 2025
+        }
+      ],
+      "species_present_count": 7
+    },
+    {
+      "hotspot_id": "great_lakes_mi",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 19,
+          "present": true,
+          "latest_year": 1999
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 15,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 195,
+          "present": true,
+          "latest_year": 2016
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 72,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 28,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 64,
+          "present": true,
+          "latest_year": 2004
+        }
+      ],
+      "species_present_count": 6
+    },
+    {
+      "hotspot_id": "wilmington_nc",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 28,
+          "present": true,
+          "latest_year": 2022
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 12,
+          "present": true,
+          "latest_year": 2017
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 4,
+          "present": true,
+          "latest_year": 2021
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 7,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 0,
+          "present": false,
+          "latest_year": null
+        }
+      ],
+      "species_present_count": 4
+    },
+    {
+      "hotspot_id": "pease_nh",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 92,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 11,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 187,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 312,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 145,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 38,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 56,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 178,
+          "present": true,
+          "latest_year": 2025
+        }
+      ],
+      "species_present_count": 8
+    },
+    {
+      "hotspot_id": "paulsboro_nj",
+      "species": [
+        {
+          "common_name": "Largemouth Bass",
+          "scientific_name": "Micropterus salmoides",
+          "occurrence_count": 1245,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Channel Catfish",
+          "scientific_name": "Ictalurus punctatus",
+          "occurrence_count": 567,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Striped Bass",
+          "scientific_name": "Morone saxatilis",
+          "occurrence_count": 312,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Brook Trout",
+          "scientific_name": "Salvelinus fontinalis",
+          "occurrence_count": 89,
+          "present": true,
+          "latest_year": 2024
+        },
+        {
+          "common_name": "Yellow Perch",
+          "scientific_name": "Perca flavescens",
+          "occurrence_count": 234,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Common Carp",
+          "scientific_name": "Cyprinus carpio",
+          "occurrence_count": 892,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "Smallmouth Bass",
+          "scientific_name": "Micropterus dolomieu",
+          "occurrence_count": 423,
+          "present": true,
+          "latest_year": 2025
+        },
+        {
+          "common_name": "White Sucker",
+          "scientific_name": "Catostomus commersonii",
+          "occurrence_count": 356,
+          "present": true,
+          "latest_year": 2025
+        }
+      ],
+      "species_present_count": 8
+    }
+  ]
+}

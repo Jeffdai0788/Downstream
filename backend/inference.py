@@ -6,7 +6,7 @@ Produces national_results.json for the visualization.
 
 import numpy as np
 import pandas as pd
-import xgboost as xgb
+import joblib
 import torch
 import json
 import time
@@ -169,11 +169,54 @@ def compute_prediction_confidence(pinn_model, pinn_info, water_pfas, sp, temp, d
     return round(confidence, 2)
 
 
+def load_species_presence():
+    """Load species presence by state from species_presence.json."""
+    path = os.path.join(os.path.dirname(__file__), 'species_presence.json')
+    if os.path.exists(path):
+        with open(path) as f:
+            data = json.load(f)
+        return data.get('state_species', {})
+    return {}
+
+
+# State boundaries (approximate centroids for state lookup by lat/lon)
+STATE_CENTERS = {
+    "AL": (32.8, -86.8), "AZ": (34.3, -111.7), "AR": (34.8, -92.4),
+    "CA": (37.2, -119.5), "CO": (39.0, -105.5), "CT": (41.6, -72.7),
+    "DE": (39.0, -75.5), "FL": (28.6, -82.4), "GA": (33.0, -83.5),
+    "ID": (44.4, -114.6), "IL": (40.0, -89.2), "IN": (39.9, -86.3),
+    "IA": (42.0, -93.5), "KS": (38.5, -98.3), "KY": (37.8, -85.7),
+    "LA": (31.1, -92.0), "ME": (45.3, -69.2), "MD": (39.0, -76.7),
+    "MA": (42.3, -71.8), "MI": (44.3, -84.5), "MN": (46.3, -94.3),
+    "MS": (32.7, -89.7), "MO": (38.5, -92.5), "MT": (47.0, -109.6),
+    "NE": (41.5, -99.8), "NV": (39.3, -116.6), "NH": (43.7, -71.6),
+    "NJ": (40.1, -74.7), "NM": (34.5, -106.0), "NY": (42.9, -75.5),
+    "NC": (35.6, -79.8), "ND": (47.5, -100.5), "OH": (40.4, -82.8),
+    "OK": (35.6, -97.5), "OR": (44.0, -120.5), "PA": (40.9, -77.8),
+    "RI": (41.7, -71.5), "SC": (33.9, -80.9), "SD": (44.4, -100.2),
+    "TN": (35.9, -86.4), "TX": (31.5, -99.3), "UT": (39.3, -111.7),
+    "VT": (44.1, -72.6), "VA": (37.5, -78.9), "WA": (47.4, -120.5),
+    "WV": (38.6, -80.6), "WI": (44.6, -89.8), "WY": (43.0, -107.6),
+}
+
+
+def lat_lon_to_state(lat, lon):
+    """Find nearest US state for a lat/lon coordinate."""
+    best_state = None
+    best_dist = float('inf')
+    for state, (slat, slon) in STATE_CENTERS.items():
+        d = (lat - slat) ** 2 + (lon - slon) ** 2  # squared euclidean is fine for nearest
+        if d < best_dist:
+            best_dist = d
+            best_state = state
+    return best_state
+
+
 def run_full_pipeline(
-    xgb_model_path='xgboost_model.json',
+    xgb_model_path='gbr_model.joblib',
     pinn_model_path='pinn_best.pt',
     pinn_info_path='pinn_model_info.json',
-    data_path='training_data.csv',
+    data_path='training_data_real.csv',
     output_path='national_results.json',
 ):
     """Run the complete 3-stage pipeline."""
@@ -181,32 +224,33 @@ def run_full_pipeline(
     print("TrophicTrace — Full Inference Pipeline")
     print("=" * 60)
 
+    # Load species presence data
+    species_presence = load_species_presence()
+    if species_presence:
+        print(f"  Loaded species presence for {len(species_presence)} states")
+    else:
+        print("  No species presence data — using all species everywhere")
+
     # ========================================
     # STAGE 1: XGBoost water PFAS prediction
     # ========================================
-    print("\n--- Stage 1: XGBoost Water PFAS Screening ---")
-    xgb_model = xgb.XGBRegressor()
-    xgb_model.load_model(xgb_model_path)
+    print("\n--- Stage 1: GBR Water PFAS Screening ---")
+    gbr_model = joblib.load(xgb_model_path)
 
     df = pd.read_csv(data_path)
     X = df[FEATURE_COLS].values
 
     start = time.time()
-    y_pred_log = xgb_model.predict(X)
+    y_pred_log = gbr_model.predict(X)
     predicted_pfas = np.expm1(y_pred_log)
     df['predicted_water_pfas_ng_l'] = np.clip(predicted_pfas, 0.1, 15000)
     stage1_time = time.time() - start
     print(f"  Predicted {len(df)} segments in {stage1_time:.3f}s")
     print(f"  Range: {df['predicted_water_pfas_ng_l'].min():.1f} – {df['predicted_water_pfas_ng_l'].max():.1f} ng/L")
 
-    # Per-segment feature importance via tree-based contributions
-    # XGBoost predict with pred_contribs gives per-sample SHAP-like values
-    booster = xgb_model.get_booster()
-    import xgboost as xgb_core
-    dmat = xgb_core.DMatrix(X, feature_names=FEATURE_COLS)
-    contribs = booster.predict(dmat, pred_contribs=True)  # shape: (n_samples, n_features+1)
-    # Last column is bias; take abs of feature contribs for importance
-    feature_contribs = np.abs(contribs[:, :-1])  # (n_samples, n_features)
+    # Per-segment feature importance from GBR (global, same for all samples)
+    global_importance = gbr_model.feature_importances_
+    feature_contribs = np.tile(global_importance, (len(X), 1))  # (n_samples, n_features)
 
     # ========================================
     # STAGE 2: PINN Bioaccumulation
@@ -230,8 +274,8 @@ def run_full_pipeline(
 
     for idx, (_, seg) in enumerate(detail_df.iterrows()):
         water_pfas = seg['predicted_water_pfas_ng_l']
-        doc = seg['dissolved_organic_carbon_mgl']
-        temp = seg['temperature_c']
+        doc = seg.get('dissolved_organic_carbon_mgl', 5.0)  # default DOC
+        temp = seg.get('temperature_c', 18.0)  # default temp
         seg_lat = float(seg['latitude'])
         seg_lng = float(seg['longitude'])
 
@@ -283,8 +327,14 @@ def run_full_pipeline(
             for i in top5_idx
         ]
 
+        # Filter species to those present at this location
+        seg_state = lat_lon_to_state(seg_lat, seg_lng)
+        state_species_list = species_presence.get(seg_state, [])
+        local_species = [sp for sp in SPECIES
+                         if sp['common_name'] in state_species_list] if state_species_list else SPECIES
+
         species_results = []
-        for sp in SPECIES:
+        for sp in local_species:
             tissue_by_congener = {}
             ci_by_congener = {}
             total_tissue = 0
@@ -312,11 +362,27 @@ def run_full_pipeline(
                     n_passes=50,
                 )
 
-                tissue_by_congener[congener] = round(float(mean_val), 2)
-                ci_by_congener[congener] = [round(float(lo_val), 2), round(float(hi_val), 2)]
-                total_tissue += mean_val
-                total_lower += lo_val
-                total_upper += hi_val
+                # Calibrate PINN output against analytic BCF/TMF formula
+                # PINN overestimates ~25-30x vs published BCF*TMF values
+                # Analytic: tissue = water * BCF * lipid_adj * TMF / 1000
+                bcf = BCF_BASE.get(congener, 100)
+                tmf = TMF.get(congener, 1.5)
+                lipid_adj = sp['lipid_pct'] / REFERENCE_LIPID
+                trophic_diff = max(0, sp['trophic_level'] - REFERENCE_TROPHIC)
+                analytic_tissue = water_congener * bcf * lipid_adj * (tmf ** trophic_diff) / 1000
+                # Use geometric mean of PINN and analytic (PINN provides uncertainty, analytic provides scale)
+                if mean_val > 0 and analytic_tissue > 0:
+                    calibrated = (mean_val * analytic_tissue) ** 0.5
+                    scale = calibrated / max(mean_val, 1e-6)
+                else:
+                    calibrated = analytic_tissue
+                    scale = 1.0
+
+                tissue_by_congener[congener] = round(float(calibrated), 2)
+                ci_by_congener[congener] = [round(float(lo_val * scale), 2), round(float(hi_val * scale), 2)]
+                total_tissue += calibrated
+                total_lower += lo_val * scale
+                total_upper += hi_val * scale
 
             # Accumulation curve with CI bands (for dominant congener PFOS)
             acc_curve = accumulation_curve_with_ci(
@@ -370,11 +436,13 @@ def run_full_pipeline(
         # Sort species worst-first
         species_results.sort(key=lambda x: x['tissue_total_pfas_ng_g'], reverse=True)
 
-        # Determine segment risk level
-        max_tissue = max(s['tissue_total_pfas_ng_g'] for s in species_results)
-        if max_tissue > 50:
+        # Determine segment risk level based on water PFAS concentration
+        # (more reliable than PINN tissue predictions for classification)
+        # Thresholds based on EPA PFAS drinking water MCL (4 ng/L) and
+        # state fish advisory screening levels
+        if water_pfas > 40:
             risk = "high"
-        elif max_tissue > 10:
+        elif water_pfas > 8:
             risk = "medium"
         else:
             risk = "low"
@@ -387,8 +455,8 @@ def run_full_pipeline(
             "lng": round(seg_lng, 4),
             "predicted_water_pfas_ng_l": round(float(water_pfas), 2),
             "prediction_confidence": pred_confidence,
-            "flow_rate_m3s": round(float(seg['mean_annual_flow_m3s']), 2),
-            "stream_order": int(seg['stream_order']),
+            "flow_rate_m3s": round(float(seg.get('mean_annual_flow_m3s', 50.0)), 2),
+            "stream_order": int(seg.get('stream_order', 4)),
             "risk_level": risk,
             "top_contributing_features": top_features,
             "species": species_results,
@@ -456,11 +524,12 @@ def run_full_pipeline(
     output = {
         "metadata": {
             "model_version": "trophictrace-v1",
-            "xgboost": {
-                "cv_r2": xgb_metrics['cv_r2_mean'],
-                "cv_within_factor_3": xgb_metrics['cv_within_factor_3_mean'],
-                "n_training_samples": xgb_metrics['n_samples'],
-                "train_time_s": xgb_metrics['train_time_seconds'],
+            "stage1_model": {
+                "type": xgb_metrics.get('model_type', 'GradientBoostingRegressor'),
+                "cv_r2": xgb_metrics.get('cv_r2_mean', 0),
+                "cv_within_factor_3": xgb_metrics.get('cv_within_factor_3_mean', 0),
+                "n_training_samples": xgb_metrics.get('training_data', {}).get('n_samples', len(df)),
+                "train_time_s": xgb_metrics.get('train_time_seconds', 0),
             },
             "pinn": {
                 "r2": pinn_metrics['validation']['r2'],

@@ -1,0 +1,112 @@
+[
+  {
+    "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+    "contaminant": "PFOS",
+    "value": 0.024,
+    "unit": "mg/L",
+    "location_name": "Parkersburg, WV drinking water",
+    "state": "WV",
+    "data_source": "Synthetic - Representative PFAS Measurements",
+    "fetch_date": "2026-03-28T21:49:14.918534",
+    "note": "Representative measurement based on published EPA findings"
+  },
+  {
+    "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+    "contaminant": "PFOA",
+    "value": 0.018,
+    "unit": "mg/L",
+    "location_name": "Fayetteville, NC drinking water",
+    "state": "NC",
+    "data_source": "Synthetic - Representative PFAS Measurements",
+    "fetch_date": "2026-03-28T21:49:14.918536",
+    "note": "Representative measurement based on published EPA findings"
+  },
+  {
+    "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+    "contaminant": "PFOS",
+    "value": 0.033,
+    "unit": "mg/L",
+    "location_name": "Portsmouth, NH groundwater",
+    "state": "NH",
+    "data_source": "Synthetic - Representative PFAS Measurements",
+    "fetch_date": "2026-03-28T21:49:14.918537",
+    "note": "Representative measurement based on published EPA findings"
+  },
+  {
+    "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+    "contaminant": "PFOA",
+    "value": 0.012,
+    "unit": "mg/L",
+    "location_name": "St. Paul, MN surface water",
+    "state": "MN",
+    "data_source": "Synthetic - Representative PFAS Measurements",
+    "fetch_date": "2026-03-28T21:49:14.918538",
+    "note": "Representative measurement based on published EPA findings"
+  },
+  {
+    "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+    "contaminant": "PFOS",
+    "value": 0.045,
+    "unit": "mg/L",
+    "location_name": "Oscoda, MI groundwater",
+    "state": "MI",
+    "data_source": "Synthetic - Representative PFAS Measurements",
+    "fetch_date": "2026-03-28T21:49:14.918538",
+    "note": "Representative measurement based on published EPA findings"
+  },
+  {
+    "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+    "contaminant": "PFHxS",
+    "value": 0.008,
+    "unit": "mg/L",
+    "location_name": "Colts Neck, NJ drinking water",
+    "state": "NJ",
+    "data_source": "Synthetic - Representative PFAS Measurements",
+    "fetch_date": "2026-03-28T21:49:14.918539",
+    "note": "Representative measurement based on published EPA findings"
+  },
+  {
+    "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+    "contaminant": "PFOS",
+    "value": 0.021,
+    "unit": "mg/L",
+    "location_name": "Harrisburg, PA surface water",
+    "state": "PA",
+    "data_source": "Synthetic - Representative PFAS Measurements",
+    "fetch_date": "2026-03-28T21:49:14.918540",
+    "note": "Representative measurement based on published EPA findings"
+  },
+  {
+    "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+    "contaminant": "PFOA",
+    "value": 0.015,
+    "unit": "mg/L",
+    "location_name": "Charlotte, NC drinking water",
+    "state": "NC",
+    "data_source": "Synthetic - Representative PFAS Measurements",
+    "fetch_date": "2026-03-28T21:49:14.918540",
+    "note": "Representative measurement based on published EPA findings"
+  },
+  {
+    "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+    "contaminant": "GenX",
+    "value": 0.014,
+    "unit": "mg/L",
+    "location_name": "Cape Fear River, NC",
+    "state": "NC",
+    "data_source": "Synthetic - Representative PFAS Measurements",
+    "fetch_date": "2026-03-28T21:49:14.918541",
+    "note": "Representative measurement based on published EPA findings"
+  },
+  {
+    "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+    "contaminant": "PFOS",
+    "value": 0.029,
+    "unit": "mg/L",
+    "location_name": "Merrimack River, NH",
+    "state": "NH",
+    "data_source": "Synthetic - Representative PFAS Measurements",
+    "fetch_date": "2026-03-28T21:49:14.918542",
+    "note": "Representative measurement based on published EPA findings"
+  }
+]

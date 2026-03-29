@@ -11,13 +11,16 @@
     "learning_rate": 0.001,
     "batch_size": 2048,
     "lambda_physics": 0.1,
-    "train_time_seconds": 82.14,
-    "device": "cpu"
+    "lambda_ode": 0.05,
+    "n_collocation_points": 4096,
+    "dropout": 0.1,
+    "train_time_seconds": 117.68,
+    "device": "mps"
   },
   "validation": {
-    "r2": 0.7559,
-    "within_factor_2_pct": 96.88,
-    "within_factor_3_pct": 98.98
+    "r2": 0.9225,
+    "within_factor_2_pct": 86.94,
+    "within_factor_3_pct": 95.46
   },
   "normalization": {
     "input_mins": [
@@ -44,11 +47,19 @@
   "physics_constraints": [
     "Trophic monotonicity: \u2202C/\u2202trophic_level \u2265 0",
     "Lipid monotonicity: \u2202C/\u2202lipid_content \u2265 0",
-    "Temporal monotonicity: \u2202C/\u2202time \u2265 0 (accumulation)"
+    "Temporal monotonicity: \u2202C/\u2202time \u2265 0 (accumulation)",
+    "ODE residual: dC/dt = k_total \u00d7 (C_ss - C_fish) (Gobas 1993)"
   ],
+  "uncertainty_quantification": {
+    "method": "MC Dropout (Gal & Ghahramani 2016)",
+    "dropout_rate": 0.1,
+    "n_forward_passes": 50,
+    "output": "95% confidence interval via 2.5th/97.5th percentiles"
+  },
   "training_history": {
-    "final_data_loss": 0.104938,
-    "final_physics_loss": 0.007843,
-    "final_val_loss": 0.108626
+    "final_data_loss": 0.522344,
+    "final_physics_loss": 0.021621,
+    "final_ode_loss": 87.234136,
+    "final_val_loss": 0.286976
   }
 }

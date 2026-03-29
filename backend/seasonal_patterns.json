@@ -1,0 +1,282 @@
+{
+  "cape_fear_nc": {
+    "name": "Cape Fear River, NC (Chemours)",
+    "lat": 34.27,
+    "lng": -78.95,
+    "monthly_pfas_multiplier": {
+      "1": 0.702,
+      "2": 0.625,
+      "3": 0.575,
+      "4": 0.792,
+      "5": 1.096,
+      "6": 1.546,
+      "7": 1.98,
+      "8": 2.38,
+      "9": 2.092,
+      "10": 1.648,
+      "11": 1.251,
+      "12": 0.914
+    },
+    "mean_annual_flow_m3s": 195.4
+  },
+  "decatur_al": {
+    "name": "Tennessee River, Decatur AL (3M)",
+    "lat": 34.6,
+    "lng": -86.98,
+    "monthly_pfas_multiplier": {
+      "1": 0.702,
+      "2": 0.636,
+      "3": 0.568,
+      "4": 0.775,
+      "5": 1.053,
+      "6": 1.392,
+      "7": 1.841,
+      "8": 2.172,
+      "9": 1.995,
+      "10": 1.564,
+      "11": 1.156,
+      "12": 0.869
+    },
+    "mean_annual_flow_m3s": 1642.0
+  },
+  "oscoda_mi": {
+    "name": "Au Sable River, MI (Wurtsmith AFB)",
+    "lat": 44.45,
+    "lng": -83.33,
+    "monthly_pfas_multiplier": {
+      "1": 1.165,
+      "2": 1.217,
+      "3": 0.726,
+      "4": 0.595,
+      "5": 0.791,
+      "6": 1.058,
+      "7": 1.345,
+      "8": 1.486,
+      "9": 1.399,
+      "10": 1.201,
+      "11": 0.99,
+      "12": 1.117
+    },
+    "mean_annual_flow_m3s": 38.2
+  },
+  "fayetteville_nc": {
+    "name": "Cape Fear Basin, Fayetteville NC",
+    "lat": 35.05,
+    "lng": -78.88,
+    "monthly_pfas_multiplier": {
+      "1": 0.65,
+      "2": 0.582,
+      "3": 0.549,
+      "4": 0.78,
+      "5": 1.124,
+      "6": 1.625,
+      "7": 2.182,
+      "8": 2.593,
+      "9": 2.24,
+      "10": 1.58,
+      "11": 1.174,
+      "12": 0.821
+    },
+    "mean_annual_flow_m3s": 92.3
+  },
+  "parkersburg_wv": {
+    "name": "Ohio River, Parkersburg WV (DuPont)",
+    "lat": 39.27,
+    "lng": -81.54,
+    "monthly_pfas_multiplier": {
+      "1": 0.767,
+      "2": 0.678,
+      "3": 0.585,
+      "4": 0.723,
+      "5": 0.967,
+      "6": 1.345,
+      "7": 1.844,
+      "8": 2.194,
+      "9": 2.004,
+      "10": 1.616,
+      "11": 1.159,
+      "12": 0.861
+    },
+    "mean_annual_flow_m3s": 7856.0
+  },
+  "bennington_vt": {
+    "name": "Walloomsac River, Bennington VT",
+    "lat": 42.88,
+    "lng": -73.2,
+    "monthly_pfas_multiplier": {
+      "1": 1.545,
+      "2": 1.697,
+      "3": 0.57,
+      "4": 0.473,
+      "5": 0.76,
+      "6": 1.354,
+      "7": 2.252,
+      "8": 2.591,
+      "9": 2.152,
+      "10": 1.516,
+      "11": 0.889,
+      "12": 1.17
+    },
+    "mean_annual_flow_m3s": 4.82
+  },
+  "rockford_mi": {
+    "name": "Rogue River, Rockford MI (Wolverine)",
+    "lat": 43.12,
+    "lng": -85.56,
+    "monthly_pfas_multiplier": {
+      "1": 1.105,
+      "2": 1.049,
+      "3": 0.592,
+      "4": 0.514,
+      "5": 0.771,
+      "6": 1.174,
+      "7": 1.688,
+      "8": 2.019,
+      "9": 1.778,
+      "10": 1.346,
+      "11": 0.975,
+      "12": 1.064
+    },
+    "mean_annual_flow_m3s": 8.64
+  },
+  "newburgh_ny": {
+    "name": "Hudson River, Newburgh NY",
+    "lat": 41.5,
+    "lng": -74.01,
+    "monthly_pfas_multiplier": {
+      "1": 0.939,
+      "2": 1.0,
+      "3": 0.523,
+      "4": 0.437,
+      "5": 0.696,
+      "6": 1.369,
+      "7": 2.22,
+      "8": 2.688,
+      "9": 2.382,
+      "10": 1.646,
+      "11": 1.145,
+      "12": 0.939
+    },
+    "mean_annual_flow_m3s": 586.0
+  },
+  "warminster_pa": {
+    "name": "Little Neshaminy Creek, PA (NASJRB)",
+    "lat": 40.2,
+    "lng": -75.09,
+    "monthly_pfas_multiplier": {
+      "1": 0.661,
+      "2": 0.603,
+      "3": 0.488,
+      "4": 0.695,
+      "5": 0.82,
+      "6": 0.82,
+      "7": 0.82,
+      "8": 0.82,
+      "9": 0.82,
+      "10": 0.82,
+      "11": 0.82,
+      "12": 0.82
+    },
+    "mean_annual_flow_m3s": 0.82
+  },
+  "colorado_springs": {
+    "name": "Fountain Creek, CO (Peterson AFB)",
+    "lat": 38.75,
+    "lng": -104.79,
+    "monthly_pfas_multiplier": {
+      "1": 1.42,
+      "2": 1.42,
+      "3": 1.42,
+      "4": 1.109,
+      "5": 0.577,
+      "6": 0.455,
+      "7": 0.5,
+      "8": 0.657,
+      "9": 1.0,
+      "10": 1.42,
+      "11": 1.42,
+      "12": 1.42
+    },
+    "mean_annual_flow_m3s": 1.42
+  },
+  "great_lakes_mi": {
+    "name": "Lake Huron Shoreline, MI",
+    "lat": 43.8,
+    "lng": -83.0,
+    "monthly_pfas_multiplier": {
+      "1": 1.182,
+      "2": 1.067,
+      "3": 0.49,
+      "4": 0.467,
+      "5": 0.741,
+      "6": 1.336,
+      "7": 2.014,
+      "8": 2.424,
+      "9": 2.103,
+      "10": 1.538,
+      "11": 1.007,
+      "12": 1.117
+    },
+    "mean_annual_flow_m3s": 2.86
+  },
+  "wilmington_nc": {
+    "name": "Cape Fear Estuary, Wilmington NC",
+    "lat": 34.05,
+    "lng": -77.95,
+    "monthly_pfas_multiplier": {
+      "1": 0.702,
+      "2": 0.625,
+      "3": 0.575,
+      "4": 0.792,
+      "5": 1.096,
+      "6": 1.546,
+      "7": 1.98,
+      "8": 2.38,
+      "9": 2.092,
+      "10": 1.648,
+      "11": 1.251,
+      "12": 0.914
+    },
+    "mean_annual_flow_m3s": 195.4
+  },
+  "pease_nh": {
+    "name": "Pease AFB, Portsmouth NH",
+    "lat": 43.08,
+    "lng": -70.82,
+    "monthly_pfas_multiplier": {
+      "1": 0.38,
+      "2": 0.38,
+      "3": 0.38,
+      "4": 0.38,
+      "5": 0.38,
+      "6": 0.38,
+      "7": 0.38,
+      "8": 0.38,
+      "9": 0.38,
+      "10": 0.38,
+      "11": 0.38,
+      "12": 0.38
+    },
+    "mean_annual_flow_m3s": 0.38
+  },
+  "paulsboro_nj": {
+    "name": "Delaware River, Paulsboro NJ",
+    "lat": 39.83,
+    "lng": -75.24,
+    "monthly_pfas_multiplier": {
+      "1": 0.731,
+      "2": 0.668,
+      "3": 0.548,
+      "4": 0.704,
+      "5": 0.983,
+      "6": 1.569,
+      "7": 2.192,
+      "8": 2.672,
+      "9": 2.408,
+      "10": 1.727,
+      "11": 1.196,
+      "12": 0.83
+    },
+    "mean_annual_flow_m3s": 342.0
+  }
+}

@@ -1,0 +1,210 @@
+[
+  {
+    "name": "EPA Region 1 (New England)",
+    "lat": 42.36,
+    "lng": -71.06,
+    "phone": "617-918-1111",
+    "url": "https://www.epa.gov/aboutepa/epa-region-1-new-england",
+    "states": [
+      "CT",
+      "ME",
+      "MA",
+      "NH",
+      "RI",
+      "VT"
+    ],
+    "type": "epa_regional"
+  },
+  {
+    "name": "EPA Region 2 (NY/NJ)",
+    "lat": 40.71,
+    "lng": -74.01,
+    "phone": "212-637-3000",
+    "url": "https://www.epa.gov/aboutepa/epa-region-2",
+    "states": [
+      "NJ",
+      "NY",
+      "PR",
+      "VI"
+    ],
+    "type": "epa_regional"
+  },
+  {
+    "name": "EPA Region 3 (Mid-Atlantic)",
+    "lat": 39.95,
+    "lng": -75.16,
+    "phone": "215-814-5000",
+    "url": "https://www.epa.gov/aboutepa/epa-region-3-mid-atlantic",
+    "states": [
+      "DE",
+      "DC",
+      "MD",
+      "PA",
+      "VA",
+      "WV"
+    ],
+    "type": "epa_regional"
+  },
+  {
+    "name": "EPA Region 4 (Southeast)",
+    "lat": 33.75,
+    "lng": -84.39,
+    "phone": "404-562-9900",
+    "url": "https://www.epa.gov/aboutepa/epa-region-4-southeast",
+    "states": [
+      "AL",
+      "FL",
+      "GA",
+      "KY",
+      "MS",
+      "NC",
+      "SC",
+      "TN"
+    ],
+    "type": "epa_regional"
+  },
+  {
+    "name": "EPA Region 5 (Great Lakes)",
+    "lat": 41.88,
+    "lng": -87.63,
+    "phone": "312-353-2000",
+    "url": "https://www.epa.gov/aboutepa/epa-region-5",
+    "states": [
+      "IL",
+      "IN",
+      "MI",
+      "MN",
+      "OH",
+      "WI"
+    ],
+    "type": "epa_regional"
+  },
+  {
+    "name": "EPA Region 7 (Midwest)",
+    "lat": 39.1,
+    "lng": -94.58,
+    "phone": "913-551-7003",
+    "url": "https://www.epa.gov/aboutepa/epa-region-7",
+    "states": [
+      "IA",
+      "KS",
+      "MO",
+      "NE"
+    ],
+    "type": "epa_regional"
+  },
+  {
+    "name": "EPA Region 8 (Mountains)",
+    "lat": 39.74,
+    "lng": -104.99,
+    "phone": "303-312-6312",
+    "url": "https://www.epa.gov/aboutepa/epa-region-8",
+    "states": [
+      "CO",
+      "MT",
+      "ND",
+      "SD",
+      "UT",
+      "WY"
+    ],
+    "type": "epa_regional"
+  },
+  {
+    "name": "EPA Region 10 (Pacific NW)",
+    "lat": 47.61,
+    "lng": -122.33,
+    "phone": "206-553-1200",
+    "url": "https://www.epa.gov/aboutepa/epa-region-10-pacific-northwest",
+    "states": [
+      "AK",
+      "ID",
+      "OR",
+      "WA"
+    ],
+    "type": "epa_regional"
+  },
+  {
+    "name": "NC DEQ PFAS Response",
+    "lat": 35.78,
+    "lng": -78.64,
+    "phone": "877-623-6748",
+    "url": "https://www.deq.nc.gov/pfas",
+    "states": [
+      "NC"
+    ],
+    "type": "state_pfas"
+  },
+  {
+    "name": "MI PFAS Response Team",
+    "lat": 42.73,
+    "lng": -84.56,
+    "phone": "800-662-9278",
+    "url": "https://www.michigan.gov/pfasresponse",
+    "states": [
+      "MI"
+    ],
+    "type": "state_pfas"
+  },
+  {
+    "name": "VT DEC PFAS Program",
+    "lat": 44.26,
+    "lng": -72.58,
+    "phone": "802-828-1556",
+    "url": "https://dec.vermont.gov/pfas",
+    "states": [
+      "VT"
+    ],
+    "type": "state_pfas"
+  },
+  {
+    "name": "PA DEP PFAS Info",
+    "lat": 40.26,
+    "lng": -76.88,
+    "phone": "717-787-9580",
+    "url": "https://www.dep.pa.gov/pfas",
+    "states": [
+      "PA"
+    ],
+    "type": "state_pfas"
+  },
+  {
+    "name": "NY DEC PFAS Program",
+    "lat": 42.65,
+    "lng": -73.76,
+    "phone": "518-402-8044",
+    "url": "https://www.dec.ny.gov/chemical/108831.html",
+    "states": [
+      "NY"
+    ],
+    "type": "state_pfas"
+  },
+  {
+    "name": "AL ADEM PFAS Info",
+    "lat": 32.38,
+    "lng": -86.3,
+    "phone": "334-271-7700",
+    "url": "https://adem.alabama.gov/programs/water/pfas.cnt",
+    "states": [
+      "AL"
+    ],
+    "type": "state_pfas"
+  },
+  {
+    "name": "EPA Safe Drinking Water Hotline",
+    "lat": 38.89,
+    "lng": -77.03,
+    "phone": "800-426-4791",
+    "url": "https://www.epa.gov/safewater",
+    "states": [],
+    "type": "national_hotline"
+  },
+  {
+    "name": "ATSDR PFAS Exposure Assessment",
+    "lat": 33.75,
+    "lng": -84.39,
+    "phone": "800-232-4636",
+    "url": "https://www.atsdr.cdc.gov/pfas/",
+    "states": [],
+    "type": "national_hotline"
+  }
+]

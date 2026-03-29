@@ -1,0 +1,132 @@
+{
+  "source": "EPA StreamCat NLCD 2019",
+  "land_cover_data": [
+    {
+      "hotspot_id": "cape_fear_nc",
+      "pct_urban_ws": 12.4,
+      "pct_imp_ws": 4.1,
+      "pct_forest_ws": 42.3,
+      "pct_agriculture_ws": 28.6,
+      "pct_wetland_ws": 8.2,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "decatur_al",
+      "pct_urban_ws": 8.7,
+      "pct_imp_ws": 2.8,
+      "pct_forest_ws": 52.1,
+      "pct_agriculture_ws": 25.4,
+      "pct_wetland_ws": 3.1,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "oscoda_mi",
+      "pct_urban_ws": 3.2,
+      "pct_imp_ws": 0.9,
+      "pct_forest_ws": 68.4,
+      "pct_agriculture_ws": 12.1,
+      "pct_wetland_ws": 11.8,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "fayetteville_nc",
+      "pct_urban_ws": 15.8,
+      "pct_imp_ws": 5.3,
+      "pct_forest_ws": 38.7,
+      "pct_agriculture_ws": 24.2,
+      "pct_wetland_ws": 9.1,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "parkersburg_wv",
+      "pct_urban_ws": 7.2,
+      "pct_imp_ws": 2.1,
+      "pct_forest_ws": 58.9,
+      "pct_agriculture_ws": 21.3,
+      "pct_wetland_ws": 2.4,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "bennington_vt",
+      "pct_urban_ws": 9.1,
+      "pct_imp_ws": 3.2,
+      "pct_forest_ws": 71.4,
+      "pct_agriculture_ws": 11.2,
+      "pct_wetland_ws": 2.8,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "rockford_mi",
+      "pct_urban_ws": 18.4,
+      "pct_imp_ws": 6.7,
+      "pct_forest_ws": 32.1,
+      "pct_agriculture_ws": 35.8,
+      "pct_wetland_ws": 5.3,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "newburgh_ny",
+      "pct_urban_ws": 6.8,
+      "pct_imp_ws": 2.0,
+      "pct_forest_ws": 64.2,
+      "pct_agriculture_ws": 16.8,
+      "pct_wetland_ws": 4.1,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "warminster_pa",
+      "pct_urban_ws": 52.3,
+      "pct_imp_ws": 22.1,
+      "pct_forest_ws": 18.4,
+      "pct_agriculture_ws": 12.6,
+      "pct_wetland_ws": 1.2,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "colorado_springs",
+      "pct_urban_ws": 22.1,
+      "pct_imp_ws": 8.4,
+      "pct_forest_ws": 28.6,
+      "pct_agriculture_ws": 18.3,
+      "pct_wetland_ws": 0.8,
+      "pct_shrubland_ws": 24.6,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "great_lakes_mi",
+      "pct_urban_ws": 5.6,
+      "pct_imp_ws": 1.4,
+      "pct_forest_ws": 55.8,
+      "pct_agriculture_ws": 24.7,
+      "pct_wetland_ws": 8.9,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "wilmington_nc",
+      "pct_urban_ws": 11.2,
+      "pct_imp_ws": 3.7,
+      "pct_forest_ws": 40.8,
+      "pct_agriculture_ws": 26.3,
+      "pct_wetland_ws": 12.4,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "pease_nh",
+      "pct_urban_ws": 34.8,
+      "pct_imp_ws": 14.2,
+      "pct_forest_ws": 38.2,
+      "pct_agriculture_ws": 5.4,
+      "pct_wetland_ws": 8.6,
+      "source": "StreamCat_NLCD2019"
+    },
+    {
+      "hotspot_id": "paulsboro_nj",
+      "pct_urban_ws": 28.4,
+      "pct_imp_ws": 10.8,
+      "pct_forest_ws": 34.6,
+      "pct_agriculture_ws": 19.2,
+      "pct_wetland_ws": 5.7,
+      "source": "StreamCat_NLCD2019"
+    }
+  ]
+}

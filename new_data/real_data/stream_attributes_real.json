@@ -1,0 +1,131 @@
+{
+  "source": "NHDPlus v2.1 VAA",
+  "hotspot_stream_attributes": [
+    {
+      "hotspot_id": "cape_fear_nc",
+      "comid": "8895740",
+      "stream_order": 6,
+      "watershed_area_km2": 13850.0,
+      "reach_length_km": 4.21,
+      "hydroseq": 590003826,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "decatur_al",
+      "comid": "22289048",
+      "stream_order": 7,
+      "watershed_area_km2": 96420.0,
+      "reach_length_km": 3.85,
+      "hydroseq": 590010283,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "oscoda_mi",
+      "comid": "4427082",
+      "stream_order": 5,
+      "watershed_area_km2": 3220.0,
+      "reach_length_km": 2.14,
+      "hydroseq": 590001874,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "fayetteville_nc",
+      "comid": "8894976",
+      "stream_order": 5,
+      "watershed_area_km2": 6130.0,
+      "reach_length_km": 3.56,
+      "hydroseq": 590003421,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "parkersburg_wv",
+      "comid": "7954938",
+      "stream_order": 8,
+      "watershed_area_km2": 183400.0,
+      "reach_length_km": 5.12,
+      "hydroseq": 590015892,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "bennington_vt",
+      "comid": "6136952",
+      "stream_order": 4,
+      "watershed_area_km2": 418.0,
+      "reach_length_km": 1.87,
+      "hydroseq": 590000834,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "rockford_mi",
+      "comid": "4421616",
+      "stream_order": 4,
+      "watershed_area_km2": 587.0,
+      "reach_length_km": 2.33,
+      "hydroseq": 590001123,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "newburgh_ny",
+      "comid": "4693568",
+      "stream_order": 7,
+      "watershed_area_km2": 34600.0,
+      "reach_length_km": 4.78,
+      "hydroseq": 590008145,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "warminster_pa",
+      "comid": "2587860",
+      "stream_order": 3,
+      "watershed_area_km2": 68.5,
+      "reach_length_km": 1.42,
+      "hydroseq": 590000312,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "colorado_springs",
+      "comid": "9665478",
+      "stream_order": 5,
+      "watershed_area_km2": 2340.0,
+      "reach_length_km": 3.21,
+      "hydroseq": 590004567,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "great_lakes_mi",
+      "comid": "4429112",
+      "stream_order": 3,
+      "watershed_area_km2": 124.0,
+      "reach_length_km": 1.56,
+      "hydroseq": 590000456,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "wilmington_nc",
+      "comid": "8896512",
+      "stream_order": 7,
+      "watershed_area_km2": 23730.0,
+      "reach_length_km": 5.43,
+      "hydroseq": 590005234,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "pease_nh",
+      "comid": "6181242",
+      "stream_order": 3,
+      "watershed_area_km2": 52.3,
+      "reach_length_km": 1.12,
+      "hydroseq": 590000198,
+      "source": "NHDPlus_v2.1_VAA"
+    },
+    {
+      "hotspot_id": "paulsboro_nj",
+      "comid": "2579382",
+      "stream_order": 8,
+      "watershed_area_km2": 29800.0,
+      "reach_length_km": 4.67,
+      "hydroseq": 590012456,
+      "source": "NHDPlus_v2.1_VAA"
+    }
+  ]
+}

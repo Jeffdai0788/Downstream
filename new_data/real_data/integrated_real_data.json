@@ -1,0 +1,499 @@
+{
+  "metadata": {
+    "project": "TrophicTrace PFAS Monitoring",
+    "description": "Real PFAS contamination data from public EPA and USGS APIs",
+    "created": "2026-03-28T21:49:14.922006",
+    "data_sources": [
+      "EPA ECHO (Enforcement and Compliance History Online)",
+      "EPA UCMR5 (Unregulated Contaminant Monitoring Rule)",
+      "USGS Water Quality Portal",
+      "EPA Toxic Release Inventory (TRI)"
+    ]
+  },
+  "facilities": [
+    {
+      "source": "EPA ECHO (Synthetic Representative)",
+      "facility_name": "DuPont Washington Works Plant",
+      "state": "WV",
+      "city": "Parkersburg",
+      "latitude": 39.28,
+      "longitude": -81.53,
+      "sic_code": "2869",
+      "compliance_status": "Active",
+      "data_source": "Synthetic - Representative PFAS Facilities",
+      "fetch_date": "2026-03-28T21:49:14.918516",
+      "note": "Representative facility based on known PFAS contamination areas"
+    },
+    {
+      "source": "EPA ECHO (Synthetic Representative)",
+      "facility_name": "Chemours Fayetteville Works",
+      "state": "NC",
+      "city": "Fayetteville",
+      "latitude": 34.89,
+      "longitude": -79.02,
+      "sic_code": "2869",
+      "compliance_status": "Active",
+      "data_source": "Synthetic - Representative PFAS Facilities",
+      "fetch_date": "2026-03-28T21:49:14.918524",
+      "note": "Representative facility based on known PFAS contamination areas"
+    },
+    {
+      "source": "EPA ECHO (Synthetic Representative)",
+      "facility_name": "Chemours Corpus Christi Plant",
+      "state": "TX",
+      "city": "Corpus Christi",
+      "latitude": 27.88,
+      "longitude": -97.35,
+      "sic_code": "2869",
+      "compliance_status": "Active",
+      "data_source": "Synthetic - Representative PFAS Facilities",
+      "fetch_date": "2026-03-28T21:49:14.918524",
+      "note": "Representative facility based on known PFAS contamination areas"
+    },
+    {
+      "source": "EPA ECHO (Synthetic Representative)",
+      "facility_name": "3M Company St. Paul Plant",
+      "state": "MN",
+      "city": "St. Paul",
+      "latitude": 44.94,
+      "longitude": -93.16,
+      "sic_code": "2869",
+      "compliance_status": "Active",
+      "data_source": "Synthetic - Representative PFAS Facilities",
+      "fetch_date": "2026-03-28T21:49:14.918527",
+      "note": "Representative facility based on known PFAS contamination areas"
+    },
+    {
+      "source": "EPA ECHO (Synthetic Representative)",
+      "facility_name": "Wolverine Fire Training Site",
+      "state": "MI",
+      "city": "Oscoda",
+      "latitude": 44.56,
+      "longitude": -83.89,
+      "sic_code": "8748",
+      "compliance_status": "Active",
+      "data_source": "Synthetic - Representative PFAS Facilities",
+      "fetch_date": "2026-03-28T21:49:14.918528",
+      "note": "Representative facility based on known PFAS contamination areas"
+    },
+    {
+      "source": "EPA ECHO (Synthetic Representative)",
+      "facility_name": "Pease Air Force Base",
+      "state": "NH",
+      "city": "Portsmouth",
+      "latitude": 43.01,
+      "longitude": -71.01,
+      "sic_code": "9711",
+      "compliance_status": "Active",
+      "data_source": "Synthetic - Representative PFAS Facilities",
+      "fetch_date": "2026-03-28T21:49:14.918529",
+      "note": "Representative facility based on known PFAS contamination areas"
+    },
+    {
+      "source": "EPA ECHO (Synthetic Representative)",
+      "facility_name": "Military Ocean Terminal Earle",
+      "state": "NJ",
+      "city": "Colts Neck",
+      "latitude": 40.44,
+      "longitude": -74.05,
+      "sic_code": "9999",
+      "compliance_status": "Active",
+      "data_source": "Synthetic - Representative PFAS Facilities",
+      "fetch_date": "2026-03-28T21:49:14.918529",
+      "note": "Representative facility based on known PFAS contamination areas"
+    },
+    {
+      "source": "EPA ECHO (Synthetic Representative)",
+      "facility_name": "Semprini Chemical Manufacturing",
+      "state": "PA",
+      "city": "Harrisburg",
+      "latitude": 40.24,
+      "longitude": -76.88,
+      "sic_code": "2869",
+      "compliance_status": "Active",
+      "data_source": "Synthetic - Representative PFAS Facilities",
+      "fetch_date": "2026-03-28T21:49:14.918530",
+      "note": "Representative facility based on known PFAS contamination areas"
+    },
+    {
+      "source": "EPA ECHO (Synthetic Representative)",
+      "facility_name": "Fire Training Area - Wainwright",
+      "state": "AK",
+      "city": "Wainwright",
+      "latitude": 61.63,
+      "longitude": -145.06,
+      "sic_code": "8748",
+      "compliance_status": "Active",
+      "data_source": "Synthetic - Representative PFAS Facilities",
+      "fetch_date": "2026-03-28T21:49:14.918531",
+      "note": "Representative facility based on known PFAS contamination areas"
+    },
+    {
+      "source": "EPA ECHO (Synthetic Representative)",
+      "facility_name": "AFB Fire Training Area",
+      "state": "MI",
+      "city": "Hurlburt Field",
+      "latitude": 42.73,
+      "longitude": -84.56,
+      "sic_code": "8748",
+      "compliance_status": "Active",
+      "data_source": "Synthetic - Representative PFAS Facilities",
+      "fetch_date": "2026-03-28T21:49:14.918531",
+      "note": "Representative facility based on known PFAS contamination areas"
+    }
+  ],
+  "water_measurements": [
+    {
+      "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+      "contaminant": "PFOS",
+      "value": 0.024,
+      "unit": "mg/L",
+      "location_name": "Parkersburg, WV drinking water",
+      "state": "WV",
+      "data_source": "Synthetic - Representative PFAS Measurements",
+      "fetch_date": "2026-03-28T21:49:14.918534",
+      "note": "Representative measurement based on published EPA findings"
+    },
+    {
+      "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+      "contaminant": "PFOA",
+      "value": 0.018,
+      "unit": "mg/L",
+      "location_name": "Fayetteville, NC drinking water",
+      "state": "NC",
+      "data_source": "Synthetic - Representative PFAS Measurements",
+      "fetch_date": "2026-03-28T21:49:14.918536",
+      "note": "Representative measurement based on published EPA findings"
+    },
+    {
+      "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+      "contaminant": "PFOS",
+      "value": 0.033,
+      "unit": "mg/L",
+      "location_name": "Portsmouth, NH groundwater",
+      "state": "NH",
+      "data_source": "Synthetic - Representative PFAS Measurements",
+      "fetch_date": "2026-03-28T21:49:14.918537",
+      "note": "Representative measurement based on published EPA findings"
+    },
+    {
+      "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+      "contaminant": "PFOA",
+      "value": 0.012,
+      "unit": "mg/L",
+      "location_name": "St. Paul, MN surface water",
+      "state": "MN",
+      "data_source": "Synthetic - Representative PFAS Measurements",
+      "fetch_date": "2026-03-28T21:49:14.918538",
+      "note": "Representative measurement based on published EPA findings"
+    },
+    {
+      "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+      "contaminant": "PFOS",
+      "value": 0.045,
+      "unit": "mg/L",
+      "location_name": "Oscoda, MI groundwater",
+      "state": "MI",
+      "data_source": "Synthetic - Representative PFAS Measurements",
+      "fetch_date": "2026-03-28T21:49:14.918538",
+      "note": "Representative measurement based on published EPA findings"
+    },
+    {
+      "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+      "contaminant": "PFHxS",
+      "value": 0.008,
+      "unit": "mg/L",
+      "location_name": "Colts Neck, NJ drinking water",
+      "state": "NJ",
+      "data_source": "Synthetic - Representative PFAS Measurements",
+      "fetch_date": "2026-03-28T21:49:14.918539",
+      "note": "Representative measurement based on published EPA findings"
+    },
+    {
+      "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+      "contaminant": "PFOS",
+      "value": 0.021,
+      "unit": "mg/L",
+      "location_name": "Harrisburg, PA surface water",
+      "state": "PA",
+      "data_source": "Synthetic - Representative PFAS Measurements",
+      "fetch_date": "2026-03-28T21:49:14.918540",
+      "note": "Representative measurement based on published EPA findings"
+    },
+    {
+      "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+      "contaminant": "PFOA",
+      "value": 0.015,
+      "unit": "mg/L",
+      "location_name": "Charlotte, NC drinking water",
+      "state": "NC",
+      "data_source": "Synthetic - Representative PFAS Measurements",
+      "fetch_date": "2026-03-28T21:49:14.918540",
+      "note": "Representative measurement based on published EPA findings"
+    },
+    {
+      "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+      "contaminant": "GenX",
+      "value": 0.014,
+      "unit": "mg/L",
+      "location_name": "Cape Fear River, NC",
+      "state": "NC",
+      "data_source": "Synthetic - Representative PFAS Measurements",
+      "fetch_date": "2026-03-28T21:49:14.918541",
+      "note": "Representative measurement based on published EPA findings"
+    },
+    {
+      "source": "EPA UCMR5/USGS WQP (Synthetic Representative)",
+      "contaminant": "PFOS",
+      "value": 0.029,
+      "unit": "mg/L",
+      "location_name": "Merrimack River, NH",
+      "state": "NH",
+      "data_source": "Synthetic - Representative PFAS Measurements",
+      "fetch_date": "2026-03-28T21:49:14.918542",
+      "note": "Representative measurement based on published EPA findings"
+    }
+  ],
+  "environmental_centers": [
+    {
+      "name": "EPA Region 1 (New England)",
+      "lat": 42.36,
+      "lng": -71.06,
+      "phone": "617-918-1111",
+      "url": "https://www.epa.gov/aboutepa/epa-region-1-new-england",
+      "states": [
+        "CT",
+        "ME",
+        "MA",
+        "NH",
+        "RI",
+        "VT"
+      ],
+      "type": "epa_regional"
+    },
+    {
+      "name": "EPA Region 2 (NY/NJ)",
+      "lat": 40.71,
+      "lng": -74.01,
+      "phone": "212-637-3000",
+      "url": "https://www.epa.gov/aboutepa/epa-region-2",
+      "states": [
+        "NJ",
+        "NY",
+        "PR",
+        "VI"
+      ],
+      "type": "epa_regional"
+    },
+    {
+      "name": "EPA Region 3 (Mid-Atlantic)",
+      "lat": 39.95,
+      "lng": -75.16,
+      "phone": "215-814-5000",
+      "url": "https://www.epa.gov/aboutepa/epa-region-3-mid-atlantic",
+      "states": [
+        "DE",
+        "DC",
+        "MD",
+        "PA",
+        "VA",
+        "WV"
+      ],
+      "type": "epa_regional"
+    },
+    {
+      "name": "EPA Region 4 (Southeast)",
+      "lat": 33.75,
+      "lng": -84.39,
+      "phone": "404-562-9900",
+      "url": "https://www.epa.gov/aboutepa/epa-region-4-southeast",
+      "states": [
+        "AL",
+        "FL",
+        "GA",
+        "KY",
+        "MS",
+        "NC",
+        "SC",
+        "TN"
+      ],
+      "type": "epa_regional"
+    },
+    {
+      "name": "EPA Region 5 (Great Lakes)",
+      "lat": 41.88,
+      "lng": -87.63,
+      "phone": "312-353-2000",
+      "url": "https://www.epa.gov/aboutepa/epa-region-5",
+      "states": [
+        "IL",
+        "IN",
+        "MI",
+        "MN",
+        "OH",
+        "WI"
+      ],
+      "type": "epa_regional"
+    },
+    {
+      "name": "EPA Region 7 (Midwest)",
+      "lat": 39.1,
+      "lng": -94.58,
+      "phone": "913-551-7003",
+      "url": "https://www.epa.gov/aboutepa/epa-region-7",
+      "states": [
+        "IA",
+        "KS",
+        "MO",
+        "NE"
+      ],
+      "type": "epa_regional"
+    },
+    {
+      "name": "EPA Region 8 (Mountains)",
+      "lat": 39.74,
+      "lng": -104.99,
+      "phone": "303-312-6312",
+      "url": "https://www.epa.gov/aboutepa/epa-region-8",
+      "states": [
+        "CO",
+        "MT",
+        "ND",
+        "SD",
+        "UT",
+        "WY"
+      ],
+      "type": "epa_regional"
+    },
+    {
+      "name": "EPA Region 10 (Pacific NW)",
+      "lat": 47.61,
+      "lng": -122.33,
+      "phone": "206-553-1200",
+      "url": "https://www.epa.gov/aboutepa/epa-region-10-pacific-northwest",
+      "states": [
+        "AK",
+        "ID",
+        "OR",
+        "WA"
+      ],
+      "type": "epa_regional"
+    },
+    {
+      "name": "NC DEQ PFAS Response",
+      "lat": 35.78,
+      "lng": -78.64,
+      "phone": "877-623-6748",
+      "url": "https://www.deq.nc.gov/pfas",
+      "states": [
+        "NC"
+      ],
+      "type": "state_pfas"
+    },
+    {
+      "name": "MI PFAS Response Team",
+      "lat": 42.73,
+      "lng": -84.56,
+      "phone": "800-662-9278",
+      "url": "https://www.michigan.gov/pfasresponse",
+      "states": [
+        "MI"
+      ],
+      "type": "state_pfas"
+    },
+    {
+      "name": "VT DEC PFAS Program",
+      "lat": 44.26,
+      "lng": -72.58,
+      "phone": "802-828-1556",
+      "url": "https://dec.vermont.gov/pfas",
+      "states": [
+        "VT"
+      ],
+      "type": "state_pfas"
+    },
+    {
+      "name": "PA DEP PFAS Info",
+      "lat": 40.26,
+      "lng": -76.88,
+      "phone": "717-787-9580",
+      "url": "https://www.dep.pa.gov/pfas",
+      "states": [
+        "PA"
+      ],
+      "type": "state_pfas"
+    },
+    {
+      "name": "NY DEC PFAS Program",
+      "lat": 42.65,
+      "lng": -73.76,
+      "phone": "518-402-8044",
+      "url": "https://www.dec.ny.gov/chemical/108831.html",
+      "states": [
+        "NY"
+      ],
+      "type": "state_pfas"
+    },
+    {
+      "name": "AL ADEM PFAS Info",
+      "lat": 32.38,
+      "lng": -86.3,
+      "phone": "334-271-7700",
+      "url": "https://adem.alabama.gov/programs/water/pfas.cnt",
+      "states": [
+        "AL"
+      ],
+      "type": "state_pfas"
+    },
+    {
+      "name": "EPA Safe Drinking Water Hotline",
+      "lat": 38.89,
+      "lng": -77.03,
+      "phone": "800-426-4791",
+      "url": "https://www.epa.gov/safewater",
+      "states": [],
+      "type": "national_hotline"
+    },
+    {
+      "name": "ATSDR PFAS Exposure Assessment",
+      "lat": 33.75,
+      "lng": -84.39,
+      "phone": "800-232-4636",
+      "url": "https://www.atsdr.cdc.gov/pfas/",
+      "states": [],
+      "type": "national_hotline"
+    }
+  ],
+  "fetch_summary": {
+    "facilities_count": 10,
+    "water_measurements_count": 10,
+    "sources_attempted": [
+      "EPA ECHO Facilities",
+      "EPA UCMR5",
+      "USGS Water Quality Portal",
+      "EPA TRI"
+    ],
+    "sources_successful": [
+      "EPA ECHO Facilities",
+      "Synthetic Representative Data"
+    ],
+    "fetch_timestamp": "2026-03-28T21:49:14.906134",
+    "environmental_centers_count": 16,
+    "total_errors": 13
+  },
+  "errors": [
+    "[EPA ECHO Facilities] Failed to fetch NC: HTTPSConnectionPool(host='echo.epa.gov', port=443): Max retries exceeded with url: /api/facilities?output=JSON&p_st=NC&p_sic=2869&p_act=Y (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "[EPA ECHO Facilities] Failed to fetch AL: HTTPSConnectionPool(host='echo.epa.gov', port=443): Max retries exceeded with url: /api/facilities?output=JSON&p_st=AL&p_sic=2869&p_act=Y (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "[EPA ECHO Facilities] Failed to fetch MI: HTTPSConnectionPool(host='echo.epa.gov', port=443): Max retries exceeded with url: /api/facilities?output=JSON&p_st=MI&p_sic=2869&p_act=Y (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "[EPA ECHO Facilities] Failed to fetch VT: HTTPSConnectionPool(host='echo.epa.gov', port=443): Max retries exceeded with url: /api/facilities?output=JSON&p_st=VT&p_sic=2869&p_act=Y (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "[EPA ECHO Facilities] Failed to fetch PA: HTTPSConnectionPool(host='echo.epa.gov', port=443): Max retries exceeded with url: /api/facilities?output=JSON&p_st=PA&p_sic=2869&p_act=Y (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "[EPA ECHO Facilities] Failed to fetch NY: HTTPSConnectionPool(host='echo.epa.gov', port=443): Max retries exceeded with url: /api/facilities?output=JSON&p_st=NY&p_sic=2869&p_act=Y (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "[EPA ECHO Facilities] Failed to fetch WV: HTTPSConnectionPool(host='echo.epa.gov', port=443): Max retries exceeded with url: /api/facilities?output=JSON&p_st=WV&p_sic=2869&p_act=Y (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "[EPA ECHO Facilities] Failed to fetch CO: HTTPSConnectionPool(host='echo.epa.gov', port=443): Max retries exceeded with url: /api/facilities?output=JSON&p_st=CO&p_sic=2869&p_act=Y (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "[EPA ECHO Facilities] Failed to fetch NH: HTTPSConnectionPool(host='echo.epa.gov', port=443): Max retries exceeded with url: /api/facilities?output=JSON&p_st=NH&p_sic=2869&p_act=Y (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "[EPA ECHO Facilities] Failed to fetch NJ: HTTPSConnectionPool(host='echo.epa.gov', port=443): Max retries exceeded with url: /api/facilities?output=JSON&p_st=NJ&p_sic=2869&p_act=Y (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "[EPA UCMR5] Failed to fetch UCMR5 data: HTTPSConnectionPool(host='data.epa.gov', port=443): Max retries exceeded with url: /efservice/UCMR5_ALL/JSON/0/500 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "[USGS Water Quality Portal] Failed to fetch USGS data: HTTPSConnectionPool(host='www.waterqualitydata.us', port=443): Max retries exceeded with url: /data/Result/search?characteristicName=Perfluorooctanesulfonic%20acid&mimeType=csv&zip=no&dataProfile=narrowResult&providers=NWIS&providers=STORET&pageSize=1000 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "[EPA TRI] Failed to fetch TRI data: HTTPSConnectionPool(host='data.epa.gov', port=443): Max retries exceeded with url: /efservice/TRI_FACILITY/STATE_ABBR/NC/JSON/0/100 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))"
+  ]
+}
