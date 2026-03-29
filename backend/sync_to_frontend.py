@@ -178,8 +178,8 @@ def sync():
         comid = backend['segments'][i].get('comid', 8893800 + i)
         hotspot_id = slugify(name)
 
-        # Very short segment — stays near the water body coordinate
-        coords = generate_polygon(lat, lng, rng, radius_deg=0.003)
+        # Small polygon at each monitoring station
+        coords = generate_polygon(lat, lng, rng, radius_deg=0.002)
         feat = make_feature(coords, hotspot_id, name, pfas, risk, stream_order, comid)
         geo_features.append(feat)
 
@@ -330,7 +330,7 @@ def sync():
                 river_comid += 1
                 pt_name = f"{river['name']} — Mile {k * 50 + int(t * 50)}"
 
-                coords = generate_polygon(lat, lng, rng, radius_deg=0.004)
+                coords = generate_polygon(lat, lng, rng, radius_deg=0.002)
                 feat = make_feature(coords, slugify(river['name']), pt_name, pfas, risk, so, river_comid)
                 geo_features.append(feat)
 

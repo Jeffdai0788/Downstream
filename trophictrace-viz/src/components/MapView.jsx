@@ -35,7 +35,7 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
     if (!map.current || !loaded) return
 
     if (!speciesFilter) {
-      ;['river-heatmap', 'river-glow', 'river-contamination', 'river-hit-area'].forEach((id) => {
+      ;['river-glow', 'river-contamination', 'river-hit-area'].forEach((id) => {
         if (map.current.getLayer(id)) map.current.setFilter(id, null)
       })
       return
@@ -54,7 +54,7 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
       ? ['in', ['get', 'hotspot_id'], ['literal', [...matchingHotspots]]]
       : ['==', ['get', 'hotspot_id'], '__none__']
 
-    ;['river-heatmap', 'river-glow', 'river-contamination', 'river-hit-area'].forEach((id) => {
+    ;['river-glow', 'river-contamination', 'river-hit-area'].forEach((id) => {
       if (map.current.getLayer(id)) map.current.setFilter(id, filter)
     })
   }, [speciesFilter, loaded, data])
@@ -140,72 +140,6 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
     })
 
 
-    // Build point source for heatmap from polygon centroids
-    const plumePoints = {
-      type: 'FeatureCollection',
-      features: riverGeo.features.map((feat) => {
-        const coords = feat.geometry.type === 'Polygon' ? feat.geometry.coordinates[0] : feat.geometry.coordinates
-        // Centroid: average of all points
-        const n = coords.length
-        const cx = coords.reduce((s, c) => s + c[0], 0) / n
-        const cy = coords.reduce((s, c) => s + c[1], 0) / n
-        return { type: 'Feature', properties: feat.properties, geometry: { type: 'Point', coordinates: [cx, cy] } }
-      }),
-    }
-    m.addSource('plume-points', { type: 'geojson', data: plumePoints })
-
-    // ── Heatmap: fills water bodies with color ─────────────────────────────
-    m.addLayer({
-      id: 'river-heatmap',
-      type: 'heatmap',
-      source: 'plume-points',
-      paint: {
-        'heatmap-weight': [
-          'interpolate', ['linear'], ['get', 'pfas_ng_l'],
-          0,    0,
-          5,    0.15,
-          20,   0.35,
-          50,   0.6,
-          100,  0.85,
-          500,  1.0,
-        ],
-        'heatmap-radius': [
-          'interpolate', ['linear'], ['zoom'],
-          3,  12,
-          5,  22,
-          7,  35,
-          9,  55,
-          11, 75,
-          13, 95,
-        ],
-        'heatmap-intensity': [
-          'interpolate', ['linear'], ['zoom'],
-          3,  0.3,
-          6,  0.6,
-          9,  1.2,
-          13, 2.0,
-        ],
-        'heatmap-color': [
-          'interpolate', ['linear'], ['heatmap-density'],
-          0,    'rgba(0,0,0,0)',
-          0.05, 'rgba(0,0,0,0)',
-          0.12, 'rgba(46,184,114,0.30)',
-          0.30, 'rgba(46,184,114,0.55)',
-          0.50, 'rgba(224,160,48,0.65)',
-          0.70, 'rgba(232,132,90,0.75)',
-          0.85, 'rgba(220,68,68,0.85)',
-          1.0,  'rgba(200,40,40,0.92)',
-        ],
-        'heatmap-opacity': [
-          'interpolate', ['linear'], ['zoom'],
-          3,  0.75,
-          8,  0.80,
-          11, 0.70,
-          14, 0.50,
-        ],
-      },
-    })
-
     // Color by PFAS concentration: green → amber → red
     const ZONE_COLOR = [
       'interpolate', ['linear'], ['get', 'pfas_ng_l'],
@@ -216,40 +150,36 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
       100,  UNSAFE_COLOR,
     ]
 
-    // ── Filled polygons on top of heatmap — visible at higher zoom ────────
+    // Find the first land/landuse layer — insert our polygons BEFORE it
+    // so land renders ON TOP and naturally clips polygon edges at shorelines
+    const styleLayers = m.getStyle().layers
+    const landLayer = styleLayers.find((l) =>
+      l.id.includes('land') || l.id.includes('landuse') || l.id.includes('landcover')
+    )
+    const insertBeforeId = landLayer?.id
+
+    // ── Filled contamination polygons — inserted below land ────────────────
     m.addLayer({
       id: 'river-contamination',
       type: 'fill',
       source: 'contaminated-rivers',
       paint: {
         'fill-color': ZONE_COLOR,
-        'fill-opacity': [
-          'interpolate', ['linear'], ['zoom'],
-          3,  0,
-          8,  0.15,
-          10, 0.45,
-          13, 0.65,
-        ],
+        'fill-opacity': 0.6,
       },
-    })
+    }, insertBeforeId)
 
-    // ── Polygon outline for definition ─────────────────────────────────────
+    // ── Subtle outline ─────────────────────────────────────────────────────
     m.addLayer({
       id: 'river-glow',
       type: 'line',
       source: 'contaminated-rivers',
       paint: {
         'line-color': ZONE_COLOR,
-        'line-width': 1,
-        'line-opacity': [
-          'interpolate', ['linear'], ['zoom'],
-          3,  0,
-          9,  0.2,
-          13, 0.4,
-        ],
+        'line-width': 0.5,
+        'line-opacity': 0.3,
       },
-      layout: { 'line-cap': 'round', 'line-join': 'round' },
-    })
+    }, insertBeforeId)
 
     // ── Invisible fill for hover/click detection ─────────────────────────
     m.addLayer({
