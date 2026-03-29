@@ -255,9 +255,11 @@ def build():
                 best = hs
         return best, best_d
 
-    # Urban % and flow from nearest hotspot (weighted by distance)
+    # Urban %, flow, stream order from nearest hotspot (weighted by distance)
+    # Sources: StreamCat NLCD 2019, USGS NWIS gauges, NHDPlus v2.1 VAA
     pct_urban = np.full(n, 15.0)
     mean_flow = np.full(n, 50.0)
+    stream_order = np.full(n, 4, dtype=int)
     for i in range(n):
         hs, d = nearest_hotspot_features(lats[i], lngs[i])
         if hs:
@@ -265,15 +267,18 @@ def build():
             weight = max(0.0, 1.0 - d / 500.0)  # hotspot influence fades at 500km
             pct_urban[i] = hs.get('pct_urban', 15.0) * weight + 15.0 * (1 - weight)
             mean_flow[i] = hs.get('mean_annual_flow_m3s', 50.0) * weight + 50.0 * (1 - weight)
+            # Stream order from NHDPlus — only use if reasonably close to hotspot
+            if weight > 0.3:
+                stream_order[i] = hs.get('stream_order', 4)
 
     merged['pct_urban'] = np.round(pct_urban, 1)
 
     # Use real watershed area where available, else estimate from flow
-    # Fill missing watershed areas with flow-based estimate
     missing_area = merged['watershed_area_km2'].isna()
     merged.loc[missing_area, 'watershed_area_km2'] = np.round(mean_flow[missing_area.values] * 10, 1)
 
     merged['mean_annual_flow_m3s'] = np.round(mean_flow, 2)
+    merged['stream_order'] = stream_order
 
     # ── 4. Build monthly time series (12 months) ──────────────────────
     print("\n--- Step 4: Build monthly aggregation ---")
@@ -300,6 +305,7 @@ def build():
         'watershed_area_km2': np.round(merged['watershed_area_km2'].values, 1),
         'pct_urban': merged['pct_urban'],
         'mean_annual_flow_m3s': merged['mean_annual_flow_m3s'],
+        'stream_order': merged['stream_order'],
         'month': merged['month'],
         'water_pfas_ng_l': np.round(merged['water_pfas_ng_l'].values, 2),
         # Metadata (not model features)
@@ -315,6 +321,9 @@ def build():
     training = training[training['water_pfas_ng_l'] <= p999].copy()
     print(f"  Removed {n_before - len(training)} extreme outliers (> {p999:.0f} ng/L)")
 
+    # Add segment_id for inference pipeline
+    training['segment_id'] = [f'seg_{i:06d}' for i in range(len(training))]
+
     training.to_csv(OUTPUT_CSV, index=False)
 
     print(f"\n{'=' * 60}")
@@ -322,7 +331,7 @@ def build():
     print(f"\nFeature summary:")
     for col in ['latitude', 'longitude', 'upstream_pfas_facility_count',
                 'nearest_pfas_facility_km', 'watershed_area_km2', 'pct_urban',
-                'mean_annual_flow_m3s', 'month']:
+                'mean_annual_flow_m3s', 'stream_order', 'month']:
         vals = training[col]
         print(f"  {col:35s} min={vals.min():10.2f}  median={vals.median():10.2f}  max={vals.max():10.2f}")
 

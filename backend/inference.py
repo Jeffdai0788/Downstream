@@ -24,7 +24,7 @@ from generate_data import (
     compute_hazard_quotient
 )
 
-from train_xgboost import FEATURE_COLS
+from train_xgboost import FEATURE_COLS, engineer_features
 
 
 # ============================================================
@@ -238,6 +238,7 @@ def run_full_pipeline(
     gbr_model = joblib.load(xgb_model_path)
 
     df = pd.read_csv(data_path)
+    df = engineer_features(df)
     X = df[FEATURE_COLS].values
 
     start = time.time()
@@ -274,8 +275,8 @@ def run_full_pipeline(
 
     for idx, (_, seg) in enumerate(detail_df.iterrows()):
         water_pfas = seg['predicted_water_pfas_ng_l']
-        doc = seg.get('dissolved_organic_carbon_mgl', 5.0)  # default DOC
-        temp = seg.get('temperature_c', 18.0)  # default temp
+        doc = 5.0   # national median DOC — real values not in WQP PFAS download
+        temp = 18.0  # national mean water temp — PINN is insensitive to ±5°C
         seg_lat = float(seg['latitude'])
         seg_lng = float(seg['longitude'])
 
@@ -456,7 +457,7 @@ def run_full_pipeline(
             "predicted_water_pfas_ng_l": round(float(water_pfas), 2),
             "prediction_confidence": pred_confidence,
             "flow_rate_m3s": round(float(seg.get('mean_annual_flow_m3s', 50.0)), 2),
-            "stream_order": int(seg.get('stream_order', 4)),
+            "stream_order": int(seg.get('stream_order', 4)) if not pd.isna(seg.get('stream_order', 4)) else 4,
             "risk_level": risk,
             "top_contributing_features": top_features,
             "species": species_results,

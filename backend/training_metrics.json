@@ -1,10 +1,26 @@
 {
-  "model_version": "2.0_real_data",
+  "model_version": "3.0_real_data",
   "model_type": "sklearn.ensemble.GradientBoostingRegressor",
   "training_data": {
     "n_samples": 2131,
     "data_source": "EPA WQP bulk PFAS measurements (54K records, 2003-2025)",
-    "n_features": 8,
+    "n_features": 12,
+    "raw_features": [
+      "latitude",
+      "longitude",
+      "upstream_pfas_facility_count",
+      "nearest_pfas_facility_km",
+      "watershed_area_km2",
+      "pct_urban",
+      "mean_annual_flow_m3s",
+      "stream_order",
+      "month"
+    ],
+    "engineered_features": [
+      "inv_facility_dist",
+      "log_facility_dist",
+      "facility_flow_ratio"
+    ],
     "features": [
       "latitude",
       "longitude",
@@ -13,7 +29,11 @@
       "watershed_area_km2",
       "pct_urban",
       "mean_annual_flow_m3s",
-      "month"
+      "stream_order",
+      "month",
+      "inv_facility_dist",
+      "log_facility_dist",
+      "facility_flow_ratio"
     ],
     "feature_sources": {
       "latitude": "WQP station coordinates",
@@ -23,51 +43,71 @@
       "watershed_area_km2": "WQP drainage area + NHDPlus estimates",
       "pct_urban": "EPA StreamCat NLCD 2019 (via hotspot interpolation)",
       "mean_annual_flow_m3s": "USGS NWIS gauge data (via hotspot interpolation)",
-      "month": "WQP sample_date (seasonal signal)"
+      "stream_order": "NHDPlus v2.1 VAA (via hotspot interpolation)",
+      "month": "WQP sample_date (seasonal signal)",
+      "inv_facility_dist": "Derived: 1 / (nearest_pfas_facility_km + 1)",
+      "log_facility_dist": "Derived: log1p(nearest_pfas_facility_km)",
+      "facility_flow_ratio": "Derived: facility_count / (flow + 1)"
     }
   },
-  "cv_rmse_mean": 240.55,
-  "cv_rmse_std": 166.64,
-  "cv_mae_mean": 28.13,
-  "cv_r2_mean": 0.0456,
-  "cv_r2_std": 0.0703,
-  "cv_within_factor_2_mean": 63.5,
-  "cv_within_factor_3_mean": 81.0,
-  "train_time_seconds": 0.14,
+  "cv_rmse_mean": 240.3,
+  "cv_rmse_std": 166.74,
+  "cv_mae_mean": 28.05,
+  "cv_r2_mean": 0.05,
+  "cv_r2_std": 0.0787,
+  "cv_within_factor_2_mean": 64.5,
+  "cv_within_factor_3_mean": 81.2,
+  "train_time_seconds": 0.19,
   "n_estimators": 150,
   "max_depth": 3,
   "feature_importance": [
     {
       "feature": "latitude",
-      "importance": 0.246
+      "importance": 0.2564
     },
     {
       "feature": "longitude",
-      "importance": 0.2348
-    },
-    {
-      "feature": "nearest_pfas_facility_km",
-      "importance": 0.2131
+      "importance": 0.212
     },
     {
       "feature": "pct_urban",
-      "importance": 0.1233
+      "importance": 0.113
+    },
+    {
+      "feature": "inv_facility_dist",
+      "importance": 0.1048
     },
     {
       "feature": "watershed_area_km2",
-      "importance": 0.1024
+      "importance": 0.0941
+    },
+    {
+      "feature": "log_facility_dist",
+      "importance": 0.0924
     },
     {
       "feature": "mean_annual_flow_m3s",
-      "importance": 0.0581
+      "importance": 0.0575
+    },
+    {
+      "feature": "nearest_pfas_facility_km",
+      "importance": 0.0466
     },
     {
       "feature": "month",
-      "importance": 0.0181
+      "importance": 0.0129
+    },
+    {
+      "feature": "stream_order",
+      "importance": 0.0041
+    },
+    {
+      "feature": "facility_flow_ratio",
+      "importance": 0.0041
     },
     {
       "feature": "upstream_pfas_facility_count",
-      "importance": 0.0042
+      "importance": 0.0021
     }
   ]
 }

@@ -17,8 +17,8 @@ import time
 import os
 
 
-# 8 pruned features — all from real federal data sources
-FEATURE_COLS = [
+# Raw columns from training CSV (all from real federal data sources)
+RAW_FEATURE_COLS = [
     'latitude',                       # WQP station coordinates
     'longitude',                      # WQP station coordinates
     'upstream_pfas_facility_count',   # EPA TRI/ECHO real facilities within 50km
@@ -26,16 +26,33 @@ FEATURE_COLS = [
     'watershed_area_km2',             # WQP drainage area / NHDPlus
     'pct_urban',                      # StreamCat NLCD 2019 urban land cover %
     'mean_annual_flow_m3s',           # USGS NWIS / hotspot flow data
+    'stream_order',                   # NHDPlus v2.1 VAA stream order
     'month',                          # WQP sample_date — seasonal signal
 ]
 
 TARGET_COL = 'water_pfas_ng_l'
 
 
+def engineer_features(df):
+    """Add derived features from raw columns to help GBR learn non-linear relationships."""
+    df = df.copy()
+    # Inverse distance to nearest facility — captures exponential decay that trees struggle with
+    df['inv_facility_dist'] = 1.0 / (df['nearest_pfas_facility_km'] + 1.0)
+    # Log distance — compresses the long tail
+    df['log_facility_dist'] = np.log1p(df['nearest_pfas_facility_km'])
+    # Dilution proxy: facility count / (flow + 1) — more facilities + less flow = higher PFAS
+    df['facility_flow_ratio'] = df['upstream_pfas_facility_count'] / (df['mean_annual_flow_m3s'] + 1.0)
+    return df
+
+
+# Final feature list used by the model (raw + engineered)
+FEATURE_COLS = RAW_FEATURE_COLS + ['inv_facility_dist', 'log_facility_dist', 'facility_flow_ratio']
+
+
 def train_model(data_path: str = 'training_data_real.csv', output_dir: str = '.'):
-    """Train GBR on real WQP PFAS measurements with 8 real features."""
+    """Train GBR on real WQP PFAS measurements."""
     print("=" * 60)
-    print("TrophicTrace — GBR PFAS Screening (v2, Real Data)")
+    print("TrophicTrace — GBR PFAS Screening (v3, Real Data)")
     print("=" * 60)
 
     data_path_full = os.path.join(output_dir, data_path) if not os.path.isabs(data_path) else data_path
@@ -45,11 +62,13 @@ def train_model(data_path: str = 'training_data_real.csv', output_dir: str = '.'
     df = pd.read_csv(data_path_full)
     print(f"\nLoaded {len(df)} training samples from {data_path_full}")
 
-    missing = [c for c in FEATURE_COLS if c not in df.columns]
+    missing = [c for c in RAW_FEATURE_COLS if c not in df.columns]
     if missing:
         raise ValueError(f"Missing required feature columns: {missing}")
 
-    print(f"Features: {len(FEATURE_COLS)}")
+    df = engineer_features(df)
+
+    print(f"Features: {len(FEATURE_COLS)} ({len(RAW_FEATURE_COLS)} raw + {len(FEATURE_COLS) - len(RAW_FEATURE_COLS)} engineered)")
     print(f"Target range: {df[TARGET_COL].min():.2f} – {df[TARGET_COL].max():.2f} ng/L")
     print(f"Target median: {df[TARGET_COL].median():.2f} ng/L")
 
@@ -134,12 +153,14 @@ def train_model(data_path: str = 'training_data_real.csv', output_dir: str = '.'
 
     # Save metrics
     metrics = {
-        'model_version': '2.0_real_data',
+        'model_version': '3.0_real_data',
         'model_type': 'sklearn.ensemble.GradientBoostingRegressor',
         'training_data': {
             'n_samples': len(df),
             'data_source': 'EPA WQP bulk PFAS measurements (54K records, 2003-2025)',
             'n_features': len(FEATURE_COLS),
+            'raw_features': RAW_FEATURE_COLS,
+            'engineered_features': ['inv_facility_dist', 'log_facility_dist', 'facility_flow_ratio'],
             'features': FEATURE_COLS,
             'feature_sources': {
                 'latitude': 'WQP station coordinates',
@@ -149,7 +170,11 @@ def train_model(data_path: str = 'training_data_real.csv', output_dir: str = '.'
                 'watershed_area_km2': 'WQP drainage area + NHDPlus estimates',
                 'pct_urban': 'EPA StreamCat NLCD 2019 (via hotspot interpolation)',
                 'mean_annual_flow_m3s': 'USGS NWIS gauge data (via hotspot interpolation)',
+                'stream_order': 'NHDPlus v2.1 VAA (via hotspot interpolation)',
                 'month': 'WQP sample_date (seasonal signal)',
+                'inv_facility_dist': 'Derived: 1 / (nearest_pfas_facility_km + 1)',
+                'log_facility_dist': 'Derived: log1p(nearest_pfas_facility_km)',
+                'facility_flow_ratio': 'Derived: facility_count / (flow + 1)',
             },
         },
         'cv_rmse_mean': round(float(np.mean(cv_results['rmse'])), 2),
@@ -184,6 +209,7 @@ def predict_national(model_path: str = 'gbr_model.joblib',
     """Run inference on all segments."""
     model = load_model(model_path)
     df = pd.read_csv(data_path)
+    df = engineer_features(df)
     X = df[FEATURE_COLS].values
 
     start = time.time()
