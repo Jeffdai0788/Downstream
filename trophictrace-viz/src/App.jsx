@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Hero from './components/Hero'
 import MapView from './components/MapView'
-import Tooltip from './components/Tooltip'
+import FloatingIsland from './components/FloatingIsland'
 import DetailPanel from './components/DetailPanel'
+import FishSearch from './components/FishSearch'
+import AIChatPrompt from './components/AIChatPrompt'
 import mockData from './data/mockData.json'
 
 export default function App() {
@@ -11,6 +13,8 @@ export default function App() {
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
   const [selectedSpecies, setSelectedSpecies] = useState(null)
   const [selectedSegment, setSelectedSegment] = useState(null)
+  const [filterSpeciesName, setFilterSpeciesName] = useState(null)
+  const mapRef = useRef(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,6 +50,8 @@ export default function App() {
             data={mockData}
             onSegmentHover={handleSegmentHover}
             onCursorMove={setCursorPos}
+            onMapReady={(m) => { mapRef.current = m }}
+            speciesFilter={filterSpeciesName}
           />
         </div>
 
@@ -61,17 +67,19 @@ export default function App() {
           <Hero scrollProgress={scrollProgress} />
         </div>
 
-        {/* Tooltip + Detail panel */}
+        {/* Interactive UI — only when map is visible */}
         {scrollProgress > 0.8 && (
           <>
+            {/* Floating island tooltip */}
             {hoveredSegment && !selectedSpecies && (
-              <Tooltip
+              <FloatingIsland
                 segment={hoveredSegment}
                 position={cursorPos}
                 onSpeciesClick={handleSpeciesClick}
               />
             )}
 
+            {/* Detail panel */}
             {selectedSpecies && (
               <DetailPanel
                 species={selectedSpecies}
@@ -82,6 +90,19 @@ export default function App() {
                 }}
               />
             )}
+
+            {/* Fish species search */}
+            <FishSearch
+              data={mockData}
+              filterSpeciesName={filterSpeciesName}
+              onFilterChange={setFilterSpeciesName}
+            />
+
+            {/* AI chat prompt */}
+            <AIChatPrompt
+              data={mockData}
+              hoveredSegment={hoveredSegment}
+            />
           </>
         )}
       </div>
