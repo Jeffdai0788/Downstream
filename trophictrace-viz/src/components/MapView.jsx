@@ -153,6 +153,18 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
       tolerance: 0.375,
     })
 
+    // Build point centroids from filtered polygons for heatmap
+    const waterPoints = {
+      type: 'FeatureCollection',
+      features: filteredFeatures.map((feat) => {
+        const coords = feat.geometry.type === 'Polygon' ? feat.geometry.coordinates[0] : feat.geometry.coordinates
+        const n = coords.length
+        const cx = coords.reduce((s, c) => s + c[0], 0) / n
+        const cy = coords.reduce((s, c) => s + c[1], 0) / n
+        return { type: 'Feature', properties: feat.properties, geometry: { type: 'Point', coordinates: [cx, cy] } }
+      }),
+    }
+    m.addSource('water-points', { type: 'geojson', data: waterPoints })
 
     // Color by PFAS concentration: green → amber → red
     const ZONE_COLOR = [
@@ -164,14 +176,68 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
       100,  UNSAFE_COLOR,
     ]
 
-    // ── Filled contamination polygons ─────────────────────────────────────
+    // Find the first land-like layer to insert heatmap BELOW it
+    // so land naturally masks heatmap bleed at shorelines
+    const styleLayers = m.getStyle().layers
+    const landIdx = styleLayers.findIndex((l) =>
+      l.type === 'fill' && l.id !== 'water' && !l.id.includes('water')
+    )
+    const insertBefore = landIdx > 0 ? styleLayers[landIdx].id : undefined
+
+    // ── Heatmap wash — large radius, inserted below land layers ───────────
+    // This tints water areas with contamination color. Land layers render
+    // on top and mask the bleed, so only water gets colored.
+    m.addLayer({
+      id: 'water-heatmap',
+      type: 'heatmap',
+      source: 'water-points',
+      paint: {
+        'heatmap-weight': [
+          'interpolate', ['linear'], ['get', 'pfas_ng_l'],
+          0,    0.05,
+          5,    0.15,
+          20,   0.3,
+          50,   0.5,
+          100,  0.7,
+          500,  1.0,
+        ],
+        'heatmap-radius': [
+          'interpolate', ['linear'], ['zoom'],
+          3,  15,
+          5,  25,
+          7,  40,
+          9,  60,
+          11, 80,
+        ],
+        'heatmap-intensity': [
+          'interpolate', ['linear'], ['zoom'],
+          3,  0.3,
+          6,  0.5,
+          9,  0.8,
+        ],
+        'heatmap-color': [
+          'interpolate', ['linear'], ['heatmap-density'],
+          0,    'rgba(0,0,0,0)',
+          0.08, 'rgba(0,0,0,0)',
+          0.15, 'rgba(46,184,114,0.25)',
+          0.35, 'rgba(46,184,114,0.40)',
+          0.55, 'rgba(224,160,48,0.50)',
+          0.75, 'rgba(232,132,90,0.60)',
+          0.90, 'rgba(220,68,68,0.70)',
+          1.0,  'rgba(200,40,40,0.80)',
+        ],
+        'heatmap-opacity': 0.75,
+      },
+    }, insertBefore)
+
+    // ── Filled contamination polygons (on top, always visible) ────────────
     m.addLayer({
       id: 'river-contamination',
       type: 'fill',
       source: 'contaminated-rivers',
       paint: {
         'fill-color': ZONE_COLOR,
-        'fill-opacity': 0.6,
+        'fill-opacity': 0.65,
       },
     })
 
