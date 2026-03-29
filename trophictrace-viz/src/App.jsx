@@ -5,7 +5,7 @@ import FloatingIsland from './components/FloatingIsland'
 import DetailPanel from './components/DetailPanel'
 import FishSearch from './components/FishSearch'
 import AIChatPrompt from './components/AIChatPrompt'
-import mockData from './data/mockData.json'
+import data from './data/nationalResults.json'
 
 export default function App() {
   const [scrollProgress, setScrollProgress] = useState(0)
@@ -30,8 +30,8 @@ export default function App() {
     if (e) setCursorPos({ x: e.point.x, y: e.point.y })
   }
 
-  const handleSpeciesClick = (species, segmentName) => {
-    setSelectedSpecies({ ...species, segmentName })
+  const handleSpeciesClick = (species, segmentId) => {
+    setSelectedSpecies({ ...species, segmentId })
     setSelectedSegment(hoveredSegment)
     setHoveredSegment(null)
   }
@@ -44,10 +44,9 @@ export default function App() {
       <div style={{ height: '200vh' }} />
 
       <div style={{ position: 'fixed', inset: 0, zIndex: 1 }}>
-        {/* Map layer */}
         <div style={{ position: 'absolute', inset: 0, opacity: mapOpacity }}>
           <MapView
-            data={mockData}
+            data={data}
             onSegmentHover={handleSegmentHover}
             onCursorMove={setCursorPos}
             onMapReady={(m) => { mapRef.current = m }}
@@ -55,54 +54,42 @@ export default function App() {
           />
         </div>
 
-        {/* Hero layer */}
         <div
           style={{
-            position: 'absolute',
-            inset: 0,
-            opacity: imageOpacity,
+            position: 'absolute', inset: 0, opacity: imageOpacity,
             pointerEvents: scrollProgress >= 0.95 ? 'none' : 'auto',
           }}
         >
           <Hero scrollProgress={scrollProgress} />
         </div>
 
-        {/* Interactive UI — only when map is visible */}
         {scrollProgress > 0.8 && (
           <>
-            {/* Floating island tooltip */}
             {hoveredSegment && !selectedSpecies && (
               <FloatingIsland
                 segment={hoveredSegment}
+                demographics={data.demographics}
                 position={cursorPos}
                 onSpeciesClick={handleSpeciesClick}
               />
             )}
 
-            {/* Detail panel */}
             {selectedSpecies && (
               <DetailPanel
                 species={selectedSpecies}
                 segment={selectedSegment}
-                onClose={() => {
-                  setSelectedSpecies(null)
-                  setSelectedSegment(null)
-                }}
+                demographics={data.demographics}
+                onClose={() => { setSelectedSpecies(null); setSelectedSegment(null) }}
               />
             )}
 
-            {/* Fish species search */}
             <FishSearch
-              data={mockData}
+              data={data}
               filterSpeciesName={filterSpeciesName}
               onFilterChange={setFilterSpeciesName}
             />
 
-            {/* AI chat prompt */}
-            <AIChatPrompt
-              data={mockData}
-              hoveredSegment={hoveredSegment}
-            />
+            <AIChatPrompt data={data} hoveredSegment={hoveredSegment} />
           </>
         )}
       </div>
