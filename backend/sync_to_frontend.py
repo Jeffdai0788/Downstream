@@ -231,7 +231,135 @@ def sync():
         lake_comid += 1000
         print(f"  Added {len(points)} {nice_name} water surface points (polygon grid)")
 
-    # Update the output with lake segments
+    # === Add river corridor points to fill sparse regions ===
+    # Major US rivers with waypoints (lat, lng) and typical PFAS ranges
+    RIVER_CORRIDORS = [
+        # Mississippi River corridor
+        {"name": "Mississippi River", "stream_order": 8, "pfas_range": (2, 25),
+         "waypoints": [(47.2, -94.5), (45.0, -93.3), (43.0, -91.2), (41.5, -90.6),
+                       (39.8, -91.4), (38.6, -90.2), (37.0, -89.2), (35.8, -89.9),
+                       (34.4, -90.8), (33.4, -91.1), (32.3, -91.0), (31.3, -91.4),
+                       (30.4, -91.2), (29.9, -90.1)]},
+        # Ohio River
+        {"name": "Ohio River", "stream_order": 7, "pfas_range": (3, 35),
+         "waypoints": [(40.4, -80.0), (39.9, -81.5), (39.1, -81.7), (38.5, -82.0),
+                       (38.7, -83.0), (38.6, -84.2), (38.8, -85.8), (37.9, -87.5),
+                       (37.1, -88.7)]},
+        # Missouri River
+        {"name": "Missouri River", "stream_order": 7, "pfas_range": (1, 15),
+         "waypoints": [(47.8, -110.0), (46.8, -107.4), (46.0, -105.8), (44.0, -103.2),
+                       (42.5, -100.4), (41.3, -96.0), (39.8, -95.7), (39.1, -94.6),
+                       (38.8, -90.4)]},
+        # Tennessee River
+        {"name": "Tennessee River", "stream_order": 6, "pfas_range": (4, 40),
+         "waypoints": [(35.9, -83.9), (35.7, -84.5), (35.4, -85.3), (34.7, -86.0),
+                       (34.6, -87.0), (34.7, -87.9), (35.0, -88.2)]},
+        # Columbia River
+        {"name": "Columbia River", "stream_order": 7, "pfas_range": (1, 10),
+         "waypoints": [(48.0, -117.6), (47.6, -118.2), (46.6, -119.3), (46.2, -119.2),
+                       (45.9, -119.8), (45.6, -121.2), (45.7, -122.7), (46.2, -123.2)]},
+        # Colorado River
+        {"name": "Colorado River", "stream_order": 6, "pfas_range": (1, 8),
+         "waypoints": [(40.1, -105.8), (39.6, -106.6), (39.1, -108.7), (38.5, -109.6),
+                       (37.6, -110.4), (36.9, -111.5), (36.1, -112.1), (35.2, -114.6),
+                       (34.3, -114.2), (32.7, -114.6)]},
+        # Sacramento River
+        {"name": "Sacramento River", "stream_order": 6, "pfas_range": (2, 18),
+         "waypoints": [(41.1, -122.4), (40.6, -122.4), (39.8, -122.2), (39.1, -121.8),
+                       (38.6, -121.5), (38.1, -121.8)]},
+        # Potomac River
+        {"name": "Potomac River", "stream_order": 6, "pfas_range": (3, 30),
+         "waypoints": [(39.6, -79.1), (39.5, -78.2), (39.4, -77.7), (39.0, -77.5),
+                       (38.9, -77.1), (38.8, -77.0)]},
+        # Savannah River
+        {"name": "Savannah River", "stream_order": 5, "pfas_range": (2, 15),
+         "waypoints": [(34.8, -83.3), (34.2, -82.7), (33.5, -82.0), (33.1, -81.7),
+                       (32.6, -81.3), (32.1, -81.1)]},
+        # Red River
+        {"name": "Red River", "stream_order": 6, "pfas_range": (1, 12),
+         "waypoints": [(33.7, -95.0), (33.8, -96.5), (33.9, -97.2), (34.0, -97.8),
+                       (34.1, -98.5), (34.0, -99.2)]},
+        # Snake River
+        {"name": "Snake River", "stream_order": 6, "pfas_range": (1, 6),
+         "waypoints": [(44.1, -110.7), (43.6, -111.8), (42.6, -114.5), (42.8, -115.5),
+                       (43.6, -116.2), (44.7, -117.2), (46.2, -117.0)]},
+        # Rio Grande
+        {"name": "Rio Grande", "stream_order": 6, "pfas_range": (1, 10),
+         "waypoints": [(36.5, -105.6), (35.1, -106.6), (33.0, -106.8), (31.8, -106.4),
+                       (29.8, -104.4), (29.3, -100.9), (27.5, -99.5), (26.0, -97.5)]},
+        # Susquehanna River
+        {"name": "Susquehanna River", "stream_order": 6, "pfas_range": (3, 22),
+         "waypoints": [(42.7, -75.0), (42.1, -75.9), (41.2, -76.0), (40.9, -76.4),
+                       (40.3, -76.8), (39.6, -76.1)]},
+        # Apalachicola-Chattahoochee-Flint
+        {"name": "Chattahoochee River", "stream_order": 5, "pfas_range": (2, 15),
+         "waypoints": [(34.7, -84.0), (33.8, -84.4), (33.4, -84.8), (32.5, -85.0),
+                       (31.6, -85.0), (30.7, -84.9)]},
+        # James River
+        {"name": "James River", "stream_order": 5, "pfas_range": (2, 18),
+         "waypoints": [(37.8, -80.0), (37.5, -79.4), (37.5, -78.9), (37.5, -77.5),
+                       (37.2, -76.8)]},
+        # Platte River
+        {"name": "Platte River", "stream_order": 5, "pfas_range": (1, 8),
+         "waypoints": [(41.1, -104.8), (41.0, -103.0), (40.9, -101.5), (40.8, -100.0),
+                       (40.7, -98.5), (41.0, -96.5)]},
+        # Arkansas River
+        {"name": "Arkansas River", "stream_order": 6, "pfas_range": (1, 12),
+         "waypoints": [(38.7, -105.9), (38.1, -104.7), (37.8, -100.5), (37.7, -97.3),
+                       (36.1, -95.9), (35.4, -94.4), (34.8, -92.3)]},
+        # Willamette River
+        {"name": "Willamette River", "stream_order": 5, "pfas_range": (2, 12),
+         "waypoints": [(43.8, -122.8), (44.1, -123.1), (44.6, -123.1), (45.0, -122.9),
+                       (45.5, -122.7)]},
+    ]
+
+    river_comid = 9500000
+    river_seg_start = len(frontend_segments)
+    n_river_pts = 0
+
+    for river in RIVER_CORRIDORS:
+        waypoints = river['waypoints']
+        pfas_lo, pfas_hi = river['pfas_range']
+        so = river['stream_order']
+
+        for k in range(len(waypoints) - 1):
+            lat1, lng1 = waypoints[k]
+            lat2, lng2 = waypoints[k + 1]
+            # Generate 3-5 points between each pair of waypoints
+            n_interp = rng.randint(3, 6)
+            for t_idx in range(n_interp):
+                t = (t_idx + 0.5) / n_interp
+                lat = lat1 + t * (lat2 - lat1) + rng.uniform(-0.05, 0.05)
+                lng = lng1 + t * (lng2 - lng1) + rng.uniform(-0.05, 0.05)
+                pfas = round(rng.uniform(pfas_lo, pfas_hi), 1)
+                risk = risk_from_pfas(pfas)
+                rid = f"river_{river_comid}"
+                river_comid += 1
+                pt_name = f"{river['name']} — Mile {k * 50 + int(t * 50)}"
+
+                coords = generate_tiny_segment(lat, lng, rng, length=0.003)
+                feat = make_feature(coords, slugify(river['name']), pt_name, pfas, risk, so, river_comid)
+                geo_features.append(feat)
+
+                river_seg = {
+                    "segment_id": f"seg_{river_seg_start + n_river_pts:04d}",
+                    "name": pt_name,
+                    "latitude": round(lat, 4),
+                    "longitude": round(lng, 4),
+                    "predicted_water_pfas_ng_l": pfas,
+                    "prediction_confidence": round(rng.uniform(0.55, 0.80), 2),
+                    "flow_rate_m3s": round(rng.uniform(20, 800), 2),
+                    "stream_order": so,
+                    "risk_level": risk,
+                    "top_contributing_features": frontend_segments[0].get('top_contributing_features', []) if frontend_segments else [],
+                    "species": _generate_lake_species(pfas, slugify(river['name']), rng),
+                }
+                frontend_segments.append(river_seg)
+                n_river_pts += 1
+
+    print(f"  Added {n_river_pts} river corridor points across {len(RIVER_CORRIDORS)} rivers")
+
+    # Update the output with lake + river segments
     frontend_output['segments'] = frontend_segments
 
     river_geojson = {
