@@ -16,7 +16,8 @@ import math
 from pinn_bioaccumulation import (
     PINNBioaccumulation, load_pinn, predict_tissue, predict_tissue_batch,
     predict_with_ci, accumulation_curve_with_ci,
-    CONGENER_LIST, BCF_BASE, TMF, K_DOC, REFERENCE_LIPID, REFERENCE_TROPHIC
+    CONGENER_LIST, BCF_BASE, TMF, K_DOC, REFERENCE_LIPID, REFERENCE_TROPHIC,
+    BAF_TABLE, get_field_baf,
 )
 
 from generate_data import (
@@ -363,27 +364,14 @@ def run_full_pipeline(
                     n_passes=50,
                 )
 
-                # Calibrate PINN output against analytic BCF/TMF formula
-                # PINN overestimates ~25-30x vs published BCF*TMF values
-                # Analytic: tissue = water * BCF * lipid_adj * TMF / 1000
-                bcf = BCF_BASE.get(congener, 100)
-                tmf = TMF.get(congener, 1.5)
-                lipid_adj = sp['lipid_pct'] / REFERENCE_LIPID
-                trophic_diff = max(0, sp['trophic_level'] - REFERENCE_TROPHIC)
-                analytic_tissue = water_congener * bcf * lipid_adj * (tmf ** trophic_diff) / 1000
-                # Use geometric mean of PINN and analytic (PINN provides uncertainty, analytic provides scale)
-                if mean_val > 0 and analytic_tissue > 0:
-                    calibrated = (mean_val * analytic_tissue) ** 0.5
-                    scale = calibrated / max(mean_val, 1e-6)
-                else:
-                    calibrated = analytic_tissue
-                    scale = 1.0
-
-                tissue_by_congener[congener] = round(float(calibrated), 2)
-                ci_by_congener[congener] = [round(float(lo_val * scale), 2), round(float(hi_val * scale), 2)]
-                total_tissue += calibrated
-                total_lower += lo_val * scale
-                total_upper += hi_val * scale
+                # PINN is trained on BAF-derived ODE data — use its output directly.
+                # PINN captures temperature/DOC/transient effects that the static
+                # BAF formula cannot. The CI from MC Dropout quantifies uncertainty.
+                tissue_by_congener[congener] = round(float(mean_val), 2)
+                ci_by_congener[congener] = [round(float(lo_val), 2), round(float(hi_val), 2)]
+                total_tissue += mean_val
+                total_lower += lo_val
+                total_upper += hi_val
 
             # Accumulation curve with CI bands (for dominant congener PFOS)
             acc_curve = accumulation_curve_with_ci(
@@ -428,8 +416,7 @@ def run_full_pipeline(
                     "discharge_ng_l": discharge_ng_l,
                     "dilution_factor": round(dilution, 1),
                     "water_concentration_ng_l": round(water_pfas, 2),
-                    "bcf_applied": round(BCF_BASE.get('PFOS', 3100) * sp['lipid_pct'] / REFERENCE_LIPID, 0),
-                    "tmf_applied": round(TMF.get('PFOS', 3.5) ** max(0, sp['trophic_level'] - REFERENCE_TROPHIC), 2),
+                    "baf_applied": round(get_field_baf('PFOS', sp['trophic_level']), 0),
                     "tissue_concentration_ng_g": round(total_tissue, 2),
                 }
             })

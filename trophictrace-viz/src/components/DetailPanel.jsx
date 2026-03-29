@@ -22,9 +22,6 @@ const FEATURE_LABELS = {
   pct_agriculture: 'Agricultural land use',
   pct_impervious: 'Impervious surface',
   population_density: 'Population density',
-  latitude: 'Geographic latitude',
-  longitude: 'Geographic longitude',
-  watershed_area_km2: 'Watershed area',
 }
 
 const FEATURE_TYPES = {
@@ -37,14 +34,11 @@ const FEATURE_TYPES = {
   mean_annual_flow_m3s: 'hydrologic',
   stream_order: 'hydrologic',
   baseflow_index: 'hydrologic',
-  watershed_area_km2: 'hydrologic',
   pct_urban: 'environmental',
   pct_agriculture: 'environmental',
   pct_impervious: 'environmental',
   dissolved_organic_carbon_mgl: 'environmental',
   population_density: 'environmental',
-  latitude: 'environmental',
-  longitude: 'environmental',
 }
 
 const FACTOR_COLORS = {
@@ -55,7 +49,18 @@ const FACTOR_COLORS = {
   hydrologic: '#7A7A7A',
 }
 
-export default function DetailPanel({ species, segment, onClose }) {
+function findNearestDemographic(segment, demographics) {
+  if (!demographics || demographics.length === 0) return null
+  let nearest = null
+  let minDist = Infinity
+  demographics.forEach((d) => {
+    const dist = Math.sqrt((segment.latitude - d.lat) ** 2 + (segment.longitude - d.lng) ** 2)
+    if (dist < minDist && dist < 0.5) { minDist = dist; nearest = d }
+  })
+  return nearest
+}
+
+export default function DetailPanel({ species, segment, demographics, onClose }) {
   const panelRef = useRef(null)
 
   useEffect(() => {
@@ -70,6 +75,7 @@ export default function DetailPanel({ species, segment, onClose }) {
   const epaLimit = 6
   const multiplier = (tissueConc / epaLimit).toFixed(1)
   const isOver = tissueConc > epaLimit
+  const nearestDemo = segment ? findNearestDemographic(segment, demographics) : null
 
   return (
     <>
@@ -93,19 +99,13 @@ export default function DetailPanel({ species, segment, onClose }) {
             {species.scientific_name}
           </p>
           <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-            {species.segmentId}
+            Segment {species.segmentId?.replace('seg_', '#')}
           </p>
 
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '3rem', fontWeight: 500, color: statusColor, lineHeight: 1.1, marginBottom: '0.375rem' }}>
             {tissueConc.toFixed(1)}
             <span style={{ fontSize: '1rem', color: 'var(--text-secondary)', marginLeft: '0.5rem', fontWeight: 400 }}>ng/g</span>
           </div>
-
-          {species.confidence_interval && (
-            <div style={{ fontSize: '0.6875rem', fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)', marginBottom: '0.375rem' }}>
-              95% CI: {species.confidence_interval[0].toFixed(1)} – {species.confidence_interval[1].toFixed(1)} ng/g
-            </div>
-          )}
 
           <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)', marginBottom: '0.75rem' }}>
             EPA screening level: {epaLimit} ng/g
@@ -131,25 +131,15 @@ export default function DetailPanel({ species, segment, onClose }) {
         {/* Congener breakdown */}
         {species.tissue_by_congener && (
           <Section title="PFAS congener breakdown">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
               {Object.entries(species.tissue_by_congener)
                 .sort(([, a], [, b]) => b - a)
-                .map(([congener, value]) => {
-                  const ci = species.ci_by_congener?.[congener]
-                  return (
-                    <div key={congener}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: ci ? '0.125rem' : 0 }}>
-                        <span style={{ color: 'var(--text-secondary)' }}>{congener}</span>
-                        <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)' }}>{value.toFixed(1)} ng/g</span>
-                      </div>
-                      {ci && (
-                        <div style={{ fontSize: '0.625rem', fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)', opacity: 0.6, textAlign: 'right' }}>
-                          [{ci[0].toFixed(1)} – {ci[1].toFixed(1)}]
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
+                .map(([congener, value]) => (
+                  <div key={congener} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem' }}>
+                    <span style={{ color: 'var(--text-secondary)' }}>{congener}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)' }}>{value.toFixed(1)} ng/g</span>
+                  </div>
+                ))}
             </div>
           </Section>
         )}
@@ -178,13 +168,6 @@ export default function DetailPanel({ species, segment, onClose }) {
           </Section>
         )}
 
-        {/* Accumulation over time */}
-        {species.accumulation_curve && (
-          <Section title="Tissue accumulation over time">
-            <AccumulationChart curve={species.accumulation_curve} statusColor={statusColor} />
-          </Section>
-        )}
-
         {/* Contamination pathway */}
         {species.pathway && (
           <Section title="Contamination pathway">
@@ -194,7 +177,7 @@ export default function DetailPanel({ species, segment, onClose }) {
 
         {/* Who is at risk */}
         <Section title="Who is at risk?">
-          <ExposureDisparity species={species} />
+          <ExposureDisparity species={species} demographic={nearestDemo} />
         </Section>
       </div>
     </>
@@ -242,7 +225,7 @@ function Pathway({ pathway }) {
   )
 }
 
-function ExposureDisparity({ species }) {
+function ExposureDisparity({ species, demographic }) {
   const recHQ = species.hazard_quotient_recreational
   const subHQ = species.hazard_quotient_subsistence
   const maxHQ = Math.max(recHQ, subHQ, 1.5)
@@ -255,16 +238,13 @@ function ExposureDisparity({ species }) {
   return (
     <div>
       {[
-        { label: 'Recreational angler', servings: species.safe_servings_per_month_recreational, hq: recHQ },
-        { label: 'Subsistence fisher', servings: species.safe_servings_per_month_subsistence, hq: subHQ },
-      ].map(({ label, servings, hq }) => (
+        { label: 'Recreational angler', hq: recHQ },
+        { label: 'Subsistence fisher', hq: subHQ },
+      ].map(({ label, hq }) => (
         <div key={label} style={{ marginBottom: '1rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.25rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.375rem' }}>
             <span style={{ color: 'var(--text-secondary)' }}>{label}</span>
             <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)' }}>HQ {formatHQ(hq)}</span>
-          </div>
-          <div style={{ fontSize: '0.6875rem', color: 'var(--text-tertiary)', marginBottom: '0.375rem' }}>
-            {servings === 0 ? 'Do not consume' : `${servings} serving${servings !== 1 ? 's' : ''}/month max`}
           </div>
           <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: 'var(--bg-secondary)' }}>
             <div style={{ width: `${Math.min((hq / maxHQ) * 100, 100)}%`, height: '100%', borderRadius: '4px', background: barColor(hq), transition: 'width 400ms ease-out' }} />
@@ -273,63 +253,15 @@ function ExposureDisparity({ species }) {
         </div>
       ))}
 
-      <div style={{ fontSize: '0.625rem', fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)', textAlign: 'center' }}>
+      <div style={{ fontSize: '0.625rem', fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)', textAlign: 'center', marginBottom: '1rem' }}>
         Dashed line = EPA Safety Threshold (HQ 1.0)
       </div>
+
+      {demographic && (
+        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+          Near {demographic.name} (median income ${demographic.median_income.toLocaleString()}), {demographic.subsistence_pct}% of households rely on locally caught fish.
+        </div>
+      )}
     </div>
-  )
-}
-
-function AccumulationChart({ curve, statusColor }) {
-  const { months, concentration_ng_g, lower_95, upper_95 } = curve
-  const W = 356, H = 90, PAD = { t: 8, r: 8, b: 24, l: 48 }
-  const iW = W - PAD.l - PAD.r
-  const iH = H - PAD.t - PAD.b
-
-  const maxMonth = months[months.length - 1]
-  const allVals = [...concentration_ng_g, ...lower_95, ...upper_95]
-  const yMin = Math.min(...allVals) * 0.85
-  const yMax = Math.max(...allVals) * 1.08
-
-  const xScale = (m) => PAD.l + (m / maxMonth) * iW
-  const yScale = (v) => PAD.t + iH - ((v - yMin) / (yMax - yMin)) * iH
-
-  const bandPath = [
-    ...months.map((m, i) => `${i === 0 ? 'M' : 'L'}${xScale(m).toFixed(1)},${yScale(upper_95[i]).toFixed(1)}`),
-    ...months.map((m, i) => `L${xScale(months[months.length - 1 - i]).toFixed(1)},${yScale(lower_95[months.length - 1 - i]).toFixed(1)}`),
-    'Z',
-  ].join(' ')
-
-  const linePath = months
-    .map((m, i) => `${i === 0 ? 'M' : 'L'}${xScale(m).toFixed(1)},${yScale(concentration_ng_g[i]).toFixed(1)}`)
-    .join(' ')
-
-  const yTicks = [yMin, (yMin + yMax) / 2, yMax]
-
-  return (
-    <svg width={W} height={H} style={{ overflow: 'visible', display: 'block' }}>
-      {/* Y-axis ticks */}
-      {yTicks.map((v) => (
-        <text key={v} x={PAD.l - 6} y={yScale(v) + 3} textAnchor="end"
-          style={{ fontSize: '9px', fontFamily: 'var(--font-mono)', fill: 'var(--text-tertiary)' }}>
-          {v >= 1000 ? `${(v / 1000).toFixed(1)}k` : Math.round(v)}
-        </text>
-      ))}
-      {/* X-axis labels */}
-      {months.map((m) => (
-        <text key={m} x={xScale(m)} y={H - 4} textAnchor="middle"
-          style={{ fontSize: '9px', fontFamily: 'var(--font-mono)', fill: 'var(--text-tertiary)' }}>
-          {m === 0 ? '0' : `${m}mo`}
-        </text>
-      ))}
-      {/* Confidence band */}
-      <path d={bandPath} fill={statusColor} fillOpacity={0.12} />
-      {/* Center line */}
-      <path d={linePath} fill="none" stroke={statusColor} strokeWidth={1.5} strokeLinejoin="round" />
-      {/* Data points */}
-      {months.map((m, i) => (
-        <circle key={m} cx={xScale(m)} cy={yScale(concentration_ng_g[i])} r={2.5} fill={statusColor} />
-      ))}
-    </svg>
   )
 }

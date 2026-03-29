@@ -14,13 +14,13 @@
     "lambda_ode": 0.05,
     "n_collocation_points": 4096,
     "dropout": 0.1,
-    "train_time_seconds": 117.68,
+    "train_time_seconds": 400.65,
     "device": "mps"
   },
   "validation": {
-    "r2": 0.9225,
-    "within_factor_2_pct": 86.94,
-    "within_factor_3_pct": 95.46
+    "r2": 0.9365,
+    "within_factor_2_pct": 96.74,
+    "within_factor_3_pct": 99.16
   },
   "normalization": {
     "input_mins": [
@@ -57,9 +57,9 @@
     "output": "95% confidence interval via 2.5th/97.5th percentiles"
   },
   "training_history": {
-    "final_data_loss": 0.522344,
-    "final_physics_loss": 0.021621,
-    "final_ode_loss": 87.234136,
-    "final_val_loss": 0.286976
+    "final_data_loss": 0.230378,
+    "final_physics_loss": 0.045009,
+    "final_ode_loss": 1.099869,
+    "final_val_loss": 0.10392
   }
 }

@@ -6,7 +6,22 @@ const STATUS_COLORS = {
   unsafe: '#DC4444',
 }
 
-export default function FloatingIsland({ segment, position, onSpeciesClick }) {
+// Find nearest demographic zone to a segment
+function findNearestDemographic(segment, demographics) {
+  if (!demographics || demographics.length === 0) return null
+  let nearest = null
+  let minDist = Infinity
+  demographics.forEach((d) => {
+    const dist = Math.sqrt((segment.latitude - d.lat) ** 2 + (segment.longitude - d.lng) ** 2)
+    if (dist < minDist && dist < 0.5) {
+      minDist = dist
+      nearest = d
+    }
+  })
+  return nearest
+}
+
+export default function FloatingIsland({ segment, demographics, position, onSpeciesClick }) {
   const [islandPos, setIslandPos] = useState({ x: 0, y: 0 })
   const [visible, setVisible] = useState(false)
 
@@ -31,6 +46,7 @@ export default function FloatingIsland({ segment, position, onSpeciesClick }) {
     (a, b) => b.tissue_total_pfas_ng_g - a.tissue_total_pfas_ng_g
   )
 
+  const nearestDemo = findNearestDemographic(segment, demographics)
   const anchorX = islandPos.x + 20
   const anchorY = islandPos.y + 10
 
@@ -71,7 +87,7 @@ export default function FloatingIsland({ segment, position, onSpeciesClick }) {
 
         {/* Header */}
         <div style={{ fontFamily: 'var(--font-display)', fontSize: '0.9375rem', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
-          {segment.name || String(segment.comid)}
+          Segment {segment.segment_id.replace('seg_', '#')}
         </div>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--text-tertiary)', marginBottom: '0.125rem' }}>
           Water PFAS: {segment.predicted_water_pfas_ng_l.toFixed(1)} ng/L
@@ -80,7 +96,7 @@ export default function FloatingIsland({ segment, position, onSpeciesClick }) {
           Confidence: {Math.round(segment.prediction_confidence * 100)}% | Stream order: {segment.stream_order}
         </div>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--text-tertiary)', marginBottom: '0.875rem' }}>
-          {segment.lat.toFixed(4)}, {segment.lng.toFixed(4)}
+          {segment.latitude.toFixed(4)}, {segment.longitude.toFixed(4)}
         </div>
 
         <div style={{ height: '1px', background: 'var(--border)', marginBottom: '0.75rem' }} />
@@ -106,7 +122,7 @@ export default function FloatingIsland({ segment, position, onSpeciesClick }) {
                   : `Max ${species.safe_servings_per_month_recreational} serving${species.safe_servings_per_month_recreational !== 1 ? 's' : ''}/month`}
               </span>
               <button
-                onClick={() => onSpeciesClick(species, segment.name || String(segment.comid))}
+                onClick={() => onSpeciesClick(species, segment.segment_id)}
                 style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: '0.6875rem', cursor: 'pointer', padding: '2px 0', fontFamily: 'var(--font-body)' }}
               >
                 Details
@@ -118,6 +134,16 @@ export default function FloatingIsland({ segment, position, onSpeciesClick }) {
           <div style={{ fontSize: '0.6875rem', color: 'var(--text-tertiary)', textAlign: 'center' }}>
             +{sorted.length - 5} more species
           </div>
+        )}
+
+        {/* Demographics */}
+        {nearestDemo && (
+          <>
+            <div style={{ height: '1px', background: 'var(--border)', margin: '0.5rem 0 0.625rem' }} />
+            <div style={{ fontSize: '0.6875rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+              Near {nearestDemo.name} — median income ${nearestDemo.median_income.toLocaleString()}, {nearestDemo.subsistence_pct}% subsistence fishing
+            </div>
+          </>
         )}
       </div>
     </>

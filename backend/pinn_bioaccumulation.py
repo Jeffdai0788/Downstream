@@ -21,17 +21,42 @@ import json
 import time
 import os
 
-# Published BCF values (L/kg) from Burkhard 2021
+# Field-measured BAF values (L/kg) by trophic level — geometric means
+# Source: Burkhard (2021) Environ Toxicol Chem, compiled field BAFs
+# BAF = C_fish / C_water — already includes bioconcentration + dietary uptake + TMF
+BAF_TABLE = {
+    'PFOS':  {2.5: 500, 3.0: 1000, 3.5: 1500, 4.0: 2500, 4.5: 3500},
+    'PFOA':  {2.5: 10,  3.0: 20,   3.5: 40,   4.0: 70,   4.5: 100},
+    'PFNA':  {2.5: 100, 3.0: 200,  3.5: 350,  4.0: 600,  4.5: 900},
+    'PFHxS': {2.5: 30,  3.0: 60,   3.5: 100,  4.0: 160,  4.5: 250},
+    'PFDA':  {2.5: 150, 3.0: 300,  3.5: 500,  4.0: 850,  4.5: 1200},
+    'GenX':  {2.5: 3,   3.0: 5,    3.5: 10,   4.0: 18,   4.5: 25},
+}
+
+# Legacy BCF/TMF — kept for PINN ODE physics constraint structure
 BCF_BASE = {
     'PFOS': 3100, 'PFOA': 132, 'PFNA': 1200,
     'PFHxS': 316, 'PFDA': 2000, 'GenX': 40,
 }
 
-# Published TMF values per trophic level step
 TMF = {
     'PFOS': 3.5, 'PFOA': 1.5, 'PFNA': 3.0,
     'PFHxS': 2.0, 'PFDA': 3.2, 'GenX': 1.2,
 }
+
+
+def get_field_baf(congener: str, trophic_level: float) -> float:
+    """Interpolate field-measured BAF (L/kg) from Burkhard 2021 compiled data."""
+    import math
+    baf_table = BAF_TABLE[congener]
+    tls = sorted(baf_table.keys())
+    tl = max(tls[0], min(tls[-1], trophic_level))
+    for i in range(len(tls) - 1):
+        if tls[i] <= tl <= tls[i + 1]:
+            frac = (tl - tls[i]) / (tls[i + 1] - tls[i])
+            log_baf = math.log(baf_table[tls[i]]) * (1 - frac) + math.log(baf_table[tls[i + 1]]) * frac
+            return math.exp(log_baf)
+    return baf_table[tls[-1]]
 
 # K_DOC values (L/kg) — DOC partition coefficients
 K_DOC = {
@@ -135,33 +160,27 @@ def generate_ode_training_data(n_samples: int = 50000) -> tuple:
         n_samples
     ).astype(float)
 
-    # Solve ODE analytically for each sample
-    # At steady state: C_fish = (k_uptake * C_water + k_diet * C_dietary) / (k_elim + k_growth)
-    # With trophic transfer: C_dietary = C_water * BCF_prey * TMF^(tl-tl_prey)
+    # Solve ODE analytically for each sample using field-measured BAFs
+    # BAF already includes bioconcentration + dietary uptake + trophic magnification
+    # tissue_ss (ng/g) = C_water (ng/L) × BAF (L/kg) / 1000 (g/kg)
+    # Transient: C(t) = C_ss × (1 - exp(-k_total × t))
     tissue = np.zeros(n_samples)
 
     for i in range(n_samples):
         congener = CONGENER_LIST[congener_idx[i]]
 
-        # Dissolved fraction
+        # Field-measured BAF (already includes trophic magnification)
+        baf = get_field_baf(congener, trophic_level[i])
+
+        # Dissolved fraction correction for DOC binding
         c_dissolved = water_pfas[i] / (1 + K_DOC[congener] * doc_mg_l[i] * 1e-6)
 
-        # Allometric scaling of uptake rate (larger fish = lower mass-specific uptake)
-        k_uptake = RATE_CONSTANTS['k_uptake_base'] * (body_mass_g[i] / 1000) ** (-0.25)
+        # Steady-state tissue concentration from field BAF
+        c_steady = c_dissolved * baf / 1000  # ng/g
 
-        # Temperature effect on elimination (Q10 = 2)
+        # Temperature effect on elimination rate (Q10 = 2)
         temp_factor = 2.0 ** ((temperature_c[i] - 15.0) / 10.0)
         k_elim = RATE_CONSTANTS['k_elim_base'] * temp_factor
-
-        # Lipid-adjusted BCF
-        bcf = BCF_BASE[congener] * (lipid_pct[i] / REFERENCE_LIPID)
-
-        # Trophic magnification
-        trophic_diff = max(0, trophic_level[i] - REFERENCE_TROPHIC)
-        tmf_factor = TMF[congener] ** trophic_diff
-
-        # Steady-state tissue concentration
-        c_steady = c_dissolved * bcf * tmf_factor / 1000  # Convert to ng/g
 
         # Transient solution: C(t) = C_ss * (1 - exp(-k_total * t))
         k_total = k_elim + RATE_CONSTANTS['k_growth']
@@ -245,34 +264,49 @@ def compute_ode_residual(model, x_norm, x_raw, device):
     congener_idx = x_raw[:, 6].long()
 
     # Vectorized physical constants per congener
-    bcf_vals = torch.tensor([BCF_BASE[c] for c in CONGENER_LIST], dtype=torch.float32, device=device)
-    kdoc_vals = torch.tensor([K_DOC[c] for c in CONGENER_LIST], dtype=torch.float32, device=device)
-    tmf_vals = torch.tensor([TMF[c] for c in CONGENER_LIST], dtype=torch.float32, device=device)
+    # Build BAF lookup tensors for each trophic level bin
+    baf_tl_bins = torch.tensor([2.5, 3.0, 3.5, 4.0, 4.5], device=device)
+    baf_vals_by_tl = {}
+    for c_idx, c_name in enumerate(CONGENER_LIST):
+        baf_vals_by_tl[c_idx] = torch.tensor(
+            [BAF_TABLE[c_name][tl] for tl in [2.5, 3.0, 3.5, 4.0, 4.5]],
+            dtype=torch.float32, device=device
+        )
 
-    bcf = bcf_vals[congener_idx]
+    kdoc_vals = torch.tensor([K_DOC[c] for c in CONGENER_LIST], dtype=torch.float32, device=device)
     kdoc = kdoc_vals[congener_idx]
 
     # Dissolved fraction: C_dissolved = C_water / (1 + K_DOC * DOC * 1e-6)
     C_dissolved = water_pfas / (1 + kdoc * doc_mg_l * 1e-6)
-
-    # Allometric uptake rate: k_uptake = 100 * (mass/1000)^(-0.25)
-    k_uptake = RATE_CONSTANTS['k_uptake_base'] * (body_mass_g / 1000.0).pow(-0.25)
 
     # Temperature-dependent elimination: Q10 = 2
     k_elim = RATE_CONSTANTS['k_elim_base'] * (2.0 ** ((temperature_c - 15.0) / 10.0))
     k_growth = RATE_CONSTANTS['k_growth']
     k_total = k_elim + k_growth
 
-    # Steady-state from ODE: C_ss = k_uptake * C_dissolved * BCF / (k_total * 1000)
-    # The ODE is: dC/dt = k_total * (C_ss - C_fish)
-    # where C_ss = (k_uptake * C_dissolved * lipid_adj * tmf_factor) / (k_total * 1000)
-    lipid_pct = x_raw[:, 2]
+    # Compute BAF per sample via interpolation on trophic level
     trophic_level = x_raw[:, 1]
-    lipid_adj = lipid_pct / REFERENCE_LIPID
-    trophic_diff = torch.clamp(trophic_level - REFERENCE_TROPHIC, min=0)
-    tmf_factor = tmf_vals[congener_idx].pow(trophic_diff)
+    tl_clamped = torch.clamp(trophic_level, 2.5, 4.5)
 
-    C_ss = C_dissolved * bcf * lipid_adj * tmf_factor / 1000.0  # ng/g
+    # Vectorized log-linear BAF interpolation
+    baf_per_sample = torch.zeros(len(x_raw), device=device)
+    for c_idx in range(6):
+        mask = (congener_idx == c_idx)
+        if mask.sum() == 0:
+            continue
+        tl_masked = tl_clamped[mask]
+        baf_tensor = baf_vals_by_tl[c_idx]  # [5] values at tl bins
+        log_baf = torch.log(baf_tensor)
+        # Find bin index for each sample
+        bin_idx = torch.searchsorted(baf_tl_bins, tl_masked.contiguous()) - 1
+        bin_idx = torch.clamp(bin_idx, 0, 3)
+        frac = (tl_masked - baf_tl_bins[bin_idx]) / (baf_tl_bins[bin_idx + 1] - baf_tl_bins[bin_idx] + 1e-8)
+        frac = torch.clamp(frac, 0, 1)
+        interp_log_baf = log_baf[bin_idx] * (1 - frac) + log_baf[bin_idx + 1] * frac
+        baf_per_sample[mask] = torch.exp(interp_log_baf)
+
+    # Steady-state from field BAF: C_ss = C_dissolved * BAF / 1000
+    C_ss = C_dissolved * baf_per_sample / 1000.0  # ng/g
 
     # ODE: dC/dt = k_total * (C_ss - C_fish)
     C_fish = C_pred.squeeze()

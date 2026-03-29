@@ -9,8 +9,8 @@ Uses sklearn GradientBoostingRegressor (no OpenMP dependency).
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.model_selection import KFold
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from sklearn.model_selection import KFold, GroupKFold
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, roc_auc_score
 import joblib
 import json
 import time
@@ -42,11 +42,29 @@ def engineer_features(df):
     df['log_facility_dist'] = np.log1p(df['nearest_pfas_facility_km'])
     # Dilution proxy: facility count / (flow + 1) — more facilities + less flow = higher PFAS
     df['facility_flow_ratio'] = df['upstream_pfas_facility_count'] / (df['mean_annual_flow_m3s'] + 1.0)
+    # Log-transform skewed hydrologic features
+    df['log_watershed'] = np.log1p(df['watershed_area_km2'])
+    df['log_flow'] = np.log1p(df['mean_annual_flow_m3s'])
+    # Interaction: urban land use × proximity to PFAS source
+    df['urban_x_inv_dist'] = df['pct_urban'] * df['inv_facility_dist']
+    # Interaction: cumulative source load near site
+    df['fac_count_x_inv_dist'] = df['upstream_pfas_facility_count'] * df['inv_facility_dist']
+    # Cyclical encoding of month (captures seasonal pattern without discontinuity at Dec→Jan)
+    df['month_sin'] = np.sin(2 * np.pi * df['month'] / 12)
+    df['month_cos'] = np.cos(2 * np.pi * df['month'] / 12)
+    # Quadratic geographic terms (captures regional PFAS clustering)
+    df['lat_sq'] = df['latitude'] ** 2
+    df['lon_sq'] = df['longitude'] ** 2
+    df['lat_lon'] = df['latitude'] * df['longitude']
     return df
 
 
 # Final feature list used by the model (raw + engineered)
-FEATURE_COLS = RAW_FEATURE_COLS + ['inv_facility_dist', 'log_facility_dist', 'facility_flow_ratio']
+FEATURE_COLS = RAW_FEATURE_COLS + [
+    'inv_facility_dist', 'log_facility_dist', 'facility_flow_ratio',
+    'log_watershed', 'log_flow', 'urban_x_inv_dist', 'fac_count_x_inv_dist',
+    'month_sin', 'month_cos', 'lat_sq', 'lon_sq', 'lat_lon',
+]
 
 
 def train_model(data_path: str = 'training_data_real.csv', output_dir: str = '.'):
@@ -75,11 +93,15 @@ def train_model(data_path: str = 'training_data_real.csv', output_dir: str = '.'
     X = df[FEATURE_COLS].values
     y = np.log1p(df[TARGET_COL].values)
 
+    # Station groups for spatial-aware cross-validation
+    # Prevents same station from appearing in both train and val folds
+    groups = df['station_id'].values if 'station_id' in df.columns else None
+
     params = {
-        'n_estimators': 150,
-        'max_depth': 3,
-        'learning_rate': 0.05,
-        'min_samples_leaf': 10,
+        'n_estimators': 800,
+        'max_depth': 5,
+        'learning_rate': 0.02,
+        'min_samples_leaf': 5,
         'subsample': 0.8,
         'max_features': 0.8,
         'random_state': 42,
@@ -88,16 +110,27 @@ def train_model(data_path: str = 'training_data_real.csv', output_dir: str = '.'
     print(f"\nModel: sklearn GradientBoostingRegressor")
     print(f"Parameters: {json.dumps(params, indent=2)}")
 
-    # 5-fold cross-validation
-    print("\n--- 5-Fold Cross-Validation ---")
-    kf = KFold(n_splits=5, shuffle=True, random_state=42)
+    # 5-fold cross-validation with spatial grouping to prevent data leakage
+    if groups is not None:
+        print("\n--- 5-Fold Grouped Cross-Validation (station-level split) ---")
+        kf = GroupKFold(n_splits=5)
+        split_iter = kf.split(X, y, groups)
+    else:
+        print("\n--- 5-Fold Cross-Validation ---")
+        kf = KFold(n_splits=5, shuffle=True, random_state=42)
+        split_iter = kf.split(X)
 
     cv_results = {
         'rmse': [], 'mae': [], 'r2': [],
         'within_factor_2': [], 'within_factor_3': [],
     }
 
-    for fold, (train_idx, val_idx) in enumerate(kf.split(X)):
+    # Collect predictions for AUROC computation
+    all_y_true_binary = []
+    all_y_scores = []
+    EPA_MCL_THRESHOLD = 4.0  # ng/L — EPA PFAS drinking water MCL (2024)
+
+    for fold, (train_idx, val_idx) in enumerate(split_iter):
         X_train, X_val = X[train_idx], X[val_idx]
         y_train, y_val = y[train_idx], y[val_idx]
 
@@ -122,12 +155,25 @@ def train_model(data_path: str = 'training_data_real.csv', output_dir: str = '.'
         cv_results['within_factor_2'].append(within_2)
         cv_results['within_factor_3'].append(within_3)
 
+        # Binary classification: above/below EPA MCL threshold
+        all_y_true_binary.extend((y_val_orig > EPA_MCL_THRESHOLD).astype(int))
+        all_y_scores.extend(y_pred_orig)
+
         print(f"  Fold {fold+1}: RMSE={rmse:.1f} | MAE={mae:.1f} | R²={r2:.3f} | "
               f"Within 2×={within_2:.1f}% | Within 3×={within_3:.1f}%")
 
     print(f"\n  Mean: RMSE={np.mean(cv_results['rmse']):.1f} ± {np.std(cv_results['rmse']):.1f} | "
           f"R²={np.mean(cv_results['r2']):.3f} ± {np.std(cv_results['r2']):.3f} | "
           f"Within 3×={np.mean(cv_results['within_factor_3']):.1f}%")
+
+    # AUROC for binary screening (above/below EPA MCL)
+    all_y_true_binary = np.array(all_y_true_binary)
+    all_y_scores = np.array(all_y_scores)
+    auroc = roc_auc_score(all_y_true_binary, all_y_scores)
+    prevalence = all_y_true_binary.mean() * 100
+    print(f"\n--- Binary Screening (>{EPA_MCL_THRESHOLD} ng/L EPA MCL) ---")
+    print(f"  AUROC: {auroc:.4f}")
+    print(f"  Prevalence: {prevalence:.1f}% of samples exceed threshold")
 
     # Train final model on full data
     print("\n--- Training Final Model ---")
@@ -184,6 +230,9 @@ def train_model(data_path: str = 'training_data_real.csv', output_dir: str = '.'
         'cv_r2_std': round(float(np.std(cv_results['r2'])), 4),
         'cv_within_factor_2_mean': round(float(np.mean(cv_results['within_factor_2'])), 1),
         'cv_within_factor_3_mean': round(float(np.mean(cv_results['within_factor_3'])), 1),
+        'cv_auroc_binary_screening': round(float(auroc), 4),
+        'binary_screening_threshold_ng_l': EPA_MCL_THRESHOLD,
+        'cv_method': 'GroupKFold (station-level)' if groups is not None else 'KFold (row-level)',
         'train_time_seconds': round(train_time, 2),
         'n_estimators': params['n_estimators'],
         'max_depth': params['max_depth'],

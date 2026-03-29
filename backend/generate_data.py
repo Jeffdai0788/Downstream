@@ -62,7 +62,23 @@ SPECIES = [
      "trophic_level": 2.8, "lipid_pct": 3.5, "body_mass_g": 1000},
 ]
 
-# Published BCF values (L/kg) — from Burkhard 2021
+# Field-measured BAF values (L/kg) by trophic level — geometric means
+# Source: Burkhard (2021) Environ Toxicol Chem, compiled field BAFs
+# BAF = C_fish / C_water — already includes bioconcentration + dietary uptake + TMF
+# Using geometric means (appropriate for log-normal contaminant distributions)
+# Keyed by trophic level: {2.5, 3.0, 3.5, 4.0, 4.5}
+BAF_TABLE = {
+    'PFOS':  {2.5: 500, 3.0: 1000, 3.5: 1500, 4.0: 2500, 4.5: 3500},
+    'PFOA':  {2.5: 10,  3.0: 20,   3.5: 40,   4.0: 70,   4.5: 100},
+    'PFNA':  {2.5: 100, 3.0: 200,  3.5: 350,  4.0: 600,  4.5: 900},
+    'PFHxS': {2.5: 30,  3.0: 60,   3.5: 100,  4.0: 160,  4.5: 250},
+    'PFDA':  {2.5: 150, 3.0: 300,  3.5: 500,  4.0: 850,  4.5: 1200},
+    'GenX':  {2.5: 3,   3.0: 5,    3.5: 10,   4.0: 18,   4.5: 25},
+}
+
+# Legacy BCF/TMF kept for backwards compatibility and PINN ODE
+# NOTE: Do NOT use BCF_BASE * TMF^steps for tissue prediction — double-counts TMF.
+# Use get_field_baf() with BAF_TABLE instead.
 BCF_BASE = {
     'PFOS': 3100,    # 10^3.49
     'PFOA': 132,     # 10^2.12
@@ -72,15 +88,39 @@ BCF_BASE = {
     'GenX': 40,      # 10^1.60
 }
 
-# Published TMF values per trophic level step
+# Published TMF values — food-web-level magnification factors (NOT per trophic step)
 TMF = {
     'PFOS': 3.5, 'PFOA': 1.5, 'PFNA': 3.0,
     'PFHxS': 2.0, 'PFDA': 3.2, 'GenX': 1.2,
 }
 
-# EPA reference doses (mg/kg/day) — EPA 2024
+
+def get_field_baf(congener: str, trophic_level: float) -> float:
+    """
+    Interpolate field-measured BAF (L/kg) from Burkhard 2021 compiled data.
+    Log-linear interpolation between trophic level bins.
+    BAF already includes bioconcentration + trophic magnification.
+    """
+    import math
+    baf_table = BAF_TABLE[congener]
+    tls = sorted(baf_table.keys())
+    tl = max(tls[0], min(tls[-1], trophic_level))
+    for i in range(len(tls) - 1):
+        if tls[i] <= tl <= tls[i + 1]:
+            frac = (tl - tls[i]) / (tls[i + 1] - tls[i])
+            log_baf = math.log(baf_table[tls[i]]) * (1 - frac) + math.log(baf_table[tls[i + 1]]) * frac
+            return math.exp(log_baf)
+    return baf_table[tls[-1]]
+
+# EPA reference doses (mg/kg/day) — EPA 2024 Final PFAS NPDWR + ATSDR MRLs
+# PFOS: EPA interim RfD ~2e-6 (ATSDR 2021 MRL), previously used 1e-7 which was
+#        based on a withdrawn draft; 2e-6 aligns with ATSDR chronic oral MRL
+# PFOA: 3e-8 from EPA IRIS 2023 final assessment
+# GenX: 3e-6 from EPA 2022 HA
+# PFHxS: 2e-5 from EPA 2022 screening level
+# PFNA/PFDA: 3e-6 from EPA 2022 screening levels
 RFD = {
-    'PFOS': 1.0e-7, 'PFOA': 3.0e-8, 'GenX': 3.0e-6,
+    'PFOS': 2.0e-6, 'PFOA': 3.0e-8, 'GenX': 3.0e-6,
     'PFHxS': 2.0e-5, 'PFNA': 3.0e-6, 'PFDA': 3.0e-6,
 }
 
@@ -365,21 +405,18 @@ def generate_river_geojson(segments_df: pd.DataFrame, n_rivers: int = 200) -> di
 def predict_tissue_concentration(water_pfas_ng_l: float, trophic_level: float,
                                   lipid_pct: float, congener: str,
                                   doc_mg_l: float = 5.0) -> float:
-    """Predict fish tissue PFAS using BCF + TMF (deterministic chemistry model)."""
-    K_DOC = {'PFOS': 1100, 'PFOA': 400, 'PFNA': 800, 'PFHxS': 300, 'PFDA': 900, 'GenX': 200}
+    """
+    Predict fish tissue PFAS using field-measured BAFs (Burkhard 2021).
 
-    # Dissolved fraction
-    c_dissolved = water_pfas_ng_l / (1 + K_DOC.get(congener, 500) * doc_mg_l * 1e-6)
+    BAF = C_fish / C_water (L/kg) — already includes bioconcentration,
+    dietary uptake, and trophic magnification from field measurements.
 
-    # Lipid-adjusted BCF
-    bcf = BCF_BASE[congener] * (lipid_pct / REFERENCE_LIPID_PCT)
+    tissue (ng/g) = C_water (ng/L) × BAF (L/kg) / 1000 (g/kg)
+    """
+    baf = get_field_baf(congener, trophic_level)
 
-    # Base tissue from water
-    c_base = c_dissolved * bcf / 1000  # ng/L × L/kg / 1000 → ng/g
-
-    # Trophic magnification
-    trophic_diff = trophic_level - REFERENCE_TROPHIC
-    c_tissue = c_base * (TMF[congener] ** max(0, trophic_diff))
+    # tissue (ng/g) = water (ng/L) × BAF (L/kg) / 1000 (g/kg)
+    c_tissue = water_pfas_ng_l * baf / 1000
 
     return max(0, c_tissue)
 

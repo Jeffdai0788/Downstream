@@ -79,7 +79,7 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
     let minDist = Infinity
     let nearest = null
     for (const h of hotspots) {
-      const d = Math.hypot(seg.lat - h.lat, seg.lng - h.lng)
+      const d = Math.hypot(seg.latitude - h.lat, seg.longitude - h.lng)
       if (d < minDist) { minDist = d; nearest = h.id }
     }
     return minDist < 1.0 ? nearest : null
@@ -102,6 +102,7 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
       map.current.resize()
       restyleWaterLayer()
       addRiverLayers()
+      addFacilityMarkers()
       addEnvCenterMarkers()
       setLoaded(true)
       if (onMapReady) onMapReady(map.current)
@@ -273,7 +274,7 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
       let nearest = null
       let minDist = Infinity
       for (const seg of data.segments) {
-        const d = Math.hypot(seg.lat - point.lat, seg.lng - point.lng)
+        const d = Math.hypot(seg.latitude - point.lat, seg.longitude - point.lng)
         if (d < minDist) { minDist = d; nearest = seg }
       }
       if (nearest && minDist < 0.5) {
@@ -292,7 +293,7 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
       let nearest = null
       let minDist = Infinity
       for (const seg of data.segments) {
-        const d = Math.hypot(seg.lat - point.lat, seg.lng - point.lng)
+        const d = Math.hypot(seg.latitude - point.lat, seg.longitude - point.lng)
         if (d < minDist) { minDist = d; nearest = seg }
       }
       if (nearest && minDist < 0.5 && onSegmentClick) {
@@ -322,6 +323,25 @@ export default function MapView({ data, onSegmentHover, onSegmentClick, onCursor
           <div style="color: var(--text-tertiary); font-size: 10px;">${center.phone}</div>
         </div>`)
       new mapboxgl.Marker(el).setLngLat([center.lng, center.lat]).setPopup(popup).addTo(map.current)
+    })
+  }
+
+  function addFacilityMarkers() {
+    data.facilities.forEach((facility) => {
+      const el = document.createElement('div')
+      el.innerHTML = `<div style="
+        width: 10px; height: 10px; background: var(--accent);
+        border-radius: 50%; border: 1.5px solid var(--text-primary);
+        box-shadow: 0 0 12px rgba(212, 145, 110, 0.4);
+      "></div>`
+
+      const popup = new mapboxgl.Popup({ offset: 12, closeButton: false })
+        .setHTML(`<div style="font-family: var(--font-body); font-size: 12px; color: var(--text-primary); padding: 4px 0;">
+          <div style="font-weight: 500; margin-bottom: 2px;">${facility.name}</div>
+          <div style="color: var(--text-tertiary); font-size: 10px;">${facility.pfas_sector ? 'PFAS sector' : 'Non-PFAS sector'}</div>
+        </div>`)
+
+      new mapboxgl.Marker(el).setLngLat([facility.lng, facility.lat]).setPopup(popup).addTo(map.current)
     })
   }
 

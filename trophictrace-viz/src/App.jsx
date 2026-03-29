@@ -44,7 +44,7 @@ export default function App() {
     setClickedSegment(segment)
     setHoveredSegment(null)
     if (mapRef.current) {
-      mapRef.current.flyTo({ center: [segment.lng, segment.lat], zoom: 8, duration: 1500 })
+      mapRef.current.flyTo({ center: [segment.longitude, segment.latitude], zoom: 8, duration: 1500 })
     }
   }
 
@@ -87,6 +87,7 @@ export default function App() {
             {hoveredSegment && !selectedSpecies && !clickedSegment && (
               <FloatingIsland
                 segment={hoveredSegment}
+                demographics={data.demographics}
                 position={cursorPos}
                 onSpeciesClick={handleSpeciesClick}
               />
@@ -96,6 +97,7 @@ export default function App() {
               <DetailPanel
                 species={selectedSpecies}
                 segment={selectedSegment}
+                demographics={data.demographics}
                 onClose={() => { setSelectedSpecies(null); setSelectedSegment(null) }}
               />
             )}

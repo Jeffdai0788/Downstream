@@ -18,9 +18,6 @@ const FEATURE_LABELS = {
   pct_agriculture:           'Agricultural land use',
   pct_impervious:            'Impervious surface',
   population_density:        'Population density',
-  latitude:                  'Geographic latitude',
-  longitude:                 'Geographic longitude',
-  watershed_area_km2:        'Watershed area',
 }
 
 const TIER = (pfas) =>
@@ -101,7 +98,7 @@ function ReportTab({ segment, allData }) {
   const pfas   = segment.predicted_water_pfas_ng_l ?? 0
   const tier   = TIER(pfas)
   const tc     = TIER_CFG[tier]
-  const center = nearestCenter(segment.lat, segment.lng)
+  const center = nearestCenter(segment.latitude, segment.longitude)
 
   const worstSpecies = segment.species?.length
     ? [...segment.species].sort((a, b) => b.tissue_total_pfas_ng_g - a.tissue_total_pfas_ng_g)[0]
@@ -115,6 +112,11 @@ function ReportTab({ segment, allData }) {
   const maxImp  = factors.length ? Math.max(...factors.map(f => f.importance)) : 1
 
   // Demographic context
+  const nearestDemo = allData.demographics?.reduce((best, d) => {
+    const dist = Math.hypot(d.lat - segment.latitude, d.lng - segment.longitude)
+    return (!best || dist < best.dist) ? { ...d, dist } : best
+  }, null)
+  const showDemo = nearestDemo && nearestDemo.dist < 0.5
 
   return (
     <div>
@@ -258,6 +260,18 @@ function ReportTab({ segment, allData }) {
         </>
       )}
 
+      {/* Demographic context */}
+      {showDemo && (
+        <>
+          <SectionLabel>Nearby Community</SectionLabel>
+          <Card>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.6875rem', color: 'var(--text-secondary)', lineHeight: 1.55, margin: 0 }}>
+              Near <strong style={{ color: 'var(--text-primary)' }}>{nearestDemo.name}</strong> (median income ${nearestDemo.median_income?.toLocaleString()}){' '}
+              — {nearestDemo.subsistence_pct}% of households rely on locally caught fish.
+            </p>
+          </Card>
+        </>
+      )}
     </div>
   )
 }
@@ -292,7 +306,7 @@ function AlertsTab({ allData, onAlertClick }) {
         const tc = TIER_CFG[tier]
         return (
           <button
-            key={seg.comid}
+            key={seg.segment_id}
             onClick={() => onAlertClick(seg)}
             style={{
               width: '100%', textAlign: 'left', cursor: 'pointer',
@@ -311,7 +325,7 @@ function AlertsTab({ allData, onAlertClick }) {
               </span>
             </div>
             <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', color: 'var(--text-primary)', marginBottom: '0.2rem' }}>
-              {seg.name || String(seg.comid)}
+              {seg.segment_id}
             </div>
             {worstSp && (
               <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.625rem', color: 'var(--text-tertiary)' }}>
@@ -402,7 +416,7 @@ function ResourcesTab() {
 export default function ActionPanel({ segment, data, onClose, onAlertClick }) {
   const [tab, setTab] = useState('report')
 
-  useEffect(() => { setTab('report') }, [segment?.comid])
+  useEffect(() => { setTab('report') }, [segment?.segment_id])
 
   const pfas = segment?.predicted_water_pfas_ng_l ?? 0
   const tier = TIER(pfas)
@@ -440,7 +454,7 @@ export default function ActionPanel({ segment, data, onClose, onAlertClick }) {
               </span>
             </div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-tertiary)', letterSpacing: '0.08em' }}>
-              {segment?.name || segment?.comid} · {segment?.lat?.toFixed(3)}°N {Math.abs(segment?.lng ?? 0).toFixed(3)}°W
+              {segment?.segment_id} · {segment?.latitude?.toFixed(3)}°N {Math.abs(segment?.longitude ?? 0).toFixed(3)}°W
             </div>
           </div>
           <button
