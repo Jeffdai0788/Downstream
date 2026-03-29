@@ -56,20 +56,22 @@ LAKE_MICHIGAN_POLY = [
     (-87.78, 42.00),  # SW corner, near Chicago
     (-87.50, 41.74),  # south tip
     (-87.10, 41.76),  # SE near Indiana Dunes
-    (-86.80, 41.90),
-    (-86.55, 42.10),
-    (-86.35, 42.40),
-    (-86.25, 42.80),
-    (-86.20, 43.20),
-    (-86.15, 43.60),
-    (-86.10, 43.90),
-    (-85.95, 44.20),
-    (-85.80, 44.50),
-    (-85.55, 44.90),
-    (-85.30, 45.20),
-    (-85.15, 45.50),  # NE tip (Mackinac)
-    (-85.60, 45.80),  # Straits of Mackinac
-    (-86.40, 45.60),  # northern shore west
+    (-86.90, 41.90),  # east shore — stay well offshore
+    (-86.70, 42.10),
+    (-86.55, 42.40),
+    (-86.48, 42.80),
+    (-86.42, 43.20),
+    (-86.38, 43.60),  # Muskegon — shore is at ~-86.25
+    (-86.35, 43.90),
+    (-86.30, 44.20),  # Ludington area
+    (-86.20, 44.50),
+    (-86.10, 44.80),  # Frankfort — shore is at ~-86.0
+    (-85.80, 45.10),  # Leland/Northport
+    (-85.60, 45.30),  # tip of Leelanau
+    (-85.00, 45.60),  # Mackinac bridge area — very narrow
+    (-84.80, 45.82),  # Straits of Mackinac
+    (-85.50, 45.85),  # northern shore heading west
+    (-86.40, 45.60),  # Manistique area
     (-86.80, 45.30),
     (-87.10, 45.00),  # Door County tip
     (-87.35, 44.90),  # Green Bay mouth
