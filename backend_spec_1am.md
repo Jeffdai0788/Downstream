@@ -263,6 +263,77 @@ Measured months always hit their exact average values. Each segment in the outpu
 | build_monthly_timeseries.py | ~3s | monthly_timeseries.json + embeds in results |
 | **Total** | **~60s** (without PINN retrain) | |
 
+---
+
+## For Frontend Developers
+
+### Where is the data?
+
+The **only file the frontend needs** is:
+
+```
+backend/national_results.json    (4.3 MB)
+```
+
+This contains everything: segments, species, timeseries, facilities, GeoJSON. Copy it into your frontend's data directory (currently `trophictrace-viz/src/data/nationalResults.json`).
+
+There is also a standalone timeseries file if needed separately:
+```
+backend/monthly_timeseries.json  (393 KB)   — 905 stations, raw WQP data
+```
+
+### How to regenerate after backend changes
+
+From the `backend/` directory:
+
+```bash
+python3 build_training_data.py      # rebuild training CSV from raw WQP data
+python3 train_xgboost.py            # retrain Stage 1 model (~0.2s)
+# python3 pinn_bioaccumulation.py   # retrain PINN (~2min, only if you changed it)
+python3 inference.py                # run full 3-stage pipeline → national_results.json
+python3 build_monthly_timeseries.py # build timeseries + embed into national_results.json
+```
+
+Then copy `national_results.json` to the frontend.
+
+### Key fields the frontend should use
+
+**Per segment** (`segments[]`):
+- `lat`, `lng` — map position
+- `name` — human-readable ("Cape Fear River — Upper Reach")
+- `predicted_water_pfas_ng_l` — the headline number
+- `risk_level` — "high" / "medium" / "low" (thresholds: >40 high, >8 medium)
+- `prediction_confidence` — 0-1, from MC Dropout (lower = more uncertain)
+- `monthly_timeseries` — object with keys "1"-"12", each has `water_pfas_ng_l` and `risk_level`
+- `nearest_station_km` — how far the nearest real WQP station is (transparency)
+- `n_real_measurements` — how many real lab samples back the timeseries
+- `top_contributing_features` — top 5 GBR feature importances for this segment
+- `species[]` — array of 8 fish species with tissue concentrations, hazard quotients, safety status
+
+**Per species** (`segments[].species[]`):
+- `common_name`, `scientific_name`
+- `tissue_total_pfas_ng_g` — total PFAS in fish tissue (sum of 6 congeners)
+- `tissue_by_congener` — breakdown: `{PFOS: 12.5, PFOA: 3.2, ...}`
+- `confidence_interval` — [lower, upper] 95% CI
+- `accumulation_curve` — `{months: [0,3,6,...], concentration_ng_g: [...], lower_95: [...], upper_95: [...]}`
+- `hazard_quotient_recreational`, `hazard_quotient_subsistence`
+- `safe_servings_per_month_recreational`, `safe_servings_per_month_subsistence`
+- `safety_status_recreational`, `safety_status_subsistence` — "safe" / "limited" / "unsafe"
+- `pathway` — source facility → water → fish chain with dilution factors
+
+**Facilities** (`facilities[]`):
+- `name`, `lat`, `lng`, `sic_code`, `npdes_permit`, `estimated_pfas_discharge_ng_l`
+
+**GeoJSON** (`geojson_segments`):
+- Standard GeoJSON FeatureCollection with LineString geometries for map rendering
+- Properties include `comid` (links to segment), `water_pfas_ng_l`, `risk_level`
+
+### FastAPI server (optional)
+
+`server.py` serves `national_results.json` over HTTP if you want API access instead of importing the JSON directly. But for the hackathon, importing the JSON is simpler and avoids CORS/deployment issues.
+
+---
+
 ## Key References
 
 - Gobas (1993) *Ecological Modelling* — Bioaccumulation ODE system
